@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record  id="petty_cash_account_bank_statement_inherit" model="ir.ui.view">
+      <field name="name">petty_cash.account_bank_statement_inherit_form</field>
+      <field name="model">account.bank.statement</field>
+      <field name="inherit_id" ref="account.view_bank_statement_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='journal_id']" position="after">
+          <field name="is_petty_cash" attrs="{'invisible': 1}" />
+          <field name="payment_id" attrs="{'invisible': [('is_petty_cash', '!=', True)]}"
+          />
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

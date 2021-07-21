@@ -1,0 +1,75 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="aupa.lots_extended_view_list">
+      <field name="name">account.analytic.list</field>
+      <field name="model">aupa.account.analytic.account</field>
+      <field name="inherit_id" ref="analytic.view_account_analytic_account_list"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='partner_id']" position="replace">
+          <field name="lot_size"/>
+          <field name="lot_section"/>
+        </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="aupa.lots_extended_view_form">
+      <field name="name">aupa.account.analytic.form</field>
+      <field name="model">account.analytic.account</field>
+      <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/>
+     <field name="arch" type="xml">
+        <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/h1[1]/field[@name='name']" position="attributes">
+          <attribute name="help">Lot's Code</attribute>
+          <attribute name="string">Lots</attribute>
+        </xpath>
+        <xpath expr="//field[@name='group_id']" position="after">
+          <field name="is_a_lot" string="Is a Lot?"/>
+          <field name="lot_size" string="Lot Area" help="Lot Area (HAS)"
+                  attrs="{'required': [('is_a_lot','=',True)], 'invisible': [('is_a_lot','=',False)]}"/>
+          <field name="lot_section" string="Section" help="Lot Section" widget="integer"
+                 attrs="{'required': [('is_a_lot','=',True)]}"/>
+        </xpath>
+      </field>
+    </record>
+<!--
+    <record model="ir.ui.view" id="crops_extended_view_list">
+      <field name="name">account.analytic.tag.list</field>
+      <field name="model">account.analytic.tag</field>
+      <field name="inherit_id" ref="analytic.account_analytic_tag_tree_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//tree[1]/field[@name='name']" position="attributes">
+          <attribute name="string">Crop/Season</attribute>
+        </xpath>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="crops_extended_view_form">
+      <field name="name">account.analytic.tag.form</field>
+      <field name="model">account.analytic.tag</field>
+      <field name="inherit_id" ref="analytic.account_analytic_tag_form_view"/>
+      <field name="arch" type="xml">
+          <xpath expr="//form[1]/sheet[1]/group[1]/field[@name='name']" position="attributes">
+            <attribute name="help">Crop's Name or Season</attribute>
+            <attribute name="string">Crop/Season</attribute>
+          </xpath>
+          <xpath expr="//form[1]/sheet[1]/group[1]/field[@name='name']" position="after">
+            <field name="is_a_crop" string="Is Crop?" attrs="{'invisible': [('active_analytic_distribution','=',True)]}"/>
+          </xpath>
+          <xpath expr="//field[@name='active_analytic_distribution']" position="attributes">
+            <attribute name="attrs">{'invisible': [('is_a_crop','=',True)]}</attribute>
+          </xpath>
+          <xpath expr="//field[@name='active_analytic_distribution']" position="after">
+            <field name="product_ids" string="Services Included" attrs="{'invisible': [('is_a_crop','=',False)]}">
+              <tree>
+                <field name="product_id"/>
+                <field name="sale_uom"/>
+                <field name="product_price" sum="Sum of Services"/>
+              </tree>
+            </field>
+          </xpath>
+      </field>
+    </record>
+    -->
+  </data>
+</odoo>

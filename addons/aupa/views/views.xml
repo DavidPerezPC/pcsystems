@@ -1,0 +1,74 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="aupa.list">
+      <field name="name">aupa list</field>
+      <field name="model">aupa.aupa</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="aupa.lots_list_action">
+      <field name="name">Lots</field>
+      <field name="res_model">account.analytic.account</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="aupa.lots_extended_view_list"/>
+    </record>
+<!--
+    <record model="ir.actions.act_window" id="aupa.crops_list_action">
+      <field name="name">Crops</field>
+      <field name="res_model">account.analytic.tag</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="crops_extended_view_list" />
+    </record>
+
+
+    <record model="ir.actions.act_window" id="aupa.collections_list_action">
+      <field name="name">Colletions</field>
+      <field name="res_model">aupa.collections</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="aupa.action_server">
+      <field name="name">aupa server</field>
+      <field name="model_id" ref="model_aupa_aupa"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem name="AUPA" id="aupa.menu_root"/>
+
+    <!-- menu categories -->
+    <menuitem name="Main Data" id="aupa.menu_maindata" parent="aupa.menu_root"/>
+    <menuitem name="Operations" id="aupa.menu_operations" parent="aupa.menu_root"/>
+
+    <!-- actions -->
+    <menuitem name="Lots" id="aupa.menu_maindata_lots" parent="aupa.menu_maindata"
+              action="aupa.lots_list_action"/>
+
+    <menuitem name="Crops" id="aupa.menu_maindata_crops" parent="aupa.menu_maindata"
+              action="aupa.crops_list_action"/>
+<!--
+    <menuitem name="Collections" id="aupa.menu_operations_collections" parent="aupa.menu_operations"
+              action="aupa.action_window_collections"/>
+-->
+  </data>
+</odoo>

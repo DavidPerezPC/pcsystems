@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/../browseinfo/.idea/browseinfo.iml" filepath="$PROJECT_DIR$/../browseinfo/.idea/browseinfo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../community/.idea/community.iml" filepath="$PROJECT_DIR$/../community/.idea/community.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../edge_tech/.idea/edge_tech.iml" filepath="$PROJECT_DIR$/../edge_tech/.idea/edge_tech.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../enterprise/.idea/enterprise.iml" filepath="$PROJECT_DIR$/../enterprise/.idea/enterprise.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/pcsystems.iml" filepath="$PROJECT_DIR$/.idea/pcsystems.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../pos_sync_restaurant/.idea/pos_sync_restaurant.iml" filepath="$PROJECT_DIR$/../pos_sync_restaurant/.idea/pos_sync_restaurant.iml" />
+      <module fileurl="file://$PROJECT_DIR$/addons/web_domain_field/.idea/web_domain_field.iml" filepath="$PROJECT_DIR$/addons/web_domain_field/.idea/web_domain_field.iml" />
+    </modules>
+  </component>
+</project>
