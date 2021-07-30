@@ -1,0 +1,92 @@
+<odoo>
+  <data>
+    <record  id="venuslift_res_partner_inherit" model="ir.ui.view">
+      <field name="name">venuslift.res_partner_inherit_form</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/div[1]/field[@name='city']" position="attributes">
+          <attribute name="attrs">{"required": [["company_id","=",1]], "readonly": [["type","=","contact"],["parent_id","!=",False]]}</attribute>
+        </xpath>
+        <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/div[1]/field[@name='zip']" position="attributes">
+          <attribute name="attrs">{ "readonly": [["type","=","contact"],["parent_id","!=",False]]}</attribute>
+        </xpath>
+        <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/div[1]/field[@name='country_id']" position="attributes">
+          <attribute name="attrs">{"readonly": [["type","=","contact"],["parent_id","!=",False]]}</attribute>
+          <attribute name="options">{"no_create":true}</attribute>
+        </xpath>
+        <xpath expr="//field[@name='category_id']" position="attributes">
+          <attribute name="attrs">{"required": [["company_id","=",1]]}</attribute>
+        </xpath>
+        <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']/group[@name='container_row_2']/group[@name='sale']/field[@name='user_id']" position="attributes">
+          <attribute name="options">{"no_create":true}</attribute>
+        </xpath>
+        <xpath expr="//field[@name='property_delivery_carrier_id']" position="attributes">
+          <attribute name="options">{"no_create":true}</attribute>
+        </xpath>
+        <xpath expr="//field[@name='property_payment_term_id']" position="after">
+          <field name="credit_limit"/>
+        </xpath>
+        <xpath expr="//field[@name='property_product_pricelist']" position="attributes">
+          <attribute name="options">{"no_create":true}</attribute>
+        </xpath>      
+      </field>
+    </record>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="venuslift.list">
+      <field name="name">venuslift list</field>
+      <field name="model">venuslift.venuslift</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="venuslift.action_window">
+      <field name="name">venuslift window</field>
+      <field name="res_model">venuslift.venuslift</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="venuslift.action_server">
+      <field name="name">venuslift server</field>
+      <field name="model_id" ref="model_venuslift_venuslift"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="venuslift" id="venuslift.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="venuslift.menu_1" parent="venuslift.menu_root"/>
+    <menuitem name="Menu 2" id="venuslift.menu_2" parent="venuslift.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="venuslift.menu_1_list" parent="venuslift.menu_1"
+              action="venuslift.action_window"/>
+    <menuitem name="Server to list" id="venuslift" parent="venuslift.menu_2"
+              action="venuslift.action_server"/>
+-->
+  </data>
+</odoo>

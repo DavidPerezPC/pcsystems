@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "AnalyticDefaultExtension",
+    'name': "Analytic Default Extension",
 
     'summary': """
         Add Product Category to Analytic Account Rules""",
 
     'description': """
-        By default Analtyic Account Rules logic includes Product ID, this module add the logic
-        to use Category ID in the rule    
+        By default Analtyic Account Rules logic includes Product ID, this module adds logic
+        to use Category ID in the rule; additionally takes the Comercial from the invoice not from 
+        active user 
         """,
 
     'author': "TECNIKA GLOBAL",
@@ -27,8 +28,5 @@
         # 'security/ir.model.access.csv',
         'views/account_analytic_default.xml',
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo/demo.xml',
-    ],
+    # only loaded in demonstration mode,
 }
