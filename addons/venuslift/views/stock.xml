@@ -1,0 +1,15 @@
+<odoo>
+  <data>
+    <record  id="venuslift_stock_picking_inherit_tree" model="ir.ui.view">
+      <field name="name">venuslift.stock_picking_inherit_tree_form</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.vpicktree"/>
+      <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="payment_term_id" optional="show" />
+                <field name="invoice_payment_state" optional="show" />
+            </field>
+      </field>
+    </record>
+  </data>
+</odoo>

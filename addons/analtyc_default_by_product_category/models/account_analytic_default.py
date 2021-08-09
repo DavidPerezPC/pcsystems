@@ -33,11 +33,12 @@ class AccountAnalyticDefault(models.Model):
     @api.model
     def account_get(self, product_id=None, partner_id=None, account_id=None, user_id=None, date=None, company_id=None):
         domain = []
+        categ = False
         if product_id:
             product_model = self.env['product.product']
             product_object = product_model.browse(product_id)
             categ=product_object.categ_id
-            domain += ['|','&', ('product_categ_id', '=', categ.id)]
+            domain += ['|', ('product_categ_id', '=', categ.id)]
         domain += [('product_categ_id','=', False)]
         if product_id:
             domain += ['|', ('product_id', '=', product_id)]
@@ -61,6 +62,9 @@ class AccountAnalyticDefault(models.Model):
         res = self.env['account.analytic.default']
         for rec in self.search(domain):
             index = 0
+            if categ and rec.product_id:
+                if rec.product_id.categ_id == categ:
+                    index +=1
             if rec.product_id: index += 1
             if rec.partner_id: index += 1
             if rec.account_id: index += 1

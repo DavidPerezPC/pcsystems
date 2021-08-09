@@ -1,0 +1,178 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* venuslift
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-09 05:50+0000\n"
+"PO-Revision-Date: 2021-08-09 00:00-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es\n"
+"X-Generator: Poedit 3.0\n"
+
+#. module: venuslift
+#: model:ir.model,name:venuslift.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__credit_limit
+#: model:ir.model.fields,field_description:venuslift.field_res_users__credit_limit
+msgid "Credit Limit"
+msgstr "Límite de Crédito"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__delivered_status__fd
+msgid "Delivered"
+msgstr "Entregado"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__delivered_status
+msgid "Delivered Status"
+msgstr "Estado de Entrega"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__display_name
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__display_name
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__id
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__id
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking__id
+msgid "ID"
+msgstr "Identificación"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__in_payment
+msgid "In Payment"
+msgstr "En Proceso de Pago"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__comercial_changed
+#: model:ir.model.fields,field_description:venuslift.field_res_users__comercial_changed
+msgid "Indicates if assigned commercial has changed"
+msgstr "Indica si el Comercial ha sido cambiado"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__credit_limit_changed
+#: model:ir.model.fields,field_description:venuslift.field_res_users__credit_limit_changed
+msgid "Indicates if credit limit has changed"
+msgstr "Indica si el Límite de Crédito ha cambiado"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_sale_order__l10n_mx_edi_payment_method_id
+msgid ""
+"Indicates the way the invoice was/will be paid, where the options could be: "
+"Cash, Nominal Check, Credit Card, etc. Leave empty if unkown and the XML "
+"will show 'Unidentified'."
+msgstr ""
+"Indica la forma en que se pagó o se pagará la factura, donde las opciones "
+"podrían ser: Efectivo, Cheque, Tarjeta de Crédito, etc. Deje vacía si no "
+"conoce la forma de pago y el XML mostrará “No Identificado”."
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__invoicing_legacy
+msgid "Invoicing App Legacy"
+msgstr "Factura sistema anterior"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__is_courtesy
+msgid "Is courtesy?"
+msgstr "Es cortesía?"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner____last_update
+#: model:ir.model.fields,field_description:venuslift.field_sale_order____last_update
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking____last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__delivered_status__nd
+msgid "Not Delivered"
+msgstr "NO Entregado"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__not_paid
+msgid "Not Paid"
+msgstr "No Pagada"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__delivered_status__no
+msgid "Only Services"
+msgstr "Sólo Servicios"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__paid
+msgid "Paid"
+msgstr "Pagada"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__delivered_status__pd
+msgid "Partially Delivered"
+msgstr "Entrega Parcial"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__partial
+msgid "Partially Paid"
+msgstr "Pago Parcial"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking__invoice_payment_state
+msgid "Payment State"
+msgstr "Estado de Pago"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__invoice_payment_state
+msgid "Payment Status"
+msgstr "Estado de Pago"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking__payment_term_id
+msgid "Payment Terms"
+msgstr "Plazo de Pago"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__l10n_mx_edi_payment_method_id
+msgid "Payment Way"
+msgstr "Forma de pago"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_stock_picking__invoice_payment_state
+msgid "Payment state related to the Sale Order Invoice"
+msgstr "Estado de Pago de la factura de esta Orden de Venta"
+
+#. module: venuslift
+#: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__reversed
+msgid "Reversed"
+msgstr "Pago Revertido"
+
+#. module: venuslift
+#: model:ir.model,name:venuslift.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_sale_order__delivered_status
+msgid "Show if the Sales Order has been delivered"
+msgstr "Muestra si la Orden de Venta fue Entregada"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_sale_order__is_courtesy
+msgid "Toggle if this sale is a courtesy"
+msgstr "Selecciona si es una Orden de Venta de Cortesía"
+
+#. module: venuslift
+#: model:ir.model,name:venuslift.model_stock_picking
+msgid "Transfer"
+msgstr "Traslado"
