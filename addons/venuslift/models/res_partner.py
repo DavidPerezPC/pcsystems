@@ -13,12 +13,13 @@ class Partner(models.Model):
         return res   
 
     credit_limit = fields.Float(tracking=True)
+    user_id = fields.Many2one('res.users', tracking=True)
     comercial_changed = fields.Boolean(string='Indicates if assigned commercial has changed', store=False, default=False)
     credit_limit_changed = fields.Boolean(string='Indicates if credit limit has changed', store=False, default=False)
 
-    @api.onchange('credit_limit')
-    def credit_limit_onchange(self):
-        self.credit_limit_changed = True
+    # @api.onchange('credit_limit')
+    # def credit_limit_onchange(self):
+    #     self.credit_limit_changed = True
 
     def send_mail_to_administrator(self):
 
