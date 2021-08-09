@@ -41,7 +41,7 @@ class AccountPayment(models.Model):
 
     petty_cash_ids = fields.One2many(
         'account.bank.statement', 'payment_id',
-        domain="[('journal_id.default_account_id', '=', self.destination_account_id)]",
+        domain="[('journal_id.default_account_id', '=', destination_account_id)]",
         string="Petty's Cash related to this Payment",
         copy=False
     )
