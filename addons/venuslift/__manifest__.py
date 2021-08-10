@@ -22,7 +22,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account', 'sale', 'stock', 'mail', 'l10n_mx_edi'],
+    'depends': ['base','account', 'sale', 'stock', 'mail'],
 
     # always loaded
     'data': [
