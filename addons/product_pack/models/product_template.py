@@ -79,4 +79,13 @@ class ProductTemplate(models.Model):
         if vals.get("pack_line_ids", False):
             self.product_variant_ids.write({"pack_line_ids": vals.get("pack_line_ids")})
             _vals.pop("pack_line_ids")
+            new_price = 0
+            list_price = self.list_price
+            for product in self.pack_line_ids:
+                new_price += (product.product_id.list_price * product.quantity)
+             
+            if new_price != list_price:
+                self.list_price = new_price
+                #vals.get("list_price")
+                #_vals.pop("list_price")
         return super().write(_vals)

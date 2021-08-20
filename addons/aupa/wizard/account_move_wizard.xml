@@ -1,0 +1,59 @@
+<odoo>
+
+    <record id="account_move_wizard_view" model="ir.ui.view">
+        <field name="name">Invoice Creation Wizard</field>
+        <field name="model">account.move.wizard</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Create Customer Invoice">
+                <group col="4">
+                    <field name="lot_id"/>
+                    <field name="partner_id"/>
+                    <field name="lot_size" />
+                    <field name="lot_section" />
+                    <field name="crop_id"/>
+                    <field name="season_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button name="create_and_view_invoice" string="Create Invoice"
+                            type="object"
+                            context="{'open_invoices': True}" class="btn-primary"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_move_wizard_view" model="ir.actions.act_window">
+        <field name="name">Invoice Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.move.wizard</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="account_move_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="lots_list_action">
+      <field name="name">Lots</field>
+      <field name="res_model">account.analytic.account</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="aupa_lots_extended_view_list"/>
+    </record>     
+    
+    <menuitem parent="account.menu_finance_receivables" name="Aupa" 
+              id="menu_action_account_aupa_menu"
+              sequence="0"/>
+
+    <menuitem parent="menu_action_account_aupa_menu" name="Invoice Wizard" 
+              action="action_account_move_wizard_view" 
+              id="menu_action_account_move_wizard"
+              sequence="0"/>
+
+    <menuitem parent="menu_action_account_aupa_menu" name="Lots" 
+              action="lots_list_action" 
+              id="menu_action_analytic_account_aupa"
+              sequence="0"/>
+
+</odoo>
