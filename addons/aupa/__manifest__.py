@@ -24,8 +24,12 @@
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
-        'views/account_payment.xml',
-        'views/templates.xml',
+        'views/analytic_account_views.xml',
+        'views/product_product_views.xml',
+        'views/account_move_views.xml',
+        'wizard/account_move_wizard.xml',
+        #'views/templates.xml',
+        #'views.xml'
     ],
     # only loaded in demonstration mode
     'demo': [

@@ -1,0 +1,284 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* aupa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-20 05:19+0000\n"
+"PO-Revision-Date: 2021-08-19 23:29-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_MX\n"
+"X-Generator: Poedit 3.0\n"
+
+#. module: aupa
+#: model:ir.model,name:aupa.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Cuenta analítica"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account__lot_size
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__lot_size
+msgid "Area Size"
+msgstr "Superficie"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_analytic_account__lot_size
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__lot_size
+#: model:ir.model.fields,help:aupa.field_aupa_collections__lot_size
+msgid "Area size of the Lot (Has)"
+msgstr "Superficies del Lote (en Hectáreas)"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__lot_size
+msgid "Area to pay"
+msgstr "Superficie a pagar"
+
+#. module: aupa
+#: model:ir.ui.menu,name:aupa.menu_action_account_aupa_menu
+msgid "Aupa"
+msgstr "Aupa"
+
+#. module: aupa
+#: model:ir.model.fields.selection,name:aupa.selection__aupa_collections__state__cancel
+#: model_terms:ir.ui.view,arch_db:aupa.account_move_wizard_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: aupa
+#: model:ir.model.fields.selection,name:aupa.selection__aupa_collections__state__confirm
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.account_move_wizard_view
+msgid "Create Customer Invoice"
+msgstr "Crear factura de cliente"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.account_move_wizard_view
+msgid "Create Invoice"
+msgstr "Crear factura"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__create_uid
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__create_date
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_bank_statement_line__crop_id
+#: model:ir.model.fields,field_description:aupa.field_account_move__crop_id
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__crop_id
+#: model:ir.model.fields,field_description:aupa.field_account_payment__crop_id
+msgid "Crop to Paid"
+msgstr "Cultivo a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__crop_id
+msgid "Crop to use"
+msgstr "Cultivo a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account__display_name
+#: model:ir.model.fields,field_description:aupa.field_account_move__display_name
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__display_name
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: aupa
+#: model:ir.model.fields.selection,name:aupa.selection__aupa_collections__state__draft
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account__id
+#: model:ir.model.fields,field_description:aupa.field_account_move__id
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__id
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__id
+msgid "ID"
+msgstr "ID"
+
+#. module: aupa
+#: model:ir.actions.act_window,name:aupa.action_account_move_wizard_view
+#: model:ir.ui.menu,name:aupa.menu_action_account_move_wizard
+msgid "Invoice Wizard"
+msgstr "Generar Factura"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account__is_a_lot
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Is a Lot?"
+msgstr "Es Lote?"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_analytic_account__is_a_lot
+msgid "It is a Lot?"
+msgstr "Es un Lote?"
+
+#. module: aupa
+#: model:ir.model,name:aupa.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account____last_update
+#: model:ir.model.fields,field_description:aupa.field_account_move____last_update
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard____last_update
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__write_uid
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__write_uid
+msgid "Last Updated by"
+msgstr "Última modificación por"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__write_date
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__write_date
+msgid "Last Updated on"
+msgstr "Última modificación el"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Lot Area"
+msgstr "Superficie del Lote"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Lot Area (HAS)"
+msgstr "Superficies del Lote (en Hectáreas)"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_analytic_account__lot_section
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__lot_section
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Lot Section"
+msgstr "Sección"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_bank_statement_line__lot_id
+#: model:ir.model.fields,field_description:aupa.field_account_move__lot_id
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__lot_id
+#: model:ir.model.fields,field_description:aupa.field_account_payment__lot_id
+msgid "Lot to paid"
+msgstr "Lote a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__lot_id
+msgid "Lot to pay/collect"
+msgstr "Lote a Cobrar"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Lot's Code"
+msgstr "Código del Lote"
+
+#. module: aupa
+#: model:ir.actions.act_window,name:aupa.lots_list_action
+#: model:ir.ui.menu,name:aupa.menu_action_analytic_account_aupa
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Lots"
+msgstr "Lotes"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__partner_id
+msgid "Partner to collect"
+msgstr "Cobrar al Cliente"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__season_ids
+msgid "Season"
+msgstr "Temporada"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_bank_statement_line__season_ids
+#: model:ir.model.fields,field_description:aupa.field_account_move__season_ids
+#: model:ir.model.fields,field_description:aupa.field_account_payment__season_ids
+msgid "Season Paid"
+msgstr "Temporada a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__season_id
+msgid "Season to pay"
+msgstr "Temporada a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_analytic_account__lot_section
+#: model:ir.model.fields,field_description:aupa.field_account_move_wizard__lot_section
+#: model_terms:ir.ui.view,arch_db:aupa.lots_extended_view_form
+msgid "Section"
+msgstr "Sección"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__partner_id
+msgid "Select Customer to Invoice"
+msgstr "Seleccione el Cliente al que se le factura"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_bank_statement_line__season_ids
+#: model:ir.model.fields,help:aupa.field_account_move__season_ids
+#: model:ir.model.fields,help:aupa.field_account_payment__season_ids
+msgid "Select Seaso to Paid"
+msgstr "Seleccione la Temporada a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__season_ids
+msgid "Select Season and Crop to Paid"
+msgstr "Seleccione Temporada/Cultivo a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_bank_statement_line__crop_id
+#: model:ir.model.fields,help:aupa.field_account_move__crop_id
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__crop_id
+#: model:ir.model.fields,help:aupa.field_account_payment__crop_id
+msgid "Select the Crop that will be Paid"
+msgstr "Seleccione el Cultivo a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_bank_statement_line__lot_id
+#: model:ir.model.fields,help:aupa.field_account_move__lot_id
+#: model:ir.model.fields,help:aupa.field_account_move_wizard__lot_id
+#: model:ir.model.fields,help:aupa.field_account_payment__lot_id
+msgid "Select the Lot that will be paid"
+msgstr "Seleccione el Lote a Pagar"
+
+#. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_aupa_collections__state
+msgid "Status"
+msgstr "Estado"
+
+#. module: aupa
+#: model:ir.model,name:aupa.model_account_move_wizard
+msgid "Wizard for Customer Invoice Creation"
+msgstr "Asistente para Crear Facturas de Clientes"
+
+#. module: aupa
+#: model:ir.model,name:aupa.model_aupa_collections
+msgid "aupa.collections"
+msgstr ""
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.account_move_wizard_view
+msgid "or"
+msgstr "O"

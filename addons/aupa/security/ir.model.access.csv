@@ -1,3 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_aupa_collections,aupa.collections,aupa.collections,base.group_user,1,1,1,1
-access_aupa_collections,aupa.collections,aupa.collections,base.group_user,1,1,1,1
+access_account_move_wizard_readonly,account.move.wizard_readonly,aupa.model_account_move_wizard,account.group_account_readonly,1,1,1,1
+access_account_move_wizard_manager,account.move.wizard_manager,aupa.model_account_move_wizard,account.group_account_invoice,1,1,1,1
