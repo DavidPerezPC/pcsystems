@@ -16,6 +16,7 @@ class AccountMoveWizard(models.TransientModel):
 
     lot_size = fields.Float(
         related="lot_id.lot_size", 
+        readonly=False,
         string="Area Size", 
         help="Area size of the Lot (Has)")
 
@@ -63,7 +64,8 @@ class AccountMoveWizard(models.TransientModel):
         for product in self.crop_id.pack_line_ids:
             inv_lines.append([0, 0, 
                 {
-                    'product_id': product.product_id.id, 
+                    'product_id': product.product_id.id,
+                    'product_uom_id': product.product_id.uom_id.id, 
                     'analytic_account_id': self.lot_id.id, 
                     'quantity': self.lot_id.lot_size, 
                     'price_unit': product.product_id.lst_price,

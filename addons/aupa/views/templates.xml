@@ -1,8 +1,172 @@
 <odoo>
     <data>
+      <template id="customer_invoice_inherit" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-value='o.with_context(lang=lang)']" position="after">
+          <t t-set="invoice_client" t-value="o.move_type == 'out_invoice'"/>
+        </xpath>
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address"/>
+        </xpath>
+        <xpath expr="//div[hasclass('page')]" position="before">
+          <section class="header-tables" t-if="invoice_client" style="margin-top:-3rem;font-size: 15px;position:relative;top: -3px;">
+            <div class="container">
+              <div class="row">
+                <div class="col-6" style="text-align:left; padding:0px;">
+                  <div style="text-color:red; font-size: 20px;">
+                    <span>
+                      <strong>
+                        <u>USUARIO</u>
+                      </strong>
+                    </span>
+                  </div>
+                  <div>
+                    <b>
+                      <span>Lote:</span>
+                    </b>
+                    <span t-field="o.lot_id.code"/>
+                  </div>
+                  <div>
+                    <b>
+                      <span>Nombre:</span>
+                    </b>
+                    <span t-field="o.lot_id.name"/>
+                  </div>
+                  <div>
+                    <b>
+                      <span>Sección:</span>
+                    </b>
+                    <span t-field="o.lot_id.lot_section"/>
+                  </div>
+                  <div>
+                    <span>Cultivo:</span>
+                    <b>
+                      <span t-esc="o.crop_id.name"/>
+                    </b>
+                  </div>
+                  <div>
+                    <span>Ciclo:</span>
+                    <b>
+                      <span t-esc="o.season_name"/>
+                    </b>
+                  </div>
+                </div>
+                <div class="col-6" style="text-left: right;padding:0px;">
+                  <div style="text-color:red; font-size: 20px;">
+                    <span>
+                      <strong>
+                        <b>
+                          <u>PRODUCTOR</u>
+                        </b>
+                      </strong>
+                    </span>
+                  </div>
+                  <div>
+                    <span t-field="o.partner_id.name"/>
+                  </div>
+                  <div>
+                    <span t-field="o.partner_id.street_name"/>
+                  </div>
+                  <t t-if="o.partner_id.l10n_mx_edi_colony">
+                    <div>
+                      <span  t-field="o.partner_id.l10n_mx_edi_colony" />
+                    </div>
+                  </t>
+                  <div>
+                    <span t-field="o.partner_id.city" />
+                    ,<span t-field="o.partner_id.state_id.code" />
+                    ,<span t-field="o.partner_id.zip" /> 
+                  </div>        
+                  <div>
+                    <span t-field="o.partner_id.country_id.name" />
+                  </div>        
+                  <t t-if="o.partner_id.vat">
+                    <div>
+                      RFC:
+                      <span  t-field="o.partner_id.vat" />
+                    </div>
+                  </t>
+                </div>
+              </div>
+            </div>
+          </section>
+        </xpath>
+        <!--xpath expr="//div[hasclass('page')]" position="before">
+          <t t-set="is_cfdi_signed" t-value="bool(o._get_l10n_mx_edi_signed_edi_document())"/>
+          <t t-set="cfdi_data" t-value="o._l10n_mx_edi_decode_cfdi()"/>
+          <section class="header-tables" t-if="invoice_client" style="margin-top:-3rem;font-size: 10px;position:relative;top: -3px;">
+              <div class="container">
+                <div class="row">
+                  <div class="col-4" style="padding:0px;">
+                    <t t-if="cfdi_data">
+                      <div>
+                        <b>
+                          <span>USO CFDI:</span>
+                        </b>
+                        <span t-esc="cfdi_data.get('usage')"/>
+                        <span t-field="o.l10n_mx_edi_usage"/>
+                      </div>
+                      <div>
+                        <b>
+                          <span>Método de pago:</span>
+                        </b>
+                        <span t-esc="cfdi_data.get('payment_method')"/>
+                        <t t-set="payment_method_name" t-value="cfdi_data.get('payment_method')"/>
+                        <t t-if="payment_method_name == 'PPD'">
+                          <span>PAGO EN PARCIALIDADES O DIFERIDO</span>
+                        </t>
+                        <t t-if="payment_method_name == 'PUE'">
+                          <span>PAGO EN UNA SOLA EXHIBICIÓN</span>
+                        </t>
+                      </div>
+                      <div>
+                        <b>
+                          <span>Forma de pago:</span>
+                        </b>
+                        <span t-esc="o.l10n_mx_edi_payment_method_id.code"/>
+                        <span t-esc="o.l10n_mx_edi_payment_method_id.name"/>
+                      </div>
+                      <div>
+                        <b>
+                          <span>Fecha y hora de certificación:</span>
+                        </b>
+                        <span t-esc="cfdi_data.get('stamp_date')"/>
+                      </div>
+                    </t>
+                  </div>
+                  <div class="col-4" style="text-align: right;padding:0px;">
+                    <div style="font-size:14px;">
+                      <span>FACTURA:</span>
+                      <b>
+                        <span t-esc="o.name"/>
+                      </b>
+                    </div>
+                    <div>
+                      <b>
+                          <span>Referencia:</span>
+                      </b>
+                      <span t-esc="o.invoice_origin"/>
+                    </div>
+                    <div>
+                      <b>
+                          <span>Fecha de Emisión:</span>
+                      </b>
+                      <span t-field="o.invoice_date"/>
+                    </div>
+                    <div>
+                      <b>
+                          <span>Folio fiscal:</span>
+                      </b>
+                      <span t-esc="cfdi_data.get('uuid')"/>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </section>
+        </xpath-->
+      </template>
 <!--
         <template id="listing">
-          <ul>
+          <ul>  
             <li t-foreach="objects" t-as="object">
               <a t-attf-href="#{ root }/objects/#{ object.id }">
                 <t t-esc="object.display_name"/>

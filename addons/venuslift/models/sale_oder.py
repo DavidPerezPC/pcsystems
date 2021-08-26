@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
+from datetime import date
 
 class SaleOrder(models.Model):
     _inherit = ['sale.order']
@@ -71,8 +72,19 @@ class SaleOrder(models.Model):
 
             rec.delivered_status = status
             rec.product_uom_changed = uom_changed
+ 
+    #@api.multi()
+    def _cancel_unconfirmed_so(self):
 
-            
+        today = date.today()
+        domain = [('state', 'in', ['draft', 'sent'])]
+        for so in self.search(domain):
+            delta = today - so.create_date
+            if delta.days > 6:
+                so.action_cancel()
+
+
+
 # class SaleOrderLine(models.Model):
 #     _inherit = ['sale.order.line']
     

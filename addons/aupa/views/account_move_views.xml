@@ -13,7 +13,7 @@
         </xpath>
       </field>
     </record-->
-
+    
     <record id="aupa_account_move_inherit_form" model="ir.ui.view">
       <field name="name">aupa_account_move_inherit_form</field>
       <field name="model">account.move</field>
@@ -26,6 +26,7 @@
           <field name="crop_id" class="oe_inline"
                   attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"
           />
+          <field name="season_name" invisible="1" />
           <!--field name="season_ids" class="oe_inline" widget="many2many_tags"
                   attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"
           /-->
