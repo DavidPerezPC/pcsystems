@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-20 05:19+0000\n"
-"PO-Revision-Date: 2021-08-19 23:29-0600\n"
+"POT-Creation-Date: 2021-08-26 18:39+0000\n"
+"PO-Revision-Date: 2021-08-26 12:44-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,62 @@ msgstr ""
 "Plural-Forms: \n"
 "Language: es_MX\n"
 "X-Generator: Poedit 3.0\n"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid ""
+"<b>\n"
+"                      <span>Lote:</span>\n"
+"                    </b>"
+msgstr "Lote:"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid ""
+"<b>\n"
+"                      <span>Nombre:</span>\n"
+"                    </b>"
+msgstr "Nombre:"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid ""
+"<b>\n"
+"                      <span>Sección:</span>\n"
+"                    </b>"
+msgstr "Sección:"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid ""
+"<span>\n"
+"                      <strong>\n"
+"                        <b>\n"
+"                          <u>PRODUCTOR</u>\n"
+"                        </b>\n"
+"                      </strong>\n"
+"                    </span>"
+msgstr "PRODUCTOR"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid ""
+"<span>\n"
+"                      <strong>\n"
+"                        <u>USUARIO</u>\n"
+"                      </strong>\n"
+"                    </span>"
+msgstr "USUARIO"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid "<span>Ciclo:</span>"
+msgstr "Ciclo:"
+
+#. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid "<span>Cultivo:</span>"
+msgstr "Cultivo:"
 
 #. module: aupa
 #: model:ir.model,name:aupa.model_account_analytic_account
@@ -115,7 +171,7 @@ msgstr "Borrador"
 #: model:ir.model.fields,field_description:aupa.field_account_move_wizard__id
 #: model:ir.model.fields,field_description:aupa.field_aupa_collections__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: aupa
 #: model:ir.actions.act_window,name:aupa.action_account_move_wizard_view
@@ -207,21 +263,39 @@ msgid "Partner to collect"
 msgstr "Cobrar al Cliente"
 
 #. module: aupa
+#: model_terms:ir.ui.view,arch_db:aupa.customer_invoice_inherit
+msgid "RFC:"
+msgstr "RFC:"
+
+#. module: aupa
 #: model:ir.model.fields,field_description:aupa.field_account_move_wizard__season_ids
 msgid "Season"
-msgstr "Temporada"
+msgstr "Ciclo"
+
+#. module: aupa
+#: model:ir.model.fields,help:aupa.field_account_bank_statement_line__season_name
+#: model:ir.model.fields,help:aupa.field_account_move__season_name
+#: model:ir.model.fields,help:aupa.field_account_payment__season_name
+msgid "Season Paid in this invoice"
+msgstr "Ciclo pagado en la factura"
 
 #. module: aupa
 #: model:ir.model.fields,field_description:aupa.field_account_bank_statement_line__season_ids
 #: model:ir.model.fields,field_description:aupa.field_account_move__season_ids
 #: model:ir.model.fields,field_description:aupa.field_account_payment__season_ids
-msgid "Season Paid"
-msgstr "Temporada a Pagar"
+msgid "Season and Crop Paid"
+msgstr "Ciclo y Cultivo pagado"
 
 #. module: aupa
 #: model:ir.model.fields,field_description:aupa.field_aupa_collections__season_id
 msgid "Season to pay"
-msgstr "Temporada a Pagar"
+msgstr "Ciclo a pagar"
+
+#. module: aupa
+#: model:ir.actions.act_window,name:aupa.season_crops_list_action
+#: model:ir.ui.menu,name:aupa.menu_action_analytic_tag_account_aupa
+msgid "Seasons"
+msgstr "Ciclos"
 
 #. module: aupa
 #: model:ir.model.fields,field_description:aupa.field_account_analytic_account__lot_section
@@ -238,12 +312,8 @@ msgstr "Seleccione el Cliente al que se le factura"
 #. module: aupa
 #: model:ir.model.fields,help:aupa.field_account_bank_statement_line__season_ids
 #: model:ir.model.fields,help:aupa.field_account_move__season_ids
-#: model:ir.model.fields,help:aupa.field_account_payment__season_ids
-msgid "Select Seaso to Paid"
-msgstr "Seleccione la Temporada a Pagar"
-
-#. module: aupa
 #: model:ir.model.fields,help:aupa.field_account_move_wizard__season_ids
+#: model:ir.model.fields,help:aupa.field_account_payment__season_ids
 msgid "Select Season and Crop to Paid"
 msgstr "Seleccione Temporada/Cultivo a Pagar"
 
@@ -264,6 +334,13 @@ msgid "Select the Lot that will be paid"
 msgstr "Seleccione el Lote a Pagar"
 
 #. module: aupa
+#: model:ir.model.fields,field_description:aupa.field_account_bank_statement_line__season_name
+#: model:ir.model.fields,field_description:aupa.field_account_move__season_name
+#: model:ir.model.fields,field_description:aupa.field_account_payment__season_name
+msgid "Seson Paid"
+msgstr "Ciclo pagado"
+
+#. module: aupa
 #: model:ir.model.fields,field_description:aupa.field_aupa_collections__state
 msgid "Status"
 msgstr "Estado"
@@ -281,4 +358,4 @@ msgstr ""
 #. module: aupa
 #: model_terms:ir.ui.view,arch_db:aupa.account_move_wizard_view
 msgid "or"
-msgstr "O"
+msgstr "o"

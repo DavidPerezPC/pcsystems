@@ -41,7 +41,14 @@
       <field name="view_mode">tree,form</field>
       <field name="view_id" ref="aupa_lots_extended_view_list"/>
     </record>     
-    
+
+    <record model="ir.actions.act_window" id="season_crops_list_action">
+      <field name="name">Seasons</field>
+      <field name="res_model">account.analytic.tag</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="analytic.account_analytic_tag_action"/>
+    </record>     
+
     <menuitem parent="account.menu_finance_receivables" name="Aupa" 
               id="menu_action_account_aupa_menu"
               sequence="0"/>
@@ -54,6 +61,11 @@
     <menuitem parent="menu_action_account_aupa_menu" name="Lots" 
               action="lots_list_action" 
               id="menu_action_analytic_account_aupa"
+              sequence="0"/>
+
+    <menuitem parent="menu_action_account_aupa_menu" name="Seasons" 
+              action="season_crops_list_action" 
+              id="menu_action_analytic_tag_account_aupa"
               sequence="0"/>
 
 </odoo>
