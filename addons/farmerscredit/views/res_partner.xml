@@ -1,0 +1,115 @@
+<odoo>
+  <data>
+    <record  id="farmerscredit_res_partner_inherit_form" model="ir.ui.view">
+        <field name="name">farmerscredit_res_partner_inherit_form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/div[2]/field[@name='company_type']" position="after">
+                <label for="is_farmer" string="Is Farmer?" />
+                <field name='is_farmer' />
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='vat']" position="after">
+                <field name='ine'  placeholder="eg. 074711637582" attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='vat']" position="after">
+                <field name='curp'  placeholder="eg. AAPR630321HDFLRC01" attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='category_id']" position="after">
+                <field name='marital_state' attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='category_id']" position="after">
+                <field name='birth_certificate'  attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+            </xpath>      
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']" position="after">
+                <page name='farmer_guarantees' string="Guarantees" attrs="{'invisible': [('is_farmer', '=', False)]}">
+                    <field name="guarantee_ids" groups="base.group_no_one" context="{'default_partner_id': active_id}" >
+                        <tree>
+                            <field name="type" />
+                            <field name="description"/>
+                            <field name="doc_number" />
+                            <field name="issued_date" />
+                            <field name="owner" />
+                            <field name="estimated_value" />
+                            <field name="estimated_date" />
+                            <field name="proficient" />
+                        </tree>
+                        <form string="Guarantee Details">
+                            <sheet>
+                                <field name="type" required="1" widget="radio" options="{'horizontal': true}"/>
+                                <field name="partner_id" invisible="1"/>
+                                <hr/>
+                                <group col="12">
+                                    <group colspan="5" string="Generic Information">
+                                        <field name="description" />
+                                        <field name="doc_number" />
+                                        <field name="issued_date" />
+                                    </group>
+                                    <group colspan="5" string="Guarantee Value">
+                                        <field name="owner"/>
+                                        <field name="estimated_value" />
+                                        <field name="estimated_date" />
+                                        <field name="proficient" />                                   
+                                    </group>
+                                    <group colspan="10">
+                                        <field name="supplier" attrs="{'invisible': ['|', ('type', '=', False), ('type', '=', 'mortgage')]}" />
+                                    </group>
+                                    <group colspan="10" string="Notary Information" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}">
+                                        <field name="notary" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
+                                        <field name="inscription" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
+                                        <field name="inscription_folio" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
+                                        <field name="book" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
+                                        <field name="section" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>         
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='internal_notes']" position="before">
+                <page name='farmer_lots' string="Lots" attrs="{'invisible': [('is_farmer', '=', False)]}">
+                    <field name="lot_ids" groups="base.group_no_one" context="{'default_partner_id': active_id}" >
+                        <tree>
+                            <field name="type" />
+                            <field name="ownership_type"/>
+                            <field name="doc_number" />
+                            <field name="location" />
+                            <field name="area" />
+                            <field name="owner" />
+                            <field name="initial_date" />
+                            <field name="end_date" />
+                        </tree>
+                        <form string="Lot Details">
+                            <sheet>
+                                <field name="type" required="1" widget="radio" options="{'horizontal': true}"/>
+                                <field name="partner_id" invisible="1"/>
+                                <hr/>
+                                <group col="12">
+                                    <group colspan="5" string="Lot Information">
+                                        <field name="ownership_type"/>
+                                        <field name="doc_number" />
+                                        <field name="location" />
+                                        <field name="area" />
+                                    </group>
+                                    <group colspan="5" string="Contract Info">
+                                        <field name="owner" />
+                                        <field name="initial_date" />
+                                        <field name="end_date" />
+                                        <!--div>
+                                            <label for="register" string="Reg Agrarian" attrs="{'invisible': [('ownership_type','not in', ('parcel'))]}" />
+                                            <label for="register" string="Reg Public" attrs="{'invisible': [('ownership_type','not in', ('public'))]}" />
+                                        </div-->
+                                        <field name="register"  attrs="{'invisible': [('ownership_type', 'not in', ('parcel', 'public'))]}"/>
+                                        <field name="parcel_number" attrs="{'invisible': [('ownership_type', 'not in', ('parcel'))]}" />
+                                    </group>
+                                </group>
+                            </sheet>
+                        </form>
+                    </field>
+                </page>
+            </xpath>         
+        </field>
+    </record>
+  </data>
+</odoo>
