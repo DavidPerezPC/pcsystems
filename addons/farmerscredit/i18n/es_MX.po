@@ -1,0 +1,542 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* farmerscredit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 14.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-30 20:43+0000\n"
+"PO-Revision-Date: 2021-08-30 15:18-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: es_MX\n"
+"X-Generator: Poedit 3.0\n"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__register
+msgid "Agrarian/Public Reg"
+msgstr "Reg. Agrario/Publico"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__area
+msgid "Area"
+msgstr "Superficie"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__beneficial
+msgid "Beneficial Owner"
+msgstr "Beneficiario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__book
+msgid "Book"
+msgstr "Libro"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__birth_certificate
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__birth_certificate
+msgid "Brith Certificate"
+msgstr "Acta Nacimiento"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__curp
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__curp
+msgid "CURP"
+msgstr "CURP"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__conjugal
+msgid "Conjugal Society"
+msgstr "Sociedad Conyugal"
+
+#. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: farmerscredit
+#: model:ir.ui.menu,name:farmerscredit.contacts_list
+msgid "Contacts"
+msgstr "Contactos"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Contract Info"
+msgstr "Información Contrato"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__create_uid
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__create_date
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__description
+msgid "Description"
+msgstr "Descripción"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__display_name
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__display_name
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__divorced
+msgid "Divorced"
+msgstr "Divorciado"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__doc_number
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__doc_number
+msgid "Document #"
+msgstr "Documento#"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__end_date
+msgid "End Date"
+msgstr "Fecha Término"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__lot_ids
+#: model:ir.model.fields,help:farmerscredit.field_res_users__lot_ids
+msgid "Enter Farmer's Lots"
+msgstr "Captura los Lotes del Agricultor"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__guarantee_ids
+#: model:ir.model.fields,help:farmerscredit.field_res_users__guarantee_ids
+msgid "Enter Farmer's guarantees"
+msgstr "Captura las Garantías proporcionadas por el Agricultor"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__owner
+msgid "Enter Guarantee's Owner's name"
+msgstr "Nombre del Propietario de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__end_date
+msgid "Enter end date for this contract"
+msgstr "Fecha de Término del contrato"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__initial_date
+msgid "Enter initial date for this contract"
+msgstr "Fecha de Inicio del Contrato"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__issued_date
+msgid "Enter issued date for this document"
+msgstr "Fecha de emisión del Documento"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__location
+msgid "Enter location for this lot"
+msgstr "Ubicación del Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__owner
+msgid "Enter lot's Owner's name"
+msgstr "Nombre del Propietario del Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__area
+msgid "Enter lot's area"
+msgstr "Superficie/Area del Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__register
+msgid "Enter the Agrarian (if is Parcel) or Public register (if is Public)"
+msgstr "Registro Agrario (si es Parcela) o Registro Publico del Lote "
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__birth_certificate
+#: model:ir.model.fields,help:farmerscredit.field_res_users__birth_certificate
+msgid "Enter the Birht Certifcate number"
+msgstr "Folio/Número del Acta de Nacimiento"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__book
+msgid "Enter the Book where this guarantte was registered"
+msgstr "Libro dónde quedo registrado"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__doc_number
+msgid "Enter the Document Number for this guarantee"
+msgstr "Folio/Numero de Identificación de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__doc_number
+msgid "Enter the Document Number for this lot"
+msgstr "Documento que ampara la propiedad del Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__estimated_date
+msgid "Enter the Estimation's date"
+msgstr "Fecha de Estimación"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__ine
+#: model:ir.model.fields,help:farmerscredit.field_res_users__ine
+msgid "Enter the INE number issued by Goverment"
+msgstr "Folio/Clave del INE"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__inscription_folio
+msgid "Enter the Inscriptio's Folio for this guarantee"
+msgstr "Folio de Inscripción de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__curp
+#: model:ir.model.fields,help:farmerscredit.field_res_users__curp
+msgid "Enter the Unique Identification Population Key assigned by Goverment"
+msgstr "Clave Unica de Registro Poblacional (CURP) asignado "
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__section
+msgid "Enter the book's section for this guarantee"
+msgstr "Libro dónde quedo Inscrito esta Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__estimated_value
+msgid "Enter the estimated value for this guarantee"
+msgstr "Valor monetario estimado de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__inscription
+msgid "Enter the inscription for this guarantee"
+msgstr "Folio/Número de Inscripción de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__notary
+msgid "Enter the notary that issued this guarantee"
+msgstr "Notaría que emitió el registro de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__parcel_number
+msgid "Enter the parcer number for this lot"
+msgstr "Número de Parcela de este Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__proficient
+msgid "Enter the proficient's name"
+msgstr "Nombre del Périto valuador"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__supplier
+msgid "Enter the supplier for this guarantee"
+msgstr "Nombre del Proveedor de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__estimated_date
+msgid "Estimate's Date"
+msgstr "Fecha Estimación"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__estimated_value
+msgid "Estimated Value"
+msgstr "Valor Estimado"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__partner_id
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__partner_id
+msgid "Farmer"
+msgstr "Agricultor"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__partner_id
+msgid "Farmer owner of these guarantees"
+msgstr "Agricultor propietario de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.ui.menu,name:farmerscredit.menu_root
+msgid "Farmer's Credit"
+msgstr "Créditos Agrícolas"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__guarantee_ids
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__guarantee_ids
+msgid "Farmer's guarantees"
+msgstr "Garantías del Agricultor"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__lot_ids
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__lot_ids
+msgid "Farmer's lots"
+msgstr "Lotes"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__partner_id
+msgid "Farmer's lots owner"
+msgstr "Lotes del Agricultor"
+
+#. module: farmerscredit
+#: model:ir.ui.menu,name:farmerscredit.farmers
+msgid "Farmers"
+msgstr "Agricultores"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__inscription_folio
+msgid "Folio"
+msgstr "Folio"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Generic Information"
+msgstr "Información General"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Guarantee Details"
+msgstr "Detalles de la Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__type
+msgid "Guarantee Type"
+msgstr "Tipo Garantía"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Guarantee Value"
+msgstr "Valor"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Guarantees"
+msgstr "Garantías"
+
+#. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_farmerscredit_partner_guarantees
+msgid "Guarantees given by Farmers"
+msgstr "Garantías proporcionadas"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__id
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__id
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__id
+msgid "ID"
+msgstr "ID"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__ine
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__ine
+msgid "INE"
+msgstr "INE"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__initial_date
+msgid "Initial Date"
+msgstr "Fecha Inicio"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__inscription
+msgid "Inscription"
+msgstr "Inscripción"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__is_farmer
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__is_farmer
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Is Farmer?"
+msgstr "Agricultor?"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__issued_date
+msgid "Issued date"
+msgstr "Fecha emisión"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees____last_update
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots____last_update
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__write_uid
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__write_uid
+msgid "Last Updated by"
+msgstr "Actualizada por"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__write_date
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__write_date
+msgid "Last Updated on"
+msgstr "Actualizado el"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__type__leased
+msgid "Leased"
+msgstr "Arrendado"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__location
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Lot Details"
+msgstr "Detalles del Lote"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Lot Information"
+msgstr "Información Lote"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Lots"
+msgstr "Lotes"
+
+#. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_farmerscredit_partner_lots
+msgid "Lots of the Farmers"
+msgstr "Lotes de Agricultores"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__marital_state
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__marital_state
+msgid "Marital State"
+msgstr "Estado Civil"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__mortgage
+msgid "Mortgage"
+msgstr "Hipotecario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__notary
+msgid "Notary"
+msgstr "Notaría"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Notary Information"
+msgstr "Información Notarial"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__ownership_type__other
+msgid "Other"
+msgstr "Otro"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__owner
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__owner
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__type__own
+msgid "Owner"
+msgstr "Propietario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__type
+msgid "Owner Type"
+msgstr "Tipo Propietario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__ownership_type
+msgid "Ownership Type"
+msgstr "Tipo de Propiedad"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__ownership_type__parcel
+msgid "Parcel Certificate"
+msgstr "Certificado Parcelario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__parcel_number
+msgid "Parcel number"
+msgstr "Parcela 3"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__pledge
+msgid "Pledge"
+msgstr "Prendaria"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__proficient
+msgid "Proficient"
+msgstr "Périto"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__description
+msgid "Property/Good description or features"
+msgstr "Descripción o características de la Propiedad"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__ownership_type__public
+msgid "Public Document"
+msgstr "Documento Publico"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__section
+msgid "Section"
+msgstr "Sección"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__type
+msgid "Select the guarantee type"
+msgstr "Selecciona el Tipo de Garantía"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__marital_state
+#: model:ir.model.fields,help:farmerscredit.field_res_users__marital_state
+msgid "Select the marital state"
+msgstr "Selecciona el Estado Civil"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__type
+msgid "Select the owner type for this lot"
+msgstr "Selecciona el Tipo de Propietario para este Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__ownership_type
+msgid "Select the ownership type for this lot"
+msgstr "Selecciona el Tipo de Propiedad para este Lote"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__separated
+msgid "Separated Goods"
+msgstr "Bienes Separados"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__single
+msgid "Single"
+msgstr "Soltero"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__supplier
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__is_farmer
+#: model:ir.model.fields,help:farmerscredit.field_res_users__is_farmer
+msgid "Toggle to indicate if is a Farmer or not"
+msgstr "Indique si es un Agricultor"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__widower
+msgid "Widower"
+msgstr "Viudo"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "eg. 074711637582"
+msgstr "eg. 074711637582"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "eg. AAPR630321HDFLRC01"
+msgstr "eg. 074711637582"
