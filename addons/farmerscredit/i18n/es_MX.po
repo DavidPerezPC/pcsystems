@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0\n"
+"Project-Id-Version: Odoo Server 14.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-30 20:43+0000\n"
-"PO-Revision-Date: 2021-08-30 15:18-0600\n"
+"POT-Creation-Date: 2021-09-01 02:58+0000\n"
+"PO-Revision-Date: 2021-08-31 21:05-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -159,7 +159,7 @@ msgstr "Superficie/Area del Lote"
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_lots__register
 msgid "Enter the Agrarian (if is Parcel) or Public register (if is Public)"
-msgstr "Registro Agrario (si es Parcela) o Registro Publico del Lote "
+msgstr "Registro Agrario (si es Parcela) o Registro Publico del Lote"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__birth_certificate
@@ -202,7 +202,7 @@ msgstr "Folio de Inscripción de la Garantía"
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__curp
 #: model:ir.model.fields,help:farmerscredit.field_res_users__curp
 msgid "Enter the Unique Identification Population Key assigned by Goverment"
-msgstr "Clave Unica de Registro Poblacional (CURP) asignado "
+msgstr "Clave Unica de Registro Poblacional (CURP) asignado"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__section
@@ -261,9 +261,15 @@ msgid "Farmer owner of these guarantees"
 msgstr "Agricultor propietario de la Garantía"
 
 #. module: farmerscredit
+#: model:ir.module.category,name:farmerscredit.module_farmerscredit
 #: model:ir.ui.menu,name:farmerscredit.menu_root
 msgid "Farmer's Credit"
 msgstr "Créditos Agrícolas"
+
+#. module: farmerscredit
+#: model:res.groups,name:farmerscredit.group_user
+msgid "Farmer's Credit User"
+msgstr "Usuario de Créditos Agrícolas"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__guarantee_ids
@@ -323,11 +329,16 @@ msgid "Guarantees given by Farmers"
 msgstr "Garantías proporcionadas"
 
 #. module: farmerscredit
+#: model:ir.module.category,description:farmerscredit.module_farmerscredit
+msgid "Helps to manage Farmer's Credit"
+msgstr "Administra los Créditos de Agricultores"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__id
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__id
 msgid "ID"
-msgstr "ID"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__ine
@@ -437,7 +448,7 @@ msgstr "Otro"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__owner
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__type__own
 msgid "Owner"
-msgstr "Propietario"
+msgstr "Propio"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__type
@@ -457,7 +468,7 @@ msgstr "Certificado Parcelario"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__parcel_number
 msgid "Parcel number"
-msgstr "Parcela 3"
+msgstr "Parcela #"
 
 #. module: farmerscredit
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__pledge
@@ -539,4 +550,4 @@ msgstr "eg. 074711637582"
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
 msgid "eg. AAPR630321HDFLRC01"
-msgstr "eg. 074711637582"
+msgstr "eg. AAPR630321HDFLRC01"

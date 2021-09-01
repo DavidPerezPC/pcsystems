@@ -21,9 +21,9 @@
             <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='category_id']" position="after">
                 <field name='birth_certificate'  attrs="{'invisible': [('is_farmer', '=', False)]}"/>
             </xpath>      
-            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='sales_purchases']" position="after">
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='internal_notes']" position="before" >
                 <page name='farmer_guarantees' string="Guarantees" attrs="{'invisible': [('is_farmer', '=', False)]}">
-                    <field name="guarantee_ids" groups="base.group_no_one" context="{'default_partner_id': active_id}" >
+                    <field name="guarantee_ids" groups="farmerscredit.group_user" context="{'default_partner_id': active_id}" >
                         <tree>
                             <field name="type" />
                             <field name="description"/>
@@ -69,7 +69,7 @@
             </xpath>         
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='internal_notes']" position="before">
                 <page name='farmer_lots' string="Lots" attrs="{'invisible': [('is_farmer', '=', False)]}">
-                    <field name="lot_ids" groups="base.group_no_one" context="{'default_partner_id': active_id}" >
+                    <field name="lot_ids" groups="farmerscredit.group_user" context="{'default_partner_id': active_id}" >
                         <tree>
                             <field name="type" />
                             <field name="ownership_type"/>
