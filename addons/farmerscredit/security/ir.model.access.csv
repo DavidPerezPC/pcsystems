@@ -1,3 +1,3 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_farmerscredit_guarantees,farmerscredit.guarantees,model_farmerscredit_partner_guarantees,base.group_user,1,1,1,1
-access_farmerscredit_lots,farmerscredit.lots,model_farmerscredit_partner_lots,base.group_user,1,1,1,1
+access_farmerscredit_guarantees,farmerscredit.guarantees,model_farmerscredit_partner_guarantees,group_user,1,1,1,1
+access_farmerscredit_lots,farmerscredit.lots,model_farmerscredit_partner_lots,group_user,1,1,1,1
