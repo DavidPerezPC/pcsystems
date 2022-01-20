@@ -18,8 +18,11 @@
       <field name="inherit_id" ref="sale.view_order_form"/>
       <field name="arch" type="xml">
             <field name="payment_term_id" position="after">
+                <field name="invoice_payment_state" invisible="1" />
                 <field name="l10n_mx_edi_payment_method_id"/>
                 <field name="is_courtesy" />
+                <field name="has_negative_stock"  readonly="1" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('id', '=', False)]}"/>
+                <field name="ready_to_deliver"  attrs="{'invisible': ['|', ('state', 'in', ['draft', 'sent']), ('invoice_status', '=', 'to invoice'), '|', ('invoice_payment_state', 'not in', ['in_payment', 'partial', 'paid']), ('id', '=', False)]}"/>
             </field>
       </field>
     </record>

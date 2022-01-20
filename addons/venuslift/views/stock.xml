@@ -8,6 +8,7 @@
             <field name="origin" position="after">
                 <field name="payment_term_id" optional="show" />
                 <field name="invoice_payment_state" optional="show" />
+                <field name="ready_to_deliver" optional="show" />
             </field>
       </field>
     </record>
