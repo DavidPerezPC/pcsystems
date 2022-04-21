@@ -11,6 +11,11 @@ class AccountMove(models.Model):
         domain="[('is_a_lot', '=', True)]",
         string="Lot to paid", 
         help="Select the Lot that will be paid")
+
+    lot_section = fields.Integer(related="lot_id.lot_section", 
+            string="Section", 
+            help="Section for this Lot",
+            store=True)
     
     crop_id = fields.Many2one(
         'product.product',
@@ -35,9 +40,10 @@ class AccountMove(models.Model):
         for rec in self:
             season_name  = ''
             for season in rec.season_ids:
-                if season.name != self.crop_id.name:
-                    season_name = season.name
-                    break
+                for crop in self.crop_id:
+                    if season.name != crop.name:
+                        season_name = season.name
+                        break
             rec.season_name = season_name
 
 

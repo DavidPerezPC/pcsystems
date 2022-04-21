@@ -41,3 +41,12 @@ class AupaLots(models.Model):
 #     def _value_pc(self):
 #         for record in self:
 #             record.value2 = float(record.value) / 100
+
+class AccountAnalyticLine(models.Model):
+    _inherit = 'account.analytic.line'
+
+    lot_section = fields.Integer(related="account_id.lot_section", 
+        string="Section", 
+        help="Section for this Lot",
+        store=True)
+    
