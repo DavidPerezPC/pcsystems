@@ -13,6 +13,18 @@
         </xpath>
       </field>
     </record-->
+    <record  id="aupa_account_move_inherit_tree" model="ir.ui.view">
+      <field name="name">aupa_account_move_inherit_tree</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_out_invoice_tree"/>
+      <field name="arch" type="xml">
+            <field name="invoice_partner_display_name" position="after">
+                <field name="lot_id" optional="show" />
+                <field name="lot_section" optional="show" />
+                <field name="season_name" optional="show" />
+            </field>
+      </field>
+    </record>
     
     <record id="aupa_account_move_inherit_form" model="ir.ui.view">
       <field name="name">aupa_account_move_inherit_form</field>
@@ -21,6 +33,9 @@
       <field name="arch" type="xml">
         <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/div[1]" position="before">
           <field name="lot_id" 
+                attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"
+          />
+          <field name="lot_section" 
                 attrs="{'invisible': [('move_type', 'not in', ('out_invoice', 'out_refund', 'out_receipt'))]}"
           />
           <field name="crop_id" class="oe_inline"

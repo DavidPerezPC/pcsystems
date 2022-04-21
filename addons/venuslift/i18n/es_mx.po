@@ -6,16 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 14.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-09 05:50+0000\n"
-"PO-Revision-Date: 2021-08-09 00:00-0600\n"
+"POT-Creation-Date: 2022-01-21 05:13+0000\n"
+"PO-Revision-Date: 2022-01-20 22:17-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: es\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #. module: venuslift
 #: model:ir.model,name:venuslift.model_res_partner
@@ -58,16 +58,31 @@ msgid "In Payment"
 msgstr "En Proceso de Pago"
 
 #. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_sale_order__has_negative_stock
+msgid "Indicates if a line item has no stock available"
+msgstr "Indica si algún artículo tiene existencia negativa"
+
+#. module: venuslift
 #: model:ir.model.fields,field_description:venuslift.field_res_partner__comercial_changed
 #: model:ir.model.fields,field_description:venuslift.field_res_users__comercial_changed
 msgid "Indicates if assigned commercial has changed"
 msgstr "Indica si el Comercial ha sido cambiado"
 
 #. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_stock_picking__ready_to_deliver
+msgid "Indicates if can be delivered"
+msgstr "Indica si se puede esta listo para entregar"
+
+#. module: venuslift
 #: model:ir.model.fields,field_description:venuslift.field_res_partner__credit_limit_changed
 #: model:ir.model.fields,field_description:venuslift.field_res_users__credit_limit_changed
 msgid "Indicates if credit limit has changed"
 msgstr "Indica si el Límite de Crédito ha cambiado"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_sale_order__ready_to_deliver
+msgid "Indicates that Sale Order can be delivered"
+msgstr "Indica si el Pedido de Venta puede entregarse"
 
 #. module: venuslift
 #: model:ir.model.fields,help:venuslift.field_sale_order__l10n_mx_edi_payment_method_id
@@ -96,6 +111,11 @@ msgstr "Es cortesía?"
 #: model:ir.model.fields,field_description:venuslift.field_stock_picking____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__has_negative_stock
+msgid "Negative Stock"
+msgstr "Existencia Negativa"
 
 #. module: venuslift
 #: model:ir.model.fields.selection,name:venuslift.selection__sale_order__delivered_status__nd
@@ -153,6 +173,16 @@ msgid "Payment state related to the Sale Order Invoice"
 msgstr "Estado de Pago de la factura de esta Orden de Venta"
 
 #. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__product_uom_changed
+msgid "Product Uom Changed"
+msgstr "Cambio Unidad de Medida"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_sale_order__ready_to_deliver
+msgid "Ready to Deliver"
+msgstr "Listo para Entrega?"
+
+#. module: venuslift
 #: model:ir.model.fields.selection,name:venuslift.selection__sale_order__invoice_payment_state__reversed
 msgid "Reversed"
 msgstr "Pago Revertido"
@@ -163,9 +193,39 @@ msgid "Sales Order"
 msgstr "Pedido de venta"
 
 #. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__user_id
+#: model:ir.model.fields,field_description:venuslift.field_res_users__user_id
+msgid "Salesperson"
+msgstr "Vendedor"
+
+#. module: venuslift
+#: model_terms:ir.ui.view,arch_db:venuslift.venuslift_stock_picking_inherit_search
+msgid "Show Ready to Deliver Sales"
+msgstr "Indica si esta listo para Entregar el Pedido de Venta"
+
+#. module: venuslift
 #: model:ir.model.fields,help:venuslift.field_sale_order__delivered_status
 msgid "Show if the Sales Order has been delivered"
 msgstr "Muestra si la Orden de Venta fue Entregada"
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_res_partner__source_id
+#: model:ir.model.fields,field_description:venuslift.field_res_users__source_id
+#: model_terms:ir.ui.view,arch_db:venuslift.venuslift_res_partner_filter_inherit
+msgid "Source"
+msgstr "Origen"
+
+#. module: venuslift
+#: model:ir.model.fields,help:venuslift.field_res_partner__user_id
+#: model:ir.model.fields,help:venuslift.field_res_users__user_id
+msgid "The internal user in charge of this contact."
+msgstr "El usuario interno responsable de este contacto."
+
+#. module: venuslift
+#: model:ir.model.fields,field_description:venuslift.field_stock_picking__ready_to_deliver
+#: model_terms:ir.ui.view,arch_db:venuslift.venuslift_stock_picking_inherit_search
+msgid "To Deliver"
+msgstr "Entregar"
 
 #. module: venuslift
 #: model:ir.model.fields,help:venuslift.field_sale_order__is_courtesy

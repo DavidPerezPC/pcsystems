@@ -8,11 +8,11 @@
             <t t-set="address"/>
         </xpath>
         <xpath expr="//div[hasclass('page')]" position="before">
-          <section class="header-tables" t-if="invoice_client" style="margin-top:-3rem;font-size: 15px;position:relative;top: -3px;">
+          <section class="header-tables" t-if="invoice_client" style="margin-top:-1rem;font-size: 10px;position:relative;top: -3px;">
             <div class="container">
               <div class="row">
                 <div class="col-6" style="text-align:left; padding:0px;">
-                  <div style="text-color:red; font-size: 20px;">
+                  <div style="text-color:red; font-size: 13px;">
                     <span>
                       <strong>
                         <u>USUARIO</u>
@@ -51,7 +51,7 @@
                   </div>
                 </div>
                 <div class="col-6" style="text-left: right;padding:0px;">
-                  <div style="text-color:red; font-size: 20px;">
+                  <div style="text-color:red; font-size: 13px;">
                     <span>
                       <strong>
                         <b>

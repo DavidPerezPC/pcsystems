@@ -1,5 +1,6 @@
 <odoo>
   <data>
+
     <record  id="venuslift_stock_picking_inherit_tree" model="ir.ui.view">
       <field name="name">venuslift.stock_picking_inherit_tree_form</field>
       <field name="model">stock.picking</field>
@@ -8,8 +9,21 @@
             <field name="origin" position="after">
                 <field name="payment_term_id" optional="show" />
                 <field name="invoice_payment_state" optional="show" />
+                <field name="ready_to_deliver" optional="show" />
             </field>
       </field>
     </record>
+
+    <record  id="venuslift_stock_picking_inherit_search" model="ir.ui.view">
+      <field name="name">venuslift.stock_picking_inherit_search_form</field>
+      <field name="model">stock.picking</field>
+      <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+      <field name="arch" type="xml">
+        <xpath expr="//filter[@name='cancel']" position="after">
+          <filter name="todeliver" string="To Deliver" domain="[('ready_to_deliver', '=', 'True')]" help="Show Ready to Deliver Sales"/>
+        </xpath>
+      </field>
+    </record>
+
   </data>
 </odoo>

@@ -8,15 +8,19 @@ class Partner(models.Model):
     @api.model
     def default_get(self, fields):
         res = super(Partner, self).default_get(fields)
-        res.update({ 'company_id': self.env.company.id} ) 
-
+        res.update({ 'company_id': self.env.company.id} )         
+        
         return res   
 
+    source_id = fields.Many2one('utm.source')
     credit_limit = fields.Float(tracking=True)
     user_id = fields.Many2one('res.users', tracking=True)
     comercial_changed = fields.Boolean(string='Indicates if assigned commercial has changed', store=False, default=False)
     credit_limit_changed = fields.Boolean(string='Indicates if credit limit has changed', store=False, default=False)
 
+
+
+   
     # @api.onchange('credit_limit')
     # def credit_limit_onchange(self):
     #     self.credit_limit_changed = True
