@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="action_invoice_debt_voucher" model="ir.actions.report">
+            <field name="name">Invoice Debt Voucher</field>
+            <field name="model">account.move</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">farmerscredit.invoice_debt_voucher</field>
+            <field name="print_report_name">'Pagare Factura %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_account_move"></field>
+        </record>
+    </data>
+</odoo>

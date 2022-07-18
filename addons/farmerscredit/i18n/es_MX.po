@@ -4,18 +4,56 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 14.0+e\n"
+"Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-09-01 02:58+0000\n"
-"PO-Revision-Date: 2021-08-31 21:05-0600\n"
+"POT-Creation-Date: 2022-07-18 18:52+0000\n"
+"PO-Revision-Date: 2022-07-18 13:01-0600\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: es_MX\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: \n"
-"Language: es_MX\n"
-"X-Generator: Poedit 3.0\n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. module: farmerscredit
+#: model:ir.actions.report,print_report_name:farmerscredit.action_invoice_debt_voucher
+msgid "'Pagare Factura %s' % (object.name)"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "(son:"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+", los intereses ordinarios a la tasa correspondiente\n"
+"                        al <strong>18% anual</strong> que serán cubiertos en\n"
+"                        términos de la factura emitida por"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+", y cuyo número\n"
+"                        aparece al rubro de este título de donde se deriva el presente documento."
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "<b><span>Cliente y Domicilio: </span></b>"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+"<br/><br/><br/>                      \n"
+"                      ________________________________________________________\n"
+"                      <br/>"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__register
@@ -47,7 +85,7 @@ msgstr "Acta Nacimiento"
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__curp
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__curp
 msgid "CURP"
-msgstr "CURP"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__conjugal
@@ -82,6 +120,16 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "Culiacán, Sinaloa a"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "Del valor del presente pagaré me (nos) obligo (amos) a pagar igualmente a"
+msgstr ""
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__description
 msgid "Description"
 msgstr "Descripción"
@@ -89,7 +137,6 @@ msgstr "Descripción"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__display_name
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__display_name
-#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Nombre"
 
@@ -103,6 +150,14 @@ msgstr "Divorciado"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__doc_number
 msgid "Document #"
 msgstr "Documento#"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+"En caso de incumplimiento en el pago en la fecha estipulada en el presente\n"
+"                        pagaré, me obligo a pagar un interés moratorio, que resulte de multiplicar\n"
+"                        por 1.5 veces la tasa de interés ordinaria."
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__end_date
@@ -296,7 +351,7 @@ msgstr "Agricultores"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__inscription_folio
 msgid "Folio"
-msgstr "Folio"
+msgstr ""
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
@@ -336,7 +391,6 @@ msgstr "Administra los Créditos de Agricultores"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__id
-#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__id
 msgid "ID"
 msgstr ""
 
@@ -344,7 +398,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__ine
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__ine
 msgid "INE"
-msgstr "INE"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__initial_date
@@ -355,6 +409,11 @@ msgstr "Fecha Inicio"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__inscription
 msgid "Inscription"
 msgstr "Inscripción"
+
+#. module: farmerscredit
+#: model:ir.actions.report,name:farmerscredit.action_invoice_debt_voucher
+msgid "Invoice Debt Voucher"
+msgstr "Pagaré"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__is_farmer
@@ -369,9 +428,13 @@ msgid "Issued date"
 msgstr "Fecha emisión"
 
 #. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento de diario"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees____last_update
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots____last_update
-#: model:ir.model.fields,field_description:farmerscredit.field_res_partner____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
 
@@ -418,6 +481,11 @@ msgid "Lots of the Farmers"
 msgstr "Lotes de Agricultores"
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "Lugar y fecha de suscripción:"
+msgstr ""
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__marital_state
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__marital_state
 msgid "Marital State"
@@ -427,6 +495,11 @@ msgstr "Estado Civil"
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__mortgage
 msgid "Mortgage"
 msgstr "Hipotecario"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "Nombre y Firma del Suscriptor"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__notary
@@ -474,6 +547,13 @@ msgstr "Parcela #"
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__pledge
 msgid "Pledge"
 msgstr "Prendaria"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+"Por este pagaré me (nos) obligo (amos) incondicionalmente a pagar a la\n"
+"                        orden de"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__proficient
@@ -532,6 +612,11 @@ msgid "Supplier"
 msgstr "Proveedor"
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "Tipo de crédito: COMERCIAL"
+msgstr ""
+
+#. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__is_farmer
 #: model:ir.model.fields,help:farmerscredit.field_res_users__is_farmer
 msgid "Toggle to indicate if is a Farmer or not"
@@ -543,11 +628,29 @@ msgid "Widower"
 msgstr "Viudo"
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid ""
+"con domicilio en: Boulevard Emiliano Zapata, No. 4701 Poniente, Colonia Las Flores, de la\n"
+"                        Ciudad de Culiacán, Sinaloa, C.P. 80104. <br/>\n"
+"                        En la fecha"
+msgstr ""
+
+#. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
 msgid "eg. 074711637582"
-msgstr "eg. 074711637582"
+msgstr ""
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
 msgid "eg. AAPR630321HDFLRC01"
-msgstr "eg. AAPR630321HDFLRC01"
+msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
+msgid "la cantidad de:"
+msgstr ""
+
+#. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_report_farmerscredit_invoice_debt_voucher
+msgid "report.farmerscredit.invoice_debt_voucher"
+msgstr ""

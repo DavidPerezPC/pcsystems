@@ -40,21 +40,21 @@
                                 <field name="partner_id" invisible="1"/>
                                 <hr/>
                                 <group col="12">
-                                    <group colspan="5" string="Generic Information">
+                                    <group colspan="12" string="Generic Information">
                                         <field name="description" />
                                         <field name="doc_number" />
                                         <field name="issued_date" />
                                     </group>
-                                    <group colspan="5" string="Guarantee Value">
+                                    <group colspan="12" string="Guarantee Value">
                                         <field name="owner"/>
                                         <field name="estimated_value" />
                                         <field name="estimated_date" />
                                         <field name="proficient" />                                   
                                     </group>
-                                    <group colspan="10">
+                                    <group colspan="12">
                                         <field name="supplier" attrs="{'invisible': ['|', ('type', '=', False), ('type', '=', 'mortgage')]}" />
                                     </group>
-                                    <group colspan="10" string="Notary Information" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}">
+                                    <group colspan="12" string="Notary Information" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}">
                                         <field name="notary" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
                                         <field name="inscription" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />
                                         <field name="inscription_folio" attrs="{'invisible': ['|', ('type', '=', False), ('type', '!=', 'mortgage')]}" />

@@ -1,7 +1,6 @@
 <odoo>
     <data>
-<!--
-        <template id="listing">
+        <!--template id="listing">
           <ul>
             <li t-foreach="objects" t-as="object">
               <a t-attf-href="#{ root }/objects/#{ object.id }">
@@ -9,16 +8,66 @@
               </a>
             </li>
           </ul>
-        </template>
-        <template id="object">
-          <h1><t t-esc="object.display_name"/></h1>
-          <dl>
-            <t t-foreach="object._fields" t-as="field">
-              <dt><t t-esc="field"/></dt>
-              <dd><t t-esc="object[field]"/></dd>
+        </template-->
+        <template id="invoice_debt_voucher">
+          <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+              <t t-call="web.external_layout">
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <div>
+                  <h2 align="left">
+                      Tipo de crédito: COMERCIAL
+                  </h2>
+                  <div>
+                    <p>
+                      <b><span>Cliente y Domicilio: </span></b>
+                      <span t-field="o.partner_id" t-options="{'widget': 'contact', 'fields': ['name','address'], 'no_marker': True}"/>
+                      <!--t t-set="address">
+                        <address t-field="o.partner_id" t-options="{'widget': 'contact', 'fields': ['address'], 'no_marker': True}"/>
+                      </t-->
+                    </p>  
+                  </div>
+
+                  <div align="justify">
+                    <p>
+
+                        Por este pagaré me (nos) obligo (amos) incondicionalmente a pagar a la
+                        orden de <b><span t-field="o.company_id.name" /></b> con domicilio en: Boulevard Emiliano Zapata, No. 4701 Poniente, Colonia Las Flores, de la
+                        Ciudad de Culiacán, Sinaloa, C.P. 80104. <br/>
+                        En la fecha <b><span t-field="o.invoice_date_due" t-options="{'format': 'd-MMMM-y'}"/></b>
+                        la cantidad de: <strong><span t-field="o.amount_total"  t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                        </strong> (son: <span t-esc="o.currency_id.amount_to_text(o.amount_total)"/> <span t-field="o.currency_id.name" /> )
+                    </p>
+                 
+                    <p>
+                        Del valor del presente pagaré me (nos) obligo (amos) a pagar igualmente a
+                        <b><span t-field="o.company_id.name"/></b>, los intereses ordinarios a la tasa correspondiente
+                        al <strong>18% anual</strong> que serán cubiertos en
+                        términos de la factura emitida por <b><span t-field="o.company_id.name"/></b>, y cuyo número
+                        aparece al rubro de este título de donde se deriva el presente documento.
+                    </p>
+                    <p>
+                        En caso de incumplimiento en el pago en la fecha estipulada en el presente
+                        pagaré, me obligo a pagar un interés moratorio, que resulte de multiplicar
+                        por 1.5 veces la tasa de interés ordinaria.
+                    </p>
+                  </div>                    
+                  <p>
+                      Lugar y fecha de suscripción: <strong>Culiacán, Sinaloa a <span t-field="o.invoice_date" t-options="{'format': 'd-MMMM-y'}"/> </strong>
+                  </p>
+                  <h3>
+                      Nombre y Firma del Suscriptor
+                  </h3>
+                  <p>
+                      <br/><br/><br/>                      
+                      ________________________________________________________
+                      <br/>
+                      <strong><span t-field="o.partner_id.name" /></strong>
+                  </p>
+                </div>
+              </t>
             </t>
-          </dl>
+          </t>
         </template>
--->
     </data>
 </odoo>
