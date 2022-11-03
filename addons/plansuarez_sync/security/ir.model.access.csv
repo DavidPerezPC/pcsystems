@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+plansuarez_synchro_server,plansuarez.synchro.server,model_plansuarez_synchro_server,base.group_system,1,1,1,1
+plansuarez_synchro_obj, plansuarez.synchro.obj,model_plansuarez_synchro_obj,base.group_system,1,1,1,1
+plansuarez_synchro_obj_avoid,plansuarez.synchro.obj.avoid,model_plansuarez_synchro_obj_avoid,base.group_system,1,1,1,1
+plansuarez_synchro_obj_line,plansuarez.synchro.obj.line,model_plansuarez_synchro_obj_line,base.group_system,1,1,1,1
+plansuarez_synchro_res_request,plansuarez.res.request,model_plansuarez_res_request,base.group_system,1,1,1,1
+
+plansuarez_synchro,plansuarez.synchro,model_plansuarez_synchro,base.group_system,1,1,1,1

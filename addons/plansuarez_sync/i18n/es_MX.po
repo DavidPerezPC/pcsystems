@@ -1,0 +1,499 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* plansuarez_sync
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-19 21:32+0000\n"
+"PO-Revision-Date: 2022-10-19 20:01-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.1.1\n"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_search
+msgid "Action From"
+msgstr "Accion de"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_search
+msgid "Action To"
+msgstr "Accion para"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__active
+msgid "Active"
+msgstr "Activo"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields.selection,name:plansuarez_sync.selection__plansuarez_synchro_obj__action__b
+msgid "Both"
+msgstr "Ambos"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro_finish
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__connection_type
+msgid "Connection Type"
+msgstr "Tipo de conexion"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__create_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__create_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__create_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__create_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__create_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__create_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__create_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__create_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__create_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__create_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__name
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_transfer_line_form
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_search
+msgid "Date"
+msgstr "Fecha"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__display_name
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__display_name
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__display_name
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__display_name
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__display_name
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__domain
+msgid "Domain"
+msgstr "Dominio"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields.selection,name:plansuarez_sync.selection__plansuarez_synchro_obj__action__d
+msgid "Download"
+msgstr "Descarga"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.base_synchro_obj_form
+msgid "Fields"
+msgstr "Campos"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__avoid_ids
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.base_synchro_obj_form
+msgid "Fields Not Sync."
+msgstr "Campos sin sincronizar."
+
+#. module: plansuarez_sync
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_synchro_obj_avoid
+msgid "Fields to synchronize"
+msgstr "Campos a sincronizar"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.actions_regclass_tree
+#: model:ir.actions.act_window,name:plansuarez_sync.actions_transfer_line_form
+msgid "Filters"
+msgstr "Filtros"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__act_from
+msgid "From User"
+msgstr "Del usuario"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_regclass_tree
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_transfer_line_form
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: plansuarez_sync
+#: model:ir.ui.menu,name:plansuarez_sync.plansuarez_sync_history
+msgid "History"
+msgstr "Historial"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__id
+msgid "ID"
+msgstr "ID"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__line_id
+msgid "IDs Affected"
+msgstr "IDs Afectados"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request____last_update
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro____last_update
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj____last_update
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid____last_update
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line____last_update
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server____last_update
+msgid "Last Modified on"
+msgstr "Ultima modificacion en"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__write_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__write_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__write_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__write_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__write_uid
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__write_uid
+msgid "Last Updated by"
+msgstr "Actualizado por ultima vez por"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__write_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__write_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__write_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__write_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__write_date
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__write_date
+msgid "Last Updated on"
+msgstr "Actualizado por ultima vez en"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__synchronize_date
+msgid "Latest Synchronization"
+msgstr "Ultima Sincronizacion"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_regclass_tree
+msgid "Latest synchronization"
+msgstr "Ultima sincronizacion"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__local_id
+msgid "Local ID"
+msgstr "ID Local"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_form
+msgid "Message"
+msgstr "Mensaje"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__obj_ids
+msgid "Models"
+msgstr "Modelos"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__obj_id
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__obj_id
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_transfer_line_form
+msgid "Object"
+msgstr "Objeto"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__model_id
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_regclass_tree
+msgid "Object to synchronize"
+msgstr "Objeto a sincronizar"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields.selection,name:plansuarez_sync.selection__plansuarez_synchro_server__connection_type__odoo
+msgid "Odoo"
+msgstr "Odio"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__password
+msgid "Password"
+msgstr "Contraseña"
+
+#. module: plansuarez_sync
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_synchro
+msgid "Plan Suarez Synchronization"
+msgstr "Sincronizacion Plan Suarez"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__server_port
+msgid "Port"
+msgstr "Puerto"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields.selection,name:plansuarez_sync.selection__plansuarez_synchro_server__connection_type__psql
+msgid "PostgreSQL"
+msgstr "PostgreSQL"
+
+#. module: plansuarez_sync
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_synchro_obj
+msgid "Register Class"
+msgstr "Clase de registro"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_line__remote_id
+msgid "Remote ID"
+msgstr "ID Remoto"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__report_create
+msgid "Report Create"
+msgstr "Crear reporte"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__report_total
+msgid "Report Total"
+msgstr "Reporte total"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__report_write
+msgid "Report Write"
+msgstr "Escribir reporte"
+
+#. module: plansuarez_sync
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_res_request
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__body
+msgid "Request"
+msgstr "Solicitar"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.action_plansuarez_res_request
+#: model:ir.ui.menu,name:plansuarez_sync.menu_plansuarez_res_request
+msgid "Request Report"
+msgstr "Solicitar reporte"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_form
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_search
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_res_request_tree
+msgid "Res Request"
+msgstr "Solicitar Res"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__connection_type
+msgid "Select what kind of Server is"
+msgstr "Seleccionar tipo de Servidor"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__user_id
+msgid "Send Result To"
+msgstr "Enviar resultado a"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__server_id
+msgid "Server"
+msgstr "Servidor"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__server_db
+msgid "Server Database"
+msgstr "Base de datos del servidor"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__name
+msgid "Server name"
+msgstr "Nombre del servidor"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.action_plansuarez_synchro_server_tree
+#: model:ir.ui.menu,name:plansuarez_sync.plansuarez_server_tree_menu_id
+msgid "Servers to be synchronized"
+msgstr "Servidores a sincronizar"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__server_url
+msgid "Sever Address"
+msgstr "Direccion del servidor"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__name
+msgid "Source Field"
+msgstr "Campo de fuente"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__server_url
+msgid "Source Server"
+msgstr "Servidor de origen"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__name
+msgid "Subject"
+msgstr "Persona"
+
+#. module: plansuarez_sync
+#: model:ir.ui.menu,name:plansuarez_sync.plansuarez_sync
+msgid "Synchronization"
+msgstr "Sincronizacion"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro_finish
+msgid "Synchronization Completed!"
+msgstr "Sincronizacion completada!"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj__action
+msgid "Synchronization direction"
+msgstr "Direccion de sincronización"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro
+msgid "Synchronize"
+msgstr "Sincronizar"
+
+#. module: plansuarez_sync
+#: model:ir.ui.menu,name:plansuarez_sync.menu_action_view_plansuarez_synchro
+msgid "Synchronize objects"
+msgstr "Sincronizar datos"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.plansuarez_synchro_obj_tree
+msgid "Synchronized Objects"
+msgstr "Datos Sincronizados"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_base_synchro_server_tree
+msgid "Synchronized Server"
+msgstr "Servidor Sincronizado"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.action_base_synchro_obj_line_tree
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_synchro_obj_line
+#: model:ir.ui.menu,name:plansuarez_sync.menu_action_base_synchro_obj_line_tree
+msgid "Synchronized instances"
+msgstr "Instancias sincronizados"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.action_transfer_tree
+#: model:ir.ui.menu,name:plansuarez_sync.transfer_menu_id
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_regclass_tree
+msgid "Synchronized objects"
+msgstr "Datos sincronizados"
+
+#. module: plansuarez_sync
+#: model:ir.model,name:plansuarez_sync.model_plansuarez_synchro_server
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_base_synchro_server_form
+msgid "Synchronized server"
+msgstr "Servidor Sincronizado"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_obj_avoid__target
+msgid "Target Field"
+msgstr "Campo Destino"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro__target_server
+msgid "Target Server"
+msgstr "Servidor Destino"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro_finish
+msgid ""
+"The synchronisation has been started. You will receive a request when it's "
+"done."
+msgstr ""
+"La sincronizacion ha empezado. Ud va a recibir una solicitud cuando haya "
+"terminado."
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_res_request__act_to
+msgid "To User"
+msgstr "Al Usuario"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro
+msgid "Transfer Data To Server"
+msgstr "Transferir Datos A Servidor"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.base_synchro_obj_form
+msgid "Transfer Details"
+msgstr "Transferir Detalles"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_transfer_line_form
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_transfer_line_tree
+msgid "Transfered IDs Details"
+msgstr "Trasnferir IDs Detallados"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.ir_filters_transfer_line_form
+msgid "Transfered Ids Details"
+msgstr "Transferir Ids Detallados"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__server_url
+msgid "Type Server Url or IP Address to access"
+msgstr "Escriba la URL o la direccion IP de para acceder"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__password
+msgid "Type password assigned to the user"
+msgstr "Escriba la contraseña asignada al usuario"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__server_db
+msgid "Type the Database Name for this Server"
+msgstr "Escriba el Nombre de la Base de Datos para este Servidor"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__server_port
+msgid "Type the Server Port if is used"
+msgstr "Escriba el Puerto del Servidor (en caso de que se utilice)"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__login
+msgid "Type the User Name or Login to access the Server"
+msgstr "Escriba el Nombre de Usuario para Iniciar Sesión"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,help:plansuarez_sync.field_plansuarez_synchro_server__name
+msgid "Type the name for this connection"
+msgstr "Nombre que identificara a esta conexion"
+
+#. module: plansuarez_sync
+#: model:ir.actions.act_window,name:plansuarez_sync.action_view_plansuarez_synchro
+msgid "Upgrade Synchronization"
+msgstr "Actualizar Sincronizacion"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields.selection,name:plansuarez_sync.selection__plansuarez_synchro_obj__action__u
+msgid "Upload"
+msgstr "Subir"
+
+#. module: plansuarez_sync
+#: model:ir.model.fields,field_description:plansuarez_sync.field_plansuarez_synchro_server__login
+msgid "UserName"
+msgstr "Usuario"
+
+#. module: plansuarez_sync
+#: model_terms:ir.ui.view,arch_db:plansuarez_sync.view_plansuarez_synchro
+msgid "or"
+msgstr "o"
