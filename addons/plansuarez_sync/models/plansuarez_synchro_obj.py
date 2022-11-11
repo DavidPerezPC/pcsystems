@@ -123,8 +123,8 @@ class BaseSynchroObj(models.Model):
     synchronize_end = fields.Datetime(string="Finished at", help="Date/Time Syncronization ended", readonly=True)
     
     line_id = fields.One2many(
-        "plansuarez.synchro.obj.line", "obj_id", "IDs Affected", ondelete="cascade"
-    )
+        "plansuarez.synchro.obj.line", "obj_id", "IDs Affected") #, ondelete="cascade"
+
 
     # avoid_ids = fields.One2many(
     #     "plansuarez.synchro.obj.line", "obj_id", "IDs  Not Sync.", ondelete="cascade",
@@ -146,8 +146,8 @@ class BaseSynchroObjAvoid(models.Model):
     name = fields.Char("Source Field", required=True)
     target = fields.Char("Target Field", required=True)
     obj_id = fields.Many2one(
-        "plansuarez.synchro.obj", "Object", required=True, ondelete="cascade"
-    )
+        "plansuarez.synchro.obj", "Object", required=True) #, ondelete="cascade"
+    
 
 class BaseSynchroObjLine(models.Model):
     """Class to store object line in base synchro."""
@@ -158,7 +158,7 @@ class BaseSynchroObjLine(models.Model):
     name = fields.Datetime(
         "Date", required=True, default=lambda self: fields.Datetime.now()
     )
-    obj_id = fields.Many2one("plansuarez.synchro.obj", "Object", ondelete="cascade")
+    obj_id = fields.Many2one("plansuarez.synchro.obj", "Object")  #ondelete="cascade")
     local_id = fields.Integer("Local ID", readonly=True)
     remote_id = fields.Integer("Remote ID", readonly=True)
 

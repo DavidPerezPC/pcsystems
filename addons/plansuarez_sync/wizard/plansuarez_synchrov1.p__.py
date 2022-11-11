@@ -1,22 +1,19 @@
 # See LICENSE file for full copyright and licensing details.
 # -*- coding: utf-8 -*-
-# from itertools import groupby
-# from msilib.schema import Error
-# import re
-# import ssl
+from itertools import groupby
+#from msilib.schema import Error
+import re
+import ssl
 import logging
 import threading
-# import time
+import time
 from xmlrpc.client import ServerProxy
 from odoo import api, fields, models
-# from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 from odoo.tools.translate import _
 from odoo.tools import format_datetime
-from datetime import datetime
-from time import sleep
-import json
-import requests
-# import numpy as np
+from datetime import datetime, timedelta
+#import numpy as np
 
 EPSILON = 0.9
 
@@ -33,6 +30,7 @@ STATUS = {
     "404": "No existe cliente con documento asignado: "
 }
 
+
 def _log_logging(env, message, function_name, path):
     env['ir.logging'].sudo().create({
         'name': 'MySync',
@@ -46,13 +44,14 @@ def _log_logging(env, message, function_name, path):
     })
 
 class RPCProxyOne(object):
+
     rpc = None
     uid = None
 
     def __init__(self, server):
         """Class to store one RPC proxy server."""
         self.server = server
-        # context = ssl.SSLContext()
+        #context = ssl.SSLContext()
         sublocal_url = ""
         if server.server_port:
             sublocal_url = "http://{}:{}/xmlrpc/".format(
@@ -64,16 +63,16 @@ class RPCProxyOne(object):
                 server.server_url
             )
         local_url = sublocal_url + "common"
-        # rpc = ServerProxy(local_url, context=context)
-        rpc = ServerProxy(local_url, allow_none=True)
+        #rpc = ServerProxy(local_url, context=context)
+        rpc = ServerProxy(local_url)
         self.uid = rpc.login(server.server_db, server.login, server.password)
         local_url = sublocal_url + "object"
         # local_url = "http://%s:%d/xmlrpc/object" % (
         #     server.server_url,
         #     server.server_port,
         # )
-        # self.rpc = ServerProxy(local_url, context=context)
-        self.rpc = ServerProxy(local_url, allow_none=True)
+        #self.rpc = ServerProxy(local_url, context=context)
+        self.rpc = ServerProxy(local_url)
 
     def __getattr__(self, name):
         return lambda *args, **kwargs: self.rpc.execute(
@@ -85,7 +84,6 @@ class RPCProxyOne(object):
             *args
         )
 
-
 class RPCProxy(object):
     """Class to store RPC proxy server."""
     
@@ -94,7 +92,6 @@ class RPCProxy(object):
 
     def get(self):
         return RPCProxyOne(self.server)
-
 
 class BaseSynchro(models.TransientModel):
     """Base Synchronization."""
@@ -134,6 +131,8 @@ class BaseSynchro(models.TransientModel):
     report_create = fields.Integer(compute="_compute_report_vals")
     report_write = fields.Integer(compute="_compute_report_vals")
 
+    
+
     @api.model
     def synchronize(self, server, target):
 
@@ -145,10 +144,9 @@ class BaseSynchro(models.TransientModel):
         tgt_uid = pool1.get().uid
         tgt_db = pool1.server.server_db
         tgt_pwd = pool1.server.password
-        tgt_url = pool1.server.server_url
 
         sql = """
-            select id, "name", amount from account_tax at
+            select id, "name" from account_tax at
             where at."name" like 'Exento%' and at.type_tax_use = 'sale';
         """
         tax_exento = self.server_url.getdata(sql, True)[0] 
@@ -163,22 +161,20 @@ class BaseSynchro(models.TransientModel):
             'tgt_uid': tgt_uid,
             'tgt_db': tgt_db,
             'tgt_pwd': tgt_pwd,
-            'tgt_url': tgt_url,
         }
 
-        #self.open_close_sessions(tgt_info)
         po_data = {
             'dhrs': self.get_po_valid(),
             'dprs': [],
             'dplrs': [], 
             'po_created': [],
             'ncs': [],
-            'ncs_negative': [],
             'eliminadas': [],
             'errors': [],
             'duplicadas': self.server_url.getdata(sql),
             'tax_exento': tax_exento
         }
+
 
         # domain = [[ ['id', '=', 875920  ] ]]
         # picking_ids = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'search_read', domain, 
@@ -189,16 +185,6 @@ class BaseSynchro(models.TransientModel):
         #     picking = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'search_read', domain, 
         #                                         {'fields': ['id', 'name', 'location_dest_id', 
         #                                            'move_ids_without_package', 'move_lines', 'date', 'branch_id']})
-        # domain = [[ ['id', '=', 875920  ] ]]
-        #picking_ids = 
-        #                     {'fields': ['id', 'name', 'picking_ids', 'session_id']})
-        # picking_ids = picking_ids[0]['picking_ids']
-        # for pick in picking_ids:
-        #     domain = [[ ['id', '=', pick] ]]
-        #     picking = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'search_read', domain, 
-        #                                         {'fields': ['id', 'name', 'location_dest_id', 
-        #                                            'move_ids_without_package', 'move_lines', 'date', 'branch_id']})
-
         self.create_pos_orders(tgt_info, po_data)
 
         if len(po_data['ncs']) > 0:
@@ -212,7 +198,7 @@ class BaseSynchro(models.TransientModel):
             'synchronize_date': sync_start_at,
             'synchronize_end': endtime,
             'action': self.action,
-            'line_id': po_data['errors']  # TODO: HE COMENTADO ESTO PORQUE ME HA DICHO QUE EL OBJETO plansuarez.synchro no tiene el objeto errors
+            'line_id': self.errors
         }
         self.env['plansuarez.synchro.obj'].create(syncro)
 
@@ -220,43 +206,9 @@ class BaseSynchro(models.TransientModel):
 
         return True
 
-    def open_close_sessions(self, tgtinfo):
-
-        try:
-            sql = """
-                select combined, status, identification, fund, tienda, identidad, abierta, cerrada, fecha, cant_orden
-                from data_open_close_retail
-                where identification is not null and identification != ''
-                order by id;
-            """
-            data_2_process = []
-            docr = self.server_url.getdata(sql, True)
-            for data in docr:
-                data_2_process.append({
-                    "combined": data.get('combined'),
-                    "status": data.get('status'),
-                    "identification": data.get('identification'),
-                    "fund": data.get('fund'),
-                    "tienda": data.get('tienda'),
-                    "identidad": data.get('identidad'),
-                    "abierta": data.get('abierta'),
-                    "cerrada": data.get('cerrada'),
-                    "fecha": data.get('fecha'),
-                    "cant_orden": data.get('cant_orden'),
-                })
-
-            final_data_2_process = { 'data': data_2_process, }
-
-            url = f"http://{tgtinfo['tgt_url']}" 
-            response = requests.post(f'{url}/openPos', json=final_data_2_process)
-            print(response.text)
-                
-        except Exception as err:
-            print(str(err))
-            sleep(10)
-            self.open_close_sessions()
 
     def create_pos_orders(self, tgt_info, po_data, negative=False):
+
         tgt_rpc = tgt_info['tgt_rpc']
         tgt_uid = tgt_info['tgt_uid']
         tgt_db = tgt_info['tgt_db']
@@ -274,7 +226,6 @@ class BaseSynchro(models.TransientModel):
         dprs = po_data['dprs']
         dplrs = po_data['dplrs']
 
-        lfilldetails = ( len(dprs) == 0 or len(dplrs) == 0 )
         errmsg = ''
         for dhr in dhrs:
             refund = False
@@ -290,10 +241,10 @@ class BaseSynchro(models.TransientModel):
                 errors.append(self.get_error(dhr, "407", errmsg))
                 continue 
         
-            if lfilldetails:
+            if not dprs or not dplrs:
                 dprs, dplrs = self.get_po_details(oid)
 
-            if es_nc or es_eliminada:
+            if es_nc:
                 ncs.append([dhr, dprs, dplrs])
                 continue
 
@@ -338,7 +289,7 @@ class BaseSynchro(models.TransientModel):
                             banco_propio = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'banco.propio.info', 'create', [data])
                     
                     if dpr['banco_c'] and not dpr['banco_cliente_name']:
-                        errmsg += "Banco Cliente no registrado {}, ".format(dpr['banco_c'])
+                        errmsg += "Banc Cliente no registrado {}, ".format(dpr['banco_c'])
                     elif dpr['banco_c']:
                         banco_c = dpr['banco_cliente_info_id']
                         if not banco_c:
@@ -474,9 +425,9 @@ class BaseSynchro(models.TransientModel):
                         'v_tipo': dhr['v_tipo'],
                         'v_tienda_caja_factura': "{}/{}".format(dhr['v_tienda'], dhr['v_cajafactura']),
                     }
-                    po_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'create', [data])
-                    errors.append(self.get_error(dhr, "200", errmsg, po_id))
-                    po_created.append(po_id)
+                    #po_id = self.tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'create', [data])
+                    #self.errors.append(self.get_error(dhr, "200", errmsg, po_id))
+                    #po_created.append(po_id)
                     if es_eliminada and not negative:
                         eliminadas.append([dhr, dprs, dplrs])
                     #if es_nc and not negative:
@@ -485,8 +436,8 @@ class BaseSynchro(models.TransientModel):
                     if self.action in ['b', 'i']:
                         applied = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'new_create_order_picking', [po_id])
      
-                    self.updatedhr(po_id, dhr['id'])
-                    print("Orden: {}".format(po_id))
+                    #self.updatedhr(po_id, dhr['id'])
+                    #print("Orden: {}".format(po_id))
                     self.report_create += 1
                 else:
                     errors.append(self.get_error(dhr, "422", errmsg))
@@ -508,16 +459,6 @@ class BaseSynchro(models.TransientModel):
 
         return po_data
     
-    def updatedhr(self, poid, dhrid):
-        sql = """
-            update data_header_retail set valid = True, pos_order_id = {}
-            where id = {};
-        """.format(poid, dhrid)
-
-        res = self.server_url.updatedata(sql)
-
-        return res
-
     def create_credits(self, tgt_info, po_data):
 
         tgt_rpc = tgt_info['tgt_rpc']
@@ -525,7 +466,6 @@ class BaseSynchro(models.TransientModel):
         tgt_db = tgt_info['tgt_db']
         tgt_pwd = tgt_info['tgt_pwd']
         errors = po_data['errors']
-        ncs_negative = po_data['ncs_negative']
         tax_exento = po_data['tax_exento']
 
         credits = po_data['ncs']
@@ -554,11 +494,10 @@ class BaseSynchro(models.TransientModel):
                                         'company_id']})
             if not pos_order:
                 #validar si esta registrada para mandarla a negativa, o bien si ya esta registrada
-                ncs_negative.append([dhr, dprs, dplrs])
-                continue 
+                 continue 
 
             pos_order = pos_order[0]
-            # v_tienda_caja_factura = "NC:" + pos_order['v_tienda_caja_factura']
+            v_tienda_caja_factura = "NC:" + pos_order['v_tienda_caja_factura']
             
             order_to_copy = self.get_credit_dict(pos_order, dhr)
             domain = [[
@@ -567,17 +506,14 @@ class BaseSynchro(models.TransientModel):
             pos_order_line = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order.line', 'search_read', domain,
                                                 {'fields': ['id', 'product_id', 'full_product_name']})
 
-            # product_list_aux = []
-            refund_lines, amount_total, taxes_total = [], 0, 0
+            product_list_aux = []
+            refund_lines = []
             for line in pos_order_line:
-                if len(dplrs) == 0:
-                    break
                 n = 0
                 for dplr in dplrs:
-                    n += 1
-                    # default_code = self.get_product_default_code(line['product_id'][0])
-                    if line['product_id'][0] == dplr['product_id']:
-
+                    n +=1
+                    default_code = self.get_product_default_code(line['product_id'][0])
+                    if default_code == dplr['product_id']:
                         if dplr['iva'] == 0:
                             iva = tax_exento['name']
                             tax_id = tax_exento
@@ -587,19 +523,16 @@ class BaseSynchro(models.TransientModel):
                                 where "name" like '{} %' and type_tax_use = 'sale'
                             """.format(dplr['iva'])
                             tax_id = self.server_url.getdata(sql, True)
-                            if len(tax_id) > 0:
+                            iva = ''
+                            if tax_id:
                                 tax_id = tax_id[0]
                                 iva = tax_id['name']
-                            else:
-                                iva = tax_exento['name']
-
-                        price_subtotal_incl = (dplr['price'] + (dplr['price'] * tax_id['amount'] if tax_id else 0) / 100) * dplr['product_uom_qty']
+                    
+                        price_subtotal_incl = (dplr['price'] + (dplr['price'] * tax_id['amount']) / 100) * dplr['product_uom_qty']
                         product_dict = (0, 0, {
-                            'full_product_name': dplr['product_name'],
-                            # 'name': order_to_copy['name'],
+                            #'name': order_to_copy['name'],
                             'qty': dplr['product_uom_qty'],
-                            # 'order_id': refund_order,
-                            'product_id': dplr['product_id'],
+                            #'order_id': refund_order,
                             'price_subtotal': dplr['price'] * dplr['product_uom_qty'],
                             'price_subtotal_incl': price_subtotal_incl,
                             'tax_ids': [(4, tax_id['id'])] if tax_id else False,
@@ -607,12 +540,12 @@ class BaseSynchro(models.TransientModel):
                         })
                         refund_lines.append(product_dict)
                         amount_total += price_subtotal_incl
-                        taxes_total += abs(price_subtotal_incl) - abs(product_dict[2]['price_subtotal'])
-                        # product_list_aux.append(dplrs[n - 1])
+                        taxes_total += abs(price_subtotal_incl) - abs(product_dict['price_subtotal'])
+                        product_list_aux.append(dplrs[n - 1])
                         dplrs.pop(n - 1)
 
             if refund_lines:
-                order_to_copy.update({'lines': refund_lines})
+                order_to_copy.update({'lines': product_dict})
                 refund_order = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'create', [order_to_copy])
                 for dpr in dprs:
                     nc_reference_bool = True if dpr['nc_reference'] else False
@@ -624,22 +557,16 @@ class BaseSynchro(models.TransientModel):
                     }
                     dpr.update(
                         {'payment_date': order_to_copy['date_order'], 
-                         'branch_id': dhr['branch_id'],
-                         'nc_reference_bool': nc_reference_bool,
-                         'bancoPropio': dpr['banco_propio'],
-                         })
-                    dpr = {key: value for key, value in dpr.items()}
+                        'branch_id': dhr['branch_id'],
+                        'nc_reference_bool': nc_reference_bool,
+                        'bancoPropio': dpr['banco_propio']
+                        })
                     order_payment = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.make.payment', 'create', [data],
-                                                       {'context': {'active_ids': [refund_order], 'active_id': refund_order}})
+                                                 {'context': {'active_ids': [refund_order], 'active_id': refund_order}})
                     tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.make.payment', 'check_payment', [[order_payment], dpr],
-                                       {'context': {'active_ids': [refund_order], 'active_id': refund_order}})
+                                                 {'context': {'active_ids': [refund_order], 'active_id': refund_order}})
 
                 self.create_credit_pickings(tgt_info, refund_order)
-        
-        if len(ncs_negative) > 0:
-            for negative in ncs_negative:
-                po_data.update({'dhrs': negative[0], 'dprs': negative[1], 'dplrs': negative[2]})
-                self.create_pos_orders(tgt_info, po_data, True)
 
 
     def create_credit_pickings(self, tgt_info, refund_order):
@@ -657,26 +584,34 @@ class BaseSynchro(models.TransientModel):
             where po.id = {};
         """.format(refund_order)
         picking_ids = self.server_url.getdata(sql, True, True)
-        domain = [[['id', '=', refund_order]]]
-        po = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'search_read', domain,
-                                {'fields': ['id', 'name', 'lines', 'picking_ids', 'session_id']})[0]
-        # picking_ids = picking_ids[0]['picking_ids'] if picking_ids else []
+        domain = [[ ['id', '=', refund_order] ]]
+        po = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'search_read', domain, 
+                                         {'fields': ['id', 'name', 'lines', 'picking_ids', 'session_id' ]})[0]
+        #picking_ids = picking_ids[0]['picking_ids'] if picking_ids else []
         for picking in picking_ids:
-            params = [[picking['id']], picking['default_location_dest_id'],
-                      po['lines'], picking['picking_type_id']
-                      ]
+            params = [ [picking['id']], picking['default_location_dest_id'], 
+                        po['lines'], picking['picking_type_id'] 
+                    ]
             tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'cpf_pol_custom_xmlrp', params)
 
-        po = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'search_read', domain, {'fields': ['id', 'name', 'lines', 'picking_ids', 'session_id']})[0]
+        po = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'search_read', domain, 
+                                         {'fields': ['id', 'name', 'lines', 'picking_ids', 'session_id' ]})[0]
         picking_ids = po[0]['pickings_ids'] if picking_ids else []
         for picking in picking_ids:
 
-            domain = [[['id', '=', picking]]]
-            picking = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'search_read', domain,
-                                         {'fields': ['id', 'name', 'location_dest_id', 'move_ids_without_package', 'move_lines', 'date', 'branch_id']})
+            domain = [[ ['id', '=', picking] ]]
+            picking = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'search_read', domain, 
+                                        {'fields': ['id', 'name', 'location_dest_id', 
+                                            'move_ids_without_package', 'move_lines', 'date', 'branch_id']})
             for moves in picking:
-                params = [[moves['id']], moves['move_ids_without_package'], moves['date'], 'stock_move', moves['branch_id']]
-                params1 = [[moves['id']], moves['move_ids_without_package'], moves['date'], 'stock_move']
+                params = [ [moves['id']], 
+                            moves['move_ids_without_package'], moves['date'], 
+                            'stock_move', moves['branch_id']
+                        ]
+                params1 = [ [moves['id']], 
+                            moves['move_ids_without_package'], moves['date'], 
+                            'stock_move'
+                        ]             
 
                 if moves['move_ids_without_package']:
                     tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'update_date_sm', params)
@@ -686,11 +621,13 @@ class BaseSynchro(models.TransientModel):
                 tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'update_date_sm', params)
                 tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'stock.picking', 'change_create_date_sm', params1)
 
-        tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'action_pos_order_invoice_custom', [[refund_order]])
+        tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 
+                            'action_pos_order_invoice_custom', [[refund_order]])
 
-    @staticmethod
-    def get_credit_dict(po, dhr):
-        credit_dict = {
+    def get_credit_dict(self, po, dhr):
+
+
+        dict = {
             'name': po['name'] + _(' REFUND'),
             'session_id': dhr['session_id'],
             'date_order': dhr['v_hora_pedido_time'],
@@ -716,11 +653,10 @@ class BaseSynchro(models.TransientModel):
             'to_invoice': True,
             'case_refund': dhr['refund'],
             'v_tipo': dhr['v_tipo'],
-            'v_tienda_caja_factura': "{}/{}".format(dhr['v_tienda'], dhr['v_cajafactura'])  , 
-            'amount_return': 0,
+            'v_tienda_caja_factura': "{}/{}".format(dhr['v_tienda'], dhr['v_cajafactura']),
         }
 
-        return credit_dict
+        return dict
 
     def get_product_default_code(self, product_id):
         sql = """
@@ -728,7 +664,7 @@ class BaseSynchro(models.TransientModel):
             from product_product pp join product_template pt on (pt.id = pp.product_tmpl_id)
             where pp.id = {};
         """.format(product_id)
-        product_info = self.server_url.getdata(sql, True, True)
+        product_info  = self.server_url.getdata(sql, True, True)
 
         return product_info[0]['default_code']
 
@@ -753,7 +689,7 @@ class BaseSynchro(models.TransientModel):
                         join res_users ru on (ru.partner_id = rp.id and ru.active)
                 where 
                     dhr.v_tipo in ('N/C', 'ELIMINADA') 
-                    and (dhr."valid" is null or dhr."valid" = false) and dhr.pos_order_id  is null            
+                    --(dhr."valid" is null or dhr."valid" = false) and dhr.pos_order_id  is null            
             )
             select dhr.id, dhr.refund, dhr.v_efectivo, dhr.v_credito, dhr.v_puntos,
                 dhr.fecha, dhr.v_hora_pedido, dhr.factura, dhr.v_numero,
@@ -968,8 +904,6 @@ class BaseSynchro(models.TransientModel):
             return sql
 
     def upload_download(self):
-
-
         self.ensure_one()
         report = []
         start_date = fields.Datetime.now()
@@ -1027,12 +961,10 @@ class BaseSynchro(models.TransientModel):
             return {}
 
     def upload_download_multi_thread(self):
-
-        #self.sync_pos_order_servers()
         threaded_synchronization = threading.Thread(
-           target=self.upload_download()
+            target=self.upload_download()
         )
-        #threaded_synchronization.run()
+        threaded_synchronization.run()
         # id2 = self.env.ref("upgrade_sync.view_upgrade_synchro_finish").id
         # return {
         #     "binding_view_types": "form",
@@ -1043,153 +975,3 @@ class BaseSynchro(models.TransientModel):
         #     "type": "ir.actions.act_window",
         #     "target": "new",
         # }
-
-    def sync_pos_order_servers(self):
-
-
-        jsonfile = "/Users/turbo/odoo16/pcsystems/addons/plansuarez_sync/wizard/all_data_to_open.json"
-        with open(jsonfile) as f:
-            sessions = json.load(f)
-
-        for s in sessions:
-            if s['tienda'] != '2':
-                continue
-            domain = [[
-                    ['identification_id', '=', s['identifcation']]
-            ]]
-            user_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'res.partner', 'search_read', domain )
-            user_id = user_id[0]
-            domain = [[
-                    ['name', '=', s['combined']]
-                ]]
-            config_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.config', 'search_read', domain )
-            config_id = config_id[0]
-            data = {
-                'config_id': s['config_id'],
-                #'name': s['name'] + "/202209",
-                'user_id': s['user_id'],
-                'start_at': s['start_at'],
-                'stop_at': s['stop_at'],
-                'state': 'opened',
-                'branch_id': s['branch_id'],
-                'store_box': s['store_box']
-            }
-            sesion_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.session', 'create', [data] )
-
-        url = 'http://172.17.0.64'
-        src_db = 'productionn_20221031'
-        src_user = 'david@testing.com'
-        src_pwd =  'd4v1dp3'
-        src_rpc = ServerProxy('{}/xmlrpc/2/common'.format(url), allow_none=True)  
-        src_uid = src_rpc.authenticate(src_db, src_user, src_pwd, {})
-        src_rpc = ServerProxy('{}/xmlrpc/2/object'.format(url), allow_none=True)
-
-        tgt_db = 'productionn_20220929'
-        tgt_user = 'd4vidp'
-        tgt_pwd = 'd4v1dp3' 
-        tgt_rpc = ServerProxy('{}/xmlrpc/2/common'.format(url), allow_none=True)  
-        tgt_uid = tgt_rpc.authenticate(tgt_db, tgt_user, tgt_pwd, {})
-        tgt_rpc = ServerProxy('{}/xmlrpc/2/object'.format(url), allow_none=True)
-
-        flds_pos = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'fields_get', [], {'attributes': ['type']} )
-        flds_line = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order.line', 'fields_get', [], {'attributes': ['type']} )
-        flds_payment = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.payment', 'fields_get', [], {'attributes': ['type']} )
-
-
-        sql = """
-                select id, config_id, "name", user_id, start_at, stop_at, 'open' state, branch_id, store_box
-                from pos_session ps
-                where branch_id  = 1 and (ps.start_at  - interval '4 hour')::date >= '2022-09-29' 
-                    and (ps.stop_at  - interval '4 hour')::date <= '2022-09-30';
-        """
-        session_ids = {}
-        sessions = self.server_url.getdata(sql, True, True)
-        for s in sessions:
-            data = {
-                'config_id': s['config_id'],
-                'name': s['name'] + "/202209",
-                'user_id': s['user_id'],
-                'start_at': s['start_at'],
-                'stop_at': s['stop_at'],
-                'state': 'opened',
-                'branch_id': s['branch_id'],
-                'store_box': s['store_box']
-            }
-            s_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.session', 'create', [data] )
-            session_ids.update({s['id']: s_id})
-
-
-        f_pos = [x for x in flds_pos.keys()]
-        avoids_flds = ['create_date', 'write_date', 'picking_ids', 'picking_count', 'failed_pickings', 'account_move', 'payment_ids',
-                       'historic_payment_ids', 'display_name', 'edit_payment_lines', 'id', '__last_update' ]
-        for f in f_pos:
-            if f in avoids_flds:
-                f_pos.remove(f)
- 
-        f_line = [x for x in flds_line.keys()]
-        avoids_flds = ['id', 'session_id', 'create_date', 'write_date', 'tax_ids', 'tax_ids_after_fiscal_position',
-                       'order_id', 'pack_lot_ids', 'display_name',  '__last_update' ]
-        for f in f_line:
-            if f in avoids_flds:
-                f_line.remove(f)
- 
-        f_payment = [x for x in flds_payment.keys()]
-        avoids_flds = ['create_date', 'write_date', 'status', 'display_name', 'id', 'pos_query', 'pos_order_id', '__last_update']
-        for f in f_payment:
-            if f in avoids_flds:
-                f_payment.remove(f)
-
-        f_payment.remove('status')
-        f_payment.remove('display_name')
-        sql = """
-            select array( 
-	            select id from  pos_order po 
-	            where po.v_tienda = '2' and (po.date_order  - interval '4 hour')::date  between '2022-09-29' and '2022-09-30'
-                );
-        """
-        data = self.server_url.getdata(sql)
-        domain = [[
-            ['id', 'in', data[0][0]]
-        ]]
-        posids = src_rpc.execute_kw(src_db, src_uid, src_pwd, 'pos.order', 'search_read', domain, {'fields': f_pos} )
-
-        for pos in posids:
-            linestgt = []
-            paytgt = []
-            domain = [[
-                ['order_id', '=', pos['id']]
-            ]]
-            lines = src_rpc.execute_kw(src_db, src_uid, src_pwd, 'pos.order.line', 'search_read', domain, {'fields': f_line} )
-            domain = [[
-                ['pos_order_id', '=', pos['id']]
-            ]]            
-            pays = src_rpc.execute_kw(src_db, src_uid, src_pwd, 'pos.payment', 'search_read', domain, {'fields': f_payment} )
-            for line in lines:
-                self.change_fld_type(flds_line, line)
-                linestgt.append((0, 0, line))
-
-            for pay in pays:
-                self.change_fld_type(flds_payment, pay)
-                paytgt.append((0, 0, pay))
-
-            self.change_fld_type(flds_pos, pos)
-            pos.update({'lines': linestgt,  'payment_ids': paytgt, 'session_id': session_ids[pos['session_id1']]})    
-
-
-            tgt_id = tgt_rpc.execute_kw(tgt_db, tgt_uid, tgt_pwd, 'pos.order', 'create', [pos])
-            print("Copiado el ID: {} al {}".format(pos['id'], tgt_id)) 
-
-
-
-    def change_fld_type(self, datawtype, data):
-        
-        for d in data:
-            dtype = datawtype[d]['type']
-            if  dtype == "many2one" and data[d]:
-                data[d] = data[d][0]
-            elif dtype == 'many2many':
-                m2m = data[d]
-                m2m_ = []
-                for m in m2m:
-                    m2m_.append((4, m))
-                data[d] = m2m_
