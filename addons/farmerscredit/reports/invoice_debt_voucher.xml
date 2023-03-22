@@ -8,5 +8,14 @@
             <field name="print_report_name">'Pagare Factura %s' % (object.name)</field>
             <field name="binding_model_id" ref="model_account_move"></field>
         </record>
+
+        <record id="action_invoice_docx_debt_voucher" model="ir.actions.report">
+            <field name="name">Invoice Docx Debt Voucher</field>
+            <field name="model">account.move</field>
+            <field name="report_type">docx</field>
+            <field name="report_name">farmerscredit.invoice_docx_debt_voucher</field>
+            <field name="print_report_name">'Pagare Factura %s' % (object.name)</field>
+            <field name="binding_model_id" ref="model_account_move"></field>
+        </record>
     </data>
 </odoo>

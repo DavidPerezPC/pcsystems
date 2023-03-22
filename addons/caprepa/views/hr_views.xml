@@ -1,0 +1,77 @@
+<odoo>
+  <data>
+    <record  id="caprepa_hr_employee_form" model="ir.ui.view">
+        <field name="name">caprepa.hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='coach_id']" position="after">
+              <field name="admission_date"/>
+            </xpath>      
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='personal_information']/group[1]/group[3]" position="replace">
+              <group string="Recruiting Information">
+                <field name="recruiter_id" />
+                <field name="source_id" />
+                <field name="medium_id" />
+              </group>
+            </xpath>
+        </field>
+    </record>
+    <!-- explicit list view definition -->
+<!--
+    <record model="ir.ui.view" id="caprepa.list">
+      <field name="name">caprepa list</field>
+      <field name="model">caprepa.caprepa</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+-->
+
+    <!-- actions opening views on models -->
+<!--
+    <record model="ir.actions.act_window" id="caprepa.action_window">
+      <field name="name">caprepa window</field>
+      <field name="res_model">caprepa.caprepa</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+-->
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="caprepa.action_server">
+      <field name="name">caprepa server</field>
+      <field name="model_id" ref="model_caprepa_caprepa"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+<!--
+    <menuitem name="caprepa" id="caprepa.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="caprepa.menu_1" parent="caprepa.menu_root"/>
+    <menuitem name="Menu 2" id="caprepa.menu_2" parent="caprepa.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="caprepa.menu_1_list" parent="caprepa.menu_1"
+              action="caprepa.action_window"/>
+    <menuitem name="Server to list" id="caprepa" parent="caprepa.menu_2"
+              action="caprepa.action_server"/>
+-->
+  </data>
+</odoo>

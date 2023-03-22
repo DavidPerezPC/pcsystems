@@ -1,0 +1,211 @@
+<odoo>
+    <record id="seasons_form" model="ir.ui.view">
+        <field name="name">Seasons Form</field>
+        <field name="model">farmerscredit.seasons</field>
+        <field name="arch" type="xml">
+            <form string="Seasons">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="status" />
+                            <field name="active" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Crops">
+                            <field name="crop_ids" groups="farmerscredit.group_user" context="{'default_season_id': active_id}">
+                                <tree>
+                                    <field name="crop_id"/>
+                                    <field name="credit_per_unit"/>
+                                    <field name="quota_per_unit" />
+                                    <field name="ministering1_amount" />
+                                    <field name="ministering1_date" />
+                                    <field name="ministering2_amount" />
+                                    <field name="ministering2_date" />
+                                    <field name="ministering3_amount" />
+                                    <field name="ministering3_date" />                                     
+                                </tree>
+                                <form string=" Crop Used">
+                                    <sheet>
+                                        <group name="container_row">
+                                            <group string="Crop Data" name="crop_data" priority="1">
+                                                <field name="crop_id"/>
+                                                <field name="credit_per_unit"/>
+                                                <field name="quota_per_unit" />
+                                            </group>
+                                            <group string="Ministering" name="ministering" priority="2">
+                                                <field name="ministering1_amount" />
+                                                <field name="ministering1_date" />
+                                                <field name="ministering2_amount" />
+                                                <field name="ministering2_date" />
+                                                <field name="ministering3_amount" />
+                                                <field name="ministering3_date" />
+                                            </group>                                            
+                                        </group>
+                                    </sheet>
+                                </form>
+                            </field>            
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="seasons_tree" model="ir.ui.view">
+        <field name="name">Seasons Tree</field>
+        <field name="model">farmerscredit.seasons</field>
+        <field name="arch" type="xml">
+            <tree string="Seasons">
+                <field name="name"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="filters_seasons_tree" model="ir.ui.view">
+        <field name="name">Season's Filters</field>
+        <field name="model">farmerscredit.seasons</field>
+        <field name="arch" type="xml">
+            <search string="Seasons">
+                <field name="name" />
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="status" />
+                <group string="Group By">
+                  <filter string="Start" name="grp_sync_start_date"
+                          context="{'group_by':'date_start'}"/>
+                  <filter string="End" name="grp_sync_end_date"
+                          context="{'group_by':'date_end'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="actions_filters_seasons_tree" model="ir.actions.act_window">
+        <field name="name">Filters</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">farmerscredit.seasons</field>
+        <field name="view_id" ref="seasons_tree"/>
+        <field name="search_view_id" ref="filters_seasons_tree"/>
+    </record>
+
+    <record id="action_form_seasons_tree" model="ir.actions.act_window">
+        <field name="name">Seasons</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">farmerscredit.seasons</field>
+        <field name="binding_view_types">form</field>
+    </record>
+
+
+   <record id="crops_form" model="ir.ui.view">
+        <field name="name">Seasons Form</field>
+        <field name="model">farmerscredit.crops</field>
+        <field name="arch" type="xml">
+            <form string="Crops">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="months"/>
+¡                            <field name="active" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Seasons">
+                            <field name="season_ids" groups="farmerscredit.group_user" context="{'default_crop_id': active_id}">
+                                <tree>
+                                    <field name="season_id"/>
+                                    <field name="credit_per_unit"/>
+                                    <field name="quota_per_unit" />
+                                    <field name="ministering1_amount" />
+                                    <field name="ministering1_date" />
+                                    <field name="ministering2_amount" />
+                                    <field name="ministering2_date" />
+                                    <field name="ministering3_amount" />
+                                    <field name="ministering3_date" />
+                                </tree>
+                                <form string=" Season">
+                                    <sheet>
+                                        <group name="container_row">
+                                            <group string="Season Data" name="season_data" priority="1">
+                                                <field name="season_id"/>
+                                                <field name="credit_per_unit"/>
+                                                <field name="quota_per_unit" />   
+                                            </group>
+                                            <group string="Ministering" name="ministering" priority="2">
+                                                <field name="ministering1_amount" />
+                                                <field name="ministering1_date" />
+                                                <field name="ministering2_amount" />
+                                                <field name="ministering2_date" />
+                                                <field name="ministering3_amount" />
+                                                <field name="ministering3_date" />
+                                            </group>                                            
+                                        </group>                                        
+                                    </sheet>
+                                </form>
+                            </field>            
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="crops_tree" model="ir.ui.view">
+        <field name="name">Crops Tree</field>
+        <field name="model">farmerscredit.crops</field>
+        <field name="arch" type="xml">
+            <tree string="Crops">
+                <field name="name"/>
+                <field name="months"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="filters_crops_tree" model="ir.ui.view">
+        <field name="name">Crops's Filters</field>
+        <field name="model">farmerscredit.crops</field>
+        <field name="arch" type="xml">
+            <search string="Crops">
+                <field name="name" />
+                <group string="Group By">
+                  <filter string="Months" name="grp_sync_months"
+                          context="{'group_by':'months'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="actions_filters_crops_tree" model="ir.actions.act_window">
+        <field name="name">Crops Filters Action</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">farmerscredit.crops</field>
+        <field name="view_id" ref="crops_tree"/>
+        <field name="search_view_id" ref="filters_crops_tree"/>
+    </record>
+
+    <record id="action_form_crops_tree" model="ir.actions.act_window">
+        <field name="name">Crops</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">farmerscredit.crops</field>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <!-- menu categories -->
+    <menuitem name="Configuration" id="farmerscredit.configuration" 
+                parent="farmerscredit.menu_root"
+                sequence="50"/>
+  
+    <!-- actions -->
+    <menuitem name="Seasons" id="farmerscredit.seasons_list" parent="farmerscredit.configuration"
+              action="action_form_seasons_tree"/>
+    <menuitem name="Crops" id="farmerscredit.crops_list" parent="farmerscredit.configuration"
+              action="action_form_crops_tree"/>
+
+</odoo>

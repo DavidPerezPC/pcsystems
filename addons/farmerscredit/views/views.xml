@@ -46,10 +46,13 @@
               web_icon="farmerscredit,static/description/farmers_credit_logo.png"/>
 
     <!-- menu categories -->
-    <menuitem name="Farmers" id="farmerscredit.farmers" parent="farmerscredit.menu_root"/>
-
+    <menuitem name="Farmers" id="farmerscredit.farmers" 
+                parent="farmerscredit.menu_root"
+                sequence="10"/>
+  
     <!-- actions -->
     <menuitem name="Contacts" id="farmerscredit.contacts_list" parent="farmerscredit.farmers"
               action="contacts.action_contacts"/>
+
   </data>
 </odoo>

@@ -1,3 +1,11 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
 access_farmerscredit_guarantees,farmerscredit.guarantees,model_farmerscredit_partner_guarantees,group_user,1,1,1,1
 access_farmerscredit_lots,farmerscredit.lots,model_farmerscredit_partner_lots,group_user,1,1,1,1
+access_farmerscredit_seasons,farmerscredit.seasons,model_farmerscredit_seasons,group_user,1,1,1,1
+access_farmerscredit_crops,farmerscredit.crops,model_farmerscredit_crops,group_user,1,1,1,1
+access_farmerscredit_season_crop_info,farmerscredit.season.crop.info,model_farmerscredit_season_crop_info,group_user,1,1,1,1
+access_farmerscredit_credit_request,farmerscredit.credit.request,model_farmerscredit_credit_request,group_user,1,1,1,1
+access_farmerscredit_credit_request_line,farmerscredit.credit.request.line,model_farmerscredit_credit_request_line,group_user,1,1,1,1
+access_farmerscredit_credit_request_references,farmerscredit.credit.request.references,model_farmerscredit_credit_request_references,group_user,1,1,1,1
+access_farmerscredit_credit_request_guarantees,farmerscredit.credit.request.guarantees,model_farmerscredit_credit_request_guarantees,group_user,1,1,1,1
+access_farmerscredit_credit_request_ministering,farmerscredit.credit.request..ministering,model_farmerscredit_credit_request_ministering,group_user,1,1,1,1

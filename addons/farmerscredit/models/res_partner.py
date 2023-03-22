@@ -1,11 +1,27 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
-from lxml import etree
+from odoo import models, fields, api, _
+#from lxml import etree
+from datetime import date
 
 class Partner(models.Model):
     _inherit = ['res.partner']
 
+    type = fields.Selection(
+        [('contact', 'Contact'),
+         ('invoice', 'Invoice Address'),
+         ('delivery', 'Delivery Address'),
+         ('private', 'Endorsement'),
+         ('other', 'Mate'),
+        ], string='Address Type',
+        default='private',
+        help=_("- Contact: Use this to organize the contact details of employees of a given company (e.g. CEO, CFO, ...).\n"
+             "- Invoice Address : Preferred address for all invoices. Selected by default when you invoice an order that belongs to this company.\n"
+             "- Delivery Address : Preferred address for all deliveries. Selected by default when you deliver an order that belongs to this company.\n"
+             "- Endorsement: Person who supports in case the borrower presents problems during the term of the contract, ...).\n"
+             "- Mate: Mate or Spouse of the borrower, ...)")
+            )
+    
     curp = fields.Char(
         string="CURP", 
         help="Enter the Unique Identification Population Key assigned by Goverment", 
@@ -36,6 +52,26 @@ class Partner(models.Model):
                     ('divorced', 'Divorced'),
                 ])
 
+    birth_date = fields.Date(
+        string="Birth Date",
+        help="Select or type the birth date"
+    )
+
+    age = fields.Integer(
+        string="Age",
+        help="Calculate age old",
+        compute="_get_partner_age",
+        store=True
+    )
+
+    sex = fields.Selection(
+        string="Sex",
+        help="Select sex, F=Female or M=Male",
+        selection=[('female', 'Female'),
+                    ('male', 'Male'),
+
+                ])
+
     guarantee_ids = fields.One2many(
         'farmerscredit.partner.guarantees', 'partner_id', 
         string="Farmer's guarantees",
@@ -45,7 +81,46 @@ class Partner(models.Model):
         'farmerscredit.partner.lots', 'partner_id',
         string="Farmer's lots",
         help="Enter Farmer's Lots")
+    
+    total_area = fields.Float(
+        string="Total Area",
+        help="Total area available for credit",
+        compute="_get_total_area", store=True, readonly=True,
+    )
 
+    @api.depends("birth_date")
+    def _get_partner_age(self):
+
+        for partner in self:
+            birthdate = partner.birth_date
+            if not birthdate:
+                continue
+            today = date.today()
+        
+            # A bool that represents if today's day/month precedes the birth day/month
+            one_or_zero = ((today.month, today.day) < (birthdate.month, birthdate.day))
+            
+            # Calculate the difference in years from the date object's components
+            year_difference = today.year - birthdate.year
+            
+            # The difference in years is not enough. 
+            # To get it right, subtract 1 or 0 based on if today precedes the 
+            # birthdate's month/day.
+            
+            # To do this, subtract the 'one_or_zero' boolean 
+            # from 'year_difference'. (This converts
+            # True to 1 and False to 0 under the hood.)
+            partner.age = year_difference - one_or_zero
+
+    @api.depends('lot_ids')    
+    def _get_total_area(self):
+        area = 0
+        for partner in self:
+            for lot in partner.lot_ids:
+                area += lot.area
+            partner.total_area = area
+
+        return area
 class PartnerGuarantees(models.Model):
     _name = 'farmerscredit.partner.guarantees'
     _description = 'Guarantees given by Farmers'
@@ -54,6 +129,7 @@ class PartnerGuarantees(models.Model):
         'res.partner',
         string='Farmer',
         help="Farmer owner of these guarantees")
+
 
     type = fields.Selection(
         string="Guarantee Type",
@@ -64,7 +140,7 @@ class PartnerGuarantees(models.Model):
                 ],
         default='pledge')
     
-    description = fields.Char(
+    name = fields.Char(
         string="Description",
         help="Property/Good description or features")
 
@@ -118,11 +194,17 @@ class PartnerGuarantees(models.Model):
         string="Section",
         help="Enter the book's section for this guarantee")    
 
-
+    # def name_get(self):
+    #     res = []
+    #     for rec in self:
+    #         res.append((rec.id, rec.description))
+    #     return res
+    
 class PartnerLots(models.Model):
     _name = 'farmerscredit.partner.lots'
     _description = "Lots of the Farmers"
 
+    
     partner_id = fields.Many2one(
         'res.partner',
         string='Farmer',
@@ -154,9 +236,10 @@ class PartnerLots(models.Model):
         string="Location",
         help="Enter location for this lot")
 
-    area = fields.Char(
+    area = fields.Float(
         string="Area",
-        help="Enter lot's area")
+        help="Enter lot's area",
+        digits=(10,2))
 
     owner = fields.Char(
         string="Owner",

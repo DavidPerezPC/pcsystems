@@ -10,23 +10,25 @@
                 <field name='is_farmer' />
             </xpath>
             <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='vat']" position="after">
+                <field name='curp'  placeholder="eg. AAPR630321HDFLRC01" attrs="{'invisible': [('is_farmer', '=', False)]}"/>             
                 <field name='ine'  placeholder="eg. 074711637582" attrs="{'invisible': [('is_farmer', '=', False)]}"/>
-            </xpath>
-            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='vat']" position="after">
-                <field name='curp'  placeholder="eg. AAPR630321HDFLRC01" attrs="{'invisible': [('is_farmer', '=', False)]}"/>
-            </xpath>
-            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='category_id']" position="after">
+                <field name='birth_certificate'  attrs="{'invisible': [('is_farmer', '=', False)]}"/>
                 <field name='marital_state' attrs="{'invisible': [('is_farmer', '=', False)]}"/>
             </xpath>
             <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='category_id']" position="after">
-                <field name='birth_certificate'  attrs="{'invisible': [('is_farmer', '=', False)]}"/>
-            </xpath>      
+                <field name='birth_date' attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+                <field name='age' attrs="{'invisible': [('is_farmer', '=', False)]}"/>
+                <field name="sex" widget="radio" options="{'horizontal': true}" attrs="{'invisible': [('is_farmer', '=', False)]}" />
+            </xpath> 
+            <!--xpath expr="//field[@name='child_ids']//field[@name='type']" position="atrributes">
+                <attribute name="string">Aval</attribute>
+            </xpath-->
             <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='internal_notes']" position="before" >
                 <page name='farmer_guarantees' string="Guarantees" attrs="{'invisible': [('is_farmer', '=', False)]}">
                     <field name="guarantee_ids" groups="farmerscredit.group_user" context="{'default_partner_id': active_id}" >
                         <tree>
                             <field name="type" />
-                            <field name="description"/>
+                            <field name="name"/>
                             <field name="doc_number" />
                             <field name="issued_date" />
                             <field name="owner" />
@@ -41,7 +43,7 @@
                                 <hr/>
                                 <group col="12">
                                     <group colspan="12" string="Generic Information">
-                                        <field name="description" />
+                                        <field name="name" />
                                         <field name="doc_number" />
                                         <field name="issued_date" />
                                     </group>

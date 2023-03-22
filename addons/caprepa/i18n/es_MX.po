@@ -1,0 +1,68 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* caprepa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-03-22 16:37+0000\n"
+"PO-Revision-Date: 2023-03-22 09:40-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.2.2\n"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__admission_date
+msgid "Admission Date"
+msgstr "Fecha Ingreso"
+
+#. module: caprepa
+#: model:ir.model,name:caprepa.model_hr_employee
+msgid "Employee"
+msgstr "Empleado"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__medium_id
+msgid "Mediums"
+msgstr "Medio"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__recruiter_id
+msgid "Recruiter"
+msgstr "Reclutador"
+
+#. module: caprepa
+#: model_terms:ir.ui.view,arch_db:caprepa.caprepa_hr_employee_form
+msgid "Recruiting Information"
+msgstr "Información de Reclutamiento"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__medium_id
+msgid "Recruitment Medium for this Employee"
+msgstr "Medio que se utilizó para reclutar al Empleado"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__source_id
+msgid "Recruitment Source for this Employee"
+msgstr "Fuente que se utilizó para reclutar al Empleado"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__admission_date
+msgid "Select or enter Date of Admission for this Employee"
+msgstr "Seleccione o proporcione la fecha de Ingreso del Empleado a la empresa"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__recruiter_id
+msgid "Select the Recruiter for this Employee"
+msgstr "Seleccione el Reclutador de este Empleado"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__source_id
+msgid "Source"
+msgstr "Fuente"

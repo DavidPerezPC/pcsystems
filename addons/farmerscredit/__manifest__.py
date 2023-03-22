@@ -23,7 +23,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account'],
+    'depends': ['contacts','account'],
 
     # always loaded
     'data': [
@@ -33,6 +33,8 @@
         'views/views.xml',
         'reports/invoice_debt_voucher.xml',
         'views/templates.xml',
+        'views/catalogs.xml',
+        'views/credit_request.xml'
     ],
     # only loaded in demonstration mode
     'demo': [],

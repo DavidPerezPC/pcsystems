@@ -32,4 +32,26 @@
         <field name="perm_unlink" eval="1" />
         <field name="domain_force">[]</field>
     </record>
+
+    <record model="ir.rule" id="season_record_user">
+        <field name="name">Seasons</field>
+        <field name="model_id" ref="model_farmerscredit_seasons" />
+        <field name="groups" eval="[(4,ref('farmerscredit.group_user'))]" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+        <field name="domain_force">[]</field>
+    </record>
+
+    <record model="ir.rule" id="crops_record_user">
+        <field name="name">Seasons</field>
+        <field name="model_id" ref="model_farmerscredit_crops" />
+        <field name="groups" eval="[(4,ref('farmerscredit.group_user'))]" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+        <field name="domain_force">[]</field>
+    </record>
 </odoo>
