@@ -28,7 +28,19 @@ class HrEmployee(models.Model):
         comodel_name='utm.medium',
         string="Mediums",
         help="Recruitment Medium for this Employee",
-        )   
+        )
+    
+    driver_license = fields.Char(
+        string="License",
+        help="Driver License number"
+    )
+
+    license_expires = fields.Date(
+        string="Expires on",
+        help="Driver License expiration date"
+    )
+    
+        
 
 # class caprepa(models.Model):
 #     _name = 'caprepa.caprepa'

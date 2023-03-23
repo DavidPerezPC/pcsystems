@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-22 16:37+0000\n"
-"PO-Revision-Date: 2023-03-22 09:40-0700\n"
+"POT-Creation-Date: 2023-03-23 00:11+0000\n"
+"PO-Revision-Date: 2023-03-22 17:14-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -23,14 +23,44 @@ msgid "Admission Date"
 msgstr "Fecha Ingreso"
 
 #. module: caprepa
+#: model_terms:ir.ui.view,arch_db:caprepa.caprepa_hr_employee_form
+msgid "Collaborator ID"
+msgstr "ID Colaborador"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__license_expires
+msgid "Driver License expiration date"
+msgstr "Fecha expiración de la Licencia de conducir"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__driver_license
+msgid "Driver License number"
+msgstr "Número de Licencia de conducir"
+
+#. module: caprepa
 #: model:ir.model,name:caprepa.model_hr_employee
 msgid "Employee"
 msgstr "Empleado"
 
 #. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__license_expires
+msgid "Expires on"
+msgstr "Expira el"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__driver_license
+msgid "License"
+msgstr "Licencia"
+
+#. module: caprepa
 #: model:ir.model.fields,field_description:caprepa.field_hr_employee__medium_id
 msgid "Mediums"
 msgstr "Medio"
+
+#. module: caprepa
+#: model_terms:ir.ui.view,arch_db:caprepa.caprepa_hr_employee_form
+msgid "Mobility Information"
+msgstr "Información de Movilidad"
 
 #. module: caprepa
 #: model:ir.model.fields,field_description:caprepa.field_hr_employee__recruiter_id

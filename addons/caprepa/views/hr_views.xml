@@ -12,8 +12,15 @@
               <group string="Recruiting Information">
                 <field name="recruiter_id" />
                 <field name="source_id" />
-                <field name="medium_id" />
               </group>
+              <group string="Mobility Information">
+                <field name="driver_license" />
+                <field name="license_expires" />
+              </group>
+            </xpath>
+            <xpath expr="//field[@name='pin']" position="replace" />
+            <xpath expr="//field[@name='barcode']" position="attributes">
+                <attribute name="string">Collaborator ID</attribute>
             </xpath>
         </field>
     </record>
