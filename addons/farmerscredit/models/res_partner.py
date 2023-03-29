@@ -9,10 +9,10 @@ class Partner(models.Model):
 
     type = fields.Selection(
         [('contact', 'Contact'),
-         ('invoice', 'Representative'),
-         ('delivery', 'Notary'),
-         ('private', 'Endorsement'),
-         ('other', 'Mate'),
+         ('invoice', _('Representative')),
+         ('delivery', _('Notary')),
+         ('private', _('Endorsement')),
+         ('other', _('Mate')),
         ], string='Contact Type',
         default='private',
         help=_(\

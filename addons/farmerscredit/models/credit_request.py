@@ -775,22 +775,22 @@ class CreditRequest(models.Model):
         local_msg_vals = dict(msg_vals or {})
 
         # portal customers have full access (existence not granted, depending on partner_id)
-        try:
-            customer_portal_group = next(group for group in groups if group[0] == 'portal_customer')
-        except StopIteration:
-            pass
-        else:
-            access_opt = customer_portal_group[2].setdefault('button_access', {})
-            is_tx_pending = self.get_portal_last_transaction().state == 'pending'
-            if self._has_to_be_signed(include_draft=True):
-                if self._has_to_be_paid():
-                    access_opt['title'] = _("View Quotation") if is_tx_pending else _("Sign & Pay Quotation")
-                else:
-                    access_opt['title'] = _("Accept & Sign Quotation")
-            elif self._has_to_be_paid(include_draft=True) and not is_tx_pending:
-                access_opt['title'] = _("Accept & Pay Quotation")
-            elif self.state in ('draft', 'sent'):
-                access_opt['title'] = _("View Quotation")
+        # try:
+        #     customer_portal_group = next(group for group in groups if group[0] == 'portal_customer')
+        # except StopIteration:
+        #     pass
+        # else:
+        #     access_opt = customer_portal_group[2].setdefault('button_access', {})
+        #     is_tx_pending = self.get_portal_last_transaction().state == 'pending'
+        #     if self._has_to_be_signed(include_draft=True):
+        #         if self._has_to_be_paid():
+        #             access_opt['title'] = _("View Quotation") if is_tx_pending else _("Sign & Pay Quotation")
+        #         else:
+        #             access_opt['title'] = _("Accept & Sign Quotation")
+        #     elif self._has_to_be_paid(include_draft=True) and not is_tx_pending:
+        #         access_opt['title'] = _("Accept & Pay Quotation")
+        #     elif self.state in ('draft', 'sent'):
+        #         access_opt['title'] = _("View Quotation")
 
         # enable followers that have access through portal
         follower_group = next(group for group in groups if group[0] == 'follower')
@@ -861,12 +861,13 @@ class CreditRequest(models.Model):
     def action_view_payment_transfer(self, payment_type='inbound'):
 
         if payment_type == 'inbound':
-            msg = f'Payment done for Contract {self.name}'
+            msg = _('Payment done for Contract ')
             payments = self.payment_ids
         else:
-            msg = f'Transfer done for Contract {self.name}'
+            msg = _('Transfer done for Contract ')
             payments = self.transfer_ids
 
+        msg += self.name
         payments = payments.filtered(lambda l: l.payment_type == payment_type)
         action = self.env['ir.actions.actions']._for_xml_id('account.action_account_payments')
         if len(payments) == 1:
@@ -912,10 +913,6 @@ class CreditRequest(models.Model):
         # In sudo mode because we need to be able to read on provider fields.
         self.authorized_transaction_ids.sudo().action_void()
 
-    def get_portal_last_transaction(self):
-        self.ensure_one()
-        return self.transaction_ids._get_last()
-
     def _get_credit_request_lines_to_report(self):
         down_payment_lines = self.credit_request_line.filtered(lambda line:
             line.is_downpayment
@@ -939,10 +936,6 @@ class CreditRequest(models.Model):
 
     def _has_to_be_signed(self, include_draft=False):
         return (self.state == 'sent' or (self.state == 'draft' and include_draft)) and not self.is_expired and self.require_signature and not self.signature
-
-    def _has_to_be_paid(self, include_draft=False):
-        transaction = self.get_portal_last_transaction()
-        return (self.state == 'sent' or (self.state == 'draft' and include_draft)) and not self.is_expired and self.require_payment and transaction.state != 'done' and self.amount_total
 
     def _get_portal_return_action(self):
         """ Return the action used to display orders when returning from customer portal. """

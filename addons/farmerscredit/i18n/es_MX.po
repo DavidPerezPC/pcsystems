@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-29 18:38+0000\n"
-"PO-Revision-Date: 2023-03-29 11:59-0700\n"
+"POT-Creation-Date: 2023-03-29 20:37+0000\n"
+"PO-Revision-Date: 2023-03-29 13:52-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -67,10 +67,9 @@ msgid ""
 msgstr ""
 "- Contacto: Se utiliza para organizar los detalles de los contactos y/o empleados de cierta "
 "compañia (e.g. CEO, CFO, …).\n"
-"- Facturación: Dirección predeterminada para las facturas. Se selecciona de forma automática "
-"cuando le realizas una orden o factura a esta compañía..\n"
-"- Entrega: Dirección predeterminada para las entregas. Se selecciona de forma automática cuando "
-"realizas la entrega a esta compañía.\n"
+"- Representante: Datos predeterminados para el Representante Legal de esta compañía o "
+"agricultor. Se selecciona de forma automática cuando realiza una Solicitud de Crédito..\n"
+"- Notaria: Datos notariales predeterminados para la escrituras de esta compañía o agricultor .\n"
 "- Aval: Persona que soporta o responde a los compromisos adquiridos por el prestatario, cuándo "
 "presentan atrasos en los pagos…).\n"
 "- Cónyuge: Esposo o Pareja del prestatario …)"
@@ -102,20 +101,6 @@ msgstr "Pagos"
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
 msgid "<span class=\"o_stat_text\">Transfers</span>"
 msgstr "Efectivo"
-
-#. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
-msgid "Accept & Pay Quotation"
-msgstr ""
-
-#. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
-msgid "Accept & Sign Quotation"
-msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__access_warning
@@ -265,7 +250,7 @@ msgstr "Acta Nacimiento"
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
 msgid "Business Data"
-msgstr ""
+msgstr "Datos Mercantiles"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__curp
@@ -738,8 +723,11 @@ msgid "Ending date of this Season"
 msgstr "Fecha de en la que termina la Temporada"
 
 #. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/res_partner.py:0
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__partner_endorsement_id
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__private
+#, python-format
 msgid "Endorsement"
 msgstr "Aval"
 
@@ -953,7 +941,7 @@ msgstr "Filtros"
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__business_folio
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__business_folio
 msgid "Folio"
-msgstr "Folio"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__business_folio
@@ -1275,7 +1263,10 @@ msgid "Marital State"
 msgstr "Estado Civil"
 
 #. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/res_partner.py:0
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__other
+#, python-format
 msgid "Mate"
 msgstr "Cónyuge"
 
@@ -1287,7 +1278,7 @@ msgstr "Número máximo de meses que dura la temporada (0 no tiene fin)"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__medium_id
 msgid "Medium"
-msgstr ""
+msgstr "Media"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__message_has_error
@@ -1416,8 +1407,11 @@ msgid "Nombre y Firma del Suscriptor"
 msgstr ""
 
 #. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/res_partner.py:0
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__notary
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__delivery
+#, python-format
 msgid "Notary"
 msgstr "Notaría"
 
@@ -1541,6 +1535,13 @@ msgid "Payment Terms"
 msgstr "Términos de Pago"
 
 #. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/credit_request.py:0
+#, python-format
+msgid "Payment done for Contract "
+msgstr ""
+
+#. module: farmerscredit
 #: model:ir.model,name:farmerscredit.model_account_payment
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__total_payments
 msgid "Payments"
@@ -1650,7 +1651,10 @@ msgid "Relationship"
 msgstr "Parentesco"
 
 #. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/res_partner.py:0
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__invoice
+#, python-format
 msgid "Representative"
 msgstr "Dirección de factura"
 
@@ -1681,7 +1685,7 @@ msgstr ""
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__activity_user_id
 msgid "Responsible User"
-msgstr ""
+msgstr "Responsable"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__message_has_sms_error
@@ -1692,13 +1696,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__team_id
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_filter
 msgid "Sales Team"
-msgstr ""
+msgstr "Equipo de Ventas"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__user_id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_line__salesman_id
 msgid "Salesperson"
-msgstr ""
+msgstr "Promotor"
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_filter
@@ -1832,26 +1836,19 @@ msgid "Sex"
 msgstr "Sexo"
 
 #. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
-msgid "Sign & Pay Quotation"
-msgstr ""
-
-#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__signature
 msgid "Signature"
-msgstr ""
+msgstr "Firma"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__signed_by
 msgid "Signed By"
-msgstr ""
+msgstr "Firmado Por"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__signed_on
 msgid "Signed On"
-msgstr ""
+msgstr "Firmado el"
 
 #. module: farmerscredit
 #: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__marital_state__single
@@ -1943,12 +1940,12 @@ msgstr ""
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__terms_type
 msgid "Terms & Conditions format"
-msgstr ""
+msgstr "Formato de Términos y Condiciones"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__note
 msgid "Terms and conditions"
-msgstr ""
+msgstr "Términos y condiciones"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__country_code
@@ -1967,7 +1964,7 @@ msgstr ""
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__commitment_date
 msgid "This is the granted date promised to the Applicant."
-msgstr ""
+msgstr "Fecha estimada o pactada, para otorgar el Crédito"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__medium_id
@@ -2006,7 +2003,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__total_area
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__total_area
 msgid "Total Area"
-msgstr ""
+msgstr "Area Total"
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_tree
@@ -2022,7 +2019,14 @@ msgstr ""
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__total_area
 #: model:ir.model.fields,help:farmerscredit.field_res_users__total_area
 msgid "Total area available for credit"
-msgstr ""
+msgstr "Area total disponible para el Crédito"
+
+#. module: farmerscredit
+#. odoo-python
+#: code:addons/farmerscredit/models/credit_request.py:0
+#, python-format
+msgid "Transfer done for Contract "
+msgstr "Transferencias en efectivo (dinero) que se han emitido a este Contrato"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__total_transfers
