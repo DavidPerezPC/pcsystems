@@ -142,6 +142,45 @@
                 <field name="partner_credit_warning"/>
             </div>
             <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button name="action_view_invoice"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="total_invoiced" widget="monetary"/>
+                            </span>
+                            <span class="o_stat_text">Invoiced</span>
+                        </div>
+                        <!--attrs="{'invisible': [('invoice_count', '=', 0)]}">
+                        <field name="invoice_count" widget="statinfo" string="Invoices"/-->
+                    </button>
+                    <button name="action_view_transfer"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_transfers" widget="monetary"/>
+                            </span>
+                            <span class="o_stat_text">Transfers</span>
+                        </div>
+                    </button>
+                    <button name="action_view_payment"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-pencil-square-o">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_payments" widget="monetary"/>
+                            </span>
+                            <span class="o_stat_text">Payments</span>
+                        </div>                        
+                    </button>
+                </div>
+
                 <div class="oe_title">
                     <h1>
                         <field name="name"/>
@@ -152,10 +191,14 @@
                     <group name="partner_details">
                         <field name="partner_id" widget="res_partner_many2one" context="{'res_partner_search_mode': 'customer', 'show_address': 1, 'show_vat': True}" options='{"always_reload": True}'/>
                         <field name="partner_endorsement_id"  context="{'default_type':'private'}" options='{"always_reload": True}'/>
+                        <field name="user_id" widget="many2one_avatar_user"/>
                    </group>
                     <group name="credit_request_details">
                         <field name="request_date"/>
                         <field name="commitment_date" />
+                        <field name="interest_rate" widget="percentage"/>
+                        <field name="arrears" />
+                        <field name="interest_stop_date" />
                         <field name="company_id" invisible="1"/>
                         <field name="currency_id" invisible="1"/>
                         <field name="payment_term_id" options="{'no_open':True,'no_create': True}" invisible="1" />
@@ -262,15 +305,67 @@
     <record id="view_credit_request_filter" model="ir.ui.view">
         <field name="name"> farmerscredit.credit.request.list.select</field>
         <field name="model">farmerscredit.credit.request</field>
-        <field name="priority" eval="15"/>
+        <field name="priority" eval="1"/>
         <field name="arch" type="xml">
             <search string="Search Credit Request">
                 <field name="name" string="Order"
-                    filter_domain="['|', '|', ('name', 'ilike', self), ('client_order_ref', 'ilike', self), ('partner_id', 'child_of', self)]"/>
+                    filter_domain="['|', ('name', 'ilike', self), ('partner_id', 'child_of', self)]"/>
                 <field name="partner_id" operator="child_of"/>
                 <field name="user_id"/>
                 <field name="team_id" string="Sales Team"/>
           </search>
+        </field>
+    </record>
+
+   <record id="view_credit_request_ministering_tree" model="ir.ui.view">
+        <field name="name">farmerscredit.credit.request.ministering.tree</field>
+        <field name="model">farmerscredit.credit.request.ministering</field>
+        <field name="arch" type="xml">
+            <tree string="Credit Request Minestering">
+                <field name="request_id" string="Credit Request" readonly="1"/>
+                <field name="partner_id" string="Applicant" readonly="1"/>
+                <field name="date_ministering" widget="date" readonly="1"/>
+                <field name="credit_granted" sum="Total" widget="monetary" decoration-bf="1" readonly="1" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_credit_request_ministering_filter" model="ir.ui.view">
+        <field name="name">farmerscredit.credit.request.ministering.list.select</field>
+        <field name="model">farmerscredit.credit.request.ministering</field>
+        <field name="priority" eval="5"/>
+        <field name="arch" type="xml">
+            <search string="Search Credit Request Ministering">
+                <field name="request_id" string="Credit Request"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="date_ministering" string="Date" />
+          </search>
+          <filter name="group_request_id" string="Credit Request" context="{'group_by': 'request_id'}" />
+        </field>
+    </record>
+
+    <record id="view_credit_request_ministering_calendar" model="ir.ui.view">
+        <field name="name">farmerscredit.credit.request.ministering.calendar</field>
+        <field name="model">farmerscredit.credit.request.ministering</field>
+        <field name="arch" type="xml">
+            <calendar string="Credit Request Ministering" 
+                date_start="date_ministering" hide_time="true" event_limit="5">
+                <field name="request_id"/>
+                <field name="partner_id" avatar_field="avatar_128"/>
+                <field name="credit_granted" widget="monetary"/>
+            </calendar>
+        </field>
+    </record>
+
+    <record id="view_credit_request_ministering_pivot" model="ir.ui.view">
+        <field name="name">farmerscredit.credit.request.ministering.pivot</field>
+        <field name="model">farmerscredit.credit.request.ministering</field>
+        <field name="arch" type="xml">
+            <pivot string="Credit Request Minestering" sample="1">
+                <field name="request_id" type="row"/>
+                <field name="date_ministering" type="col" />
+                <field name="credit_granted" type="measure"/>
+            </pivot>
         </field>
     </record>
 
@@ -334,6 +429,39 @@
         <field name="act_window_id" ref="action_credit_request"/>
     </record>
 
+<!-- ACTIONS PARA MINISTERING -->
+    <record id="action_credit_request_ministering" model="ir.actions.act_window">
+        <field name="name">Credit Request Ministering</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">farmerscredit.credit.request.ministering</field>
+        <field name="view_mode">tree,calendar,pivot</field>
+        <field name="search_view_id" ref="view_credit_request_ministering_filter"/>
+        <field name="context">{'group_by': 'request_id'}</field>
+    </record>
+
+    <record id="credit_request_ministering_action_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_credit_request_ministering_tree"/>
+        <field name="act_window_id" ref="action_credit_request_ministering"/>
+    </record>
+
+    <record id="credit_request_ministering_action_view_calendar" model="ir.actions.act_window.view">
+        <field name="sequence" eval="4"/>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="view_credit_request_ministering_calendar"/>
+        <field name="act_window_id" ref="action_credit_request_ministering"/>
+    </record>
+
+    <record id="credit_request_ministering_action_view_pivot" model="ir.actions.act_window.view">
+        <field name="sequence" eval="5"/>
+        <field name="view_mode">pivot</field>
+        <field name="view_id" ref="view_credit_request_ministering_pivot"/>
+        <field name="act_window_id" ref="action_credit_request_ministering"/>
+    </record>
+
+
+
 
     <!-- menu categories -->
     <menuitem name="Operations" id="farmerscredit.operations" 
@@ -344,4 +472,8 @@
     <menuitem name="Credit Request" id="farmerscredit.credit_request_list" parent="farmerscredit.operations"
               sequence="05"
               action="action_credit_request"/>
+    
+    <menuitem name="Ministering" id="farmerscredit.credit_request_list_ministering" parent="farmerscredit.operations"
+              sequence="10"
+              action="action_credit_request_ministering"/>
 </odoo>

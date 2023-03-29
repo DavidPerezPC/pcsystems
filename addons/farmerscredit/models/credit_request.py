@@ -95,18 +95,31 @@ class CreditRequest(models.Model):
         help="Date of credit request",
         default=lambda self: fields.Date.today()
     )   
+
+    due_date = fields.Date(
+        string="Due Date",
+        help="Due date for this Credit Request",
+        compute="_get_due_date",
+        store=True
+    )
+
     interest_rate = fields.Float(
         string="Interest",
         help="Regular interest rate for this credit",
         digits=(10,4)
     )
 
-    interest_arrears = fields.Float(
+    arrears = fields.Float(
         string="Arrears",
-        help="Arrears interest rate for this credit",
-        digits=(10,4)
+        help="Times to multiply Interest Rate for Arrears charges",
+        digits=(8,2)
     )    
     
+    interest_stop_date = fields.Date(
+        string="Stop at",
+        help="Interest will stop running from this date, only acumulated debt with no more interest"
+    )
+
     require_signature = fields.Boolean(
         string="Online Signature",
         compute='_compute_require_signature',
@@ -172,6 +185,7 @@ class CreditRequest(models.Model):
             'request_id', 
             string='Ministering',
             help="Ministering for the Credit Request",
+            copy=False,
             auto_join=True)
     
     ministering_count = fields.Integer(compute="_compute_ministering_count", store=False, readonly=True)
@@ -223,14 +237,36 @@ class CreditRequest(models.Model):
     amount_tax = fields.Monetary(string="Taxes", store=True, compute='_compute_amounts')
     amount_total = fields.Monetary(string="Total", store=True, compute='_compute_amounts', tracking=4)
 
-    invoice_count = fields.Integer(string="Invoice Count", compute='_get_invoiced')
-    invoice_ids = fields.Many2many(
+    invoice_count = fields.Integer(string="Invoice Count", compute='_get_invoice_count')
+    total_invoiced = fields.Monetary(string="Invoiced", compute='_compute_amounts')
+    invoice_ids = fields.One2many(
         comodel_name='account.move',
-        string="Invoices",
-        compute='_get_invoiced',
-        search='_search_invoice_ids',
-        copy=False)
+        inverse_name = 'request_id',
+        string="Invoices issued on behalf this Contract",
+        domain="[('move_type', '=', 'out_invoice')]",
+        copy=False,
+        autojoin=True)
     
+    payment_count = fields.Integer(string="Payment Count", compute='_get_payment_count')
+    total_payments = fields.Monetary(string="Payments", compute='_compute_amounts')
+    payment_ids = fields.One2many(
+        comodel_name='account.payment',
+        inverse_name = 'request_id',
+        string="Payments done to this Contract",
+        domain="[('payment_type', '=', 'inbound'), ('partner_type', '=', 'customer')]",
+        copy=False,
+        autojoin=True)
+
+    transfer_count = fields.Integer(string="Invoice Count", compute='_get_transfer_count')
+    total_transfers = fields.Monetary(string="Transfers", compute='_compute_amounts')
+    transfer_ids = fields.One2many(
+        comodel_name='account.payment',
+        inverse_name = 'request_id',
+        string="Transfers done to this Contract",
+        domain="[('payment_type', '=', 'outbound'), ('partner_type', '=', 'customer')]",
+        copy=False,
+        autojoin=True)
+
     # Followup ?
     analytic_account_id = fields.Many2one(
         comodel_name='account.analytic.account',
@@ -275,7 +311,14 @@ class CreditRequest(models.Model):
             count = len(rec.ministering_ids)
         
         return count
-        
+
+    @api.depends("credit_request_line")
+    def _get_due_date(self):
+        due_date = False
+        if self.credit_request_line:
+            due_date = self.credit_request_line[0].season_id.date_end
+        self.due_date = due_date
+
     @api.model
     def _get_note_url(self):
         return self.env.company.get_base_url()
@@ -290,15 +333,6 @@ class CreditRequest(models.Model):
         for order in self:
             order = order.with_company(order.company_id)
             order.payment_term_id = order.partner_id.property_payment_term_id
-
-    @api.depends('partner_id')
-    def _compute_pricelist_id(self):
-        for order in self:
-            if not order.partner_id:
-                order.pricelist_id = False
-                continue
-            order = order.with_company(order.company_id)
-            order.pricelist_id = order.partner_id.property_product_pricelist
 
     @api.depends('partner_id')
     def _compute_user_id(self):
@@ -322,15 +356,24 @@ class CreditRequest(models.Model):
                     user_id=user_id, domain=[('company_id', 'in', [company_id, False])])
             order.team_id = cached_teams[key]
 
-    @api.depends('credit_request_line.credit_amount', 'credit_request_line.area', 'credit_request_line.quota_per_unit')
+    #@api.depends('invoice_ids','credit_request_line.credit_amount', 'credit_request_line.area', 'credit_request_line.quota_per_unit')
     def _compute_amounts(self):
-        return 0
-        """Compute the total amounts of the SO."""
-        # for order in self:
+        """Compute the total amounts of the CR."""
+        for credit in self:
         #     credit_request_lines = order.credit_request_line.filtered(lambda x: not x.display_type)
         #     order.amount_untaxed = sum(credit_request_lines.mapped('price_subtotal'))
         #     order.amount_total = sum(credit_request_lines.mapped('price_total'))
-        #     order.amount_tax = sum(credit_request_lines.mapped('price_tax'))
+
+            invoices = self.invoice_ids.filtered(lambda l: l.move_type == 'out_invoice')
+            payments = self.payment_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'inbound')
+            transfers = self.transfer_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'outbound')
+            #for inv in self.invoice_ids:
+            #    if inv.move_type == 'out_invoice':
+            #        total += inv.amount_total
+            credit.total_invoiced = sum(invoices.mapped('amount_total'))
+            credit.total_payments = sum(payments.mapped('amount'))
+            credit.total_transfers = sum(transfers.mapped('amount'))
+
 
     @api.depends('partner_id')
     def _compute_guarantee_ids(self):
@@ -657,64 +700,18 @@ class CreditRequest(models.Model):
                 self.fiscal_position_id._get_html_link() if self.fiscal_position_id else "",
             ))
 
-    def action_update_prices(self):
-        self.ensure_one()
-
-        self._recompute_prices()
-
-        if self.pricelist_id:
-            self.message_post(body=_(
-                "Product prices have been recomputed according to pricelist %s.",
-                self.pricelist_id._get_html_link(),
-            ))
-
-    def _recompute_prices(self):
-        lines_to_recompute = self._get_update_prices_lines()
-        lines_to_recompute.invalidate_recordset(['pricelist_item_id'])
-        lines_to_recompute._compute_price_unit()
-        # Special case: we want to overwrite the existing discount on _recompute_prices call
-        # i.e. to make sure the discount is correctly reset
-        # if pricelist discount_policy is different than when the price was first computed.
-        lines_to_recompute.discount = 0.0
-        lines_to_recompute._compute_discount()
-        self.show_update_pricelist = False
-
     # INVOICING #
 
-    def _prepare_invoice(self):
-        """
-        Prepare the dict of values to create the new invoice for a sales order. This method may be
-        overridden to implement custom invoice generation (making sure to call super() to establish
-        a clean extension chain).
-        """
-        self.ensure_one()
-
-        return {
-            'ref': self.client_order_ref or '',
-            'move_type': 'out_invoice',
-            'narration': self.note,
-            'campaign_id': self.campaign_id.id,
-            'medium_id': self.medium_id.id,
-            'source_id': self.source_id.id,
-            'team_id': self.team_id.id,
-            'partner_id': self.partner_invoice_id.id,
-            'partner_shipping_id': self.partner_shipping_id.id,
-            'fiscal_position_id': (self.fiscal_position_id or self.fiscal_position_id._get_fiscal_position(self.partner_invoice_id)).id,
-            'invoice_origin': self.name,
-            'invoice_payment_term_id': self.payment_term_id.id,
-            'invoice_user_id': self.user_id.id,
-            'payment_reference': self.reference,
-            'transaction_ids': [Command.set(self.transaction_ids.ids)],
-            'company_id': self.company_id.id,
-            'invoice_line_ids': [],
-        }
+    def _get_invoice_count(self):
+        
+        for record in self:
+            record.invoice_count = self.env['account.move'].search_count(
+                [('request_id', '=', self.id),('move_type', '=', 'out_invoice')])
 
     def action_view_invoice(self):
         invoices = self.mapped('invoice_ids')
         action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        if len(invoices) > 1:
-            action['domain'] = [('id', 'in', invoices.ids)]
-        elif len(invoices) == 1:
+        if len(invoices) == 1 :
             form_view = [(self.env.ref('account.view_move_form').id, 'form')]
             if 'views' in action:
                 action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
@@ -722,18 +719,30 @@ class CreditRequest(models.Model):
                 action['views'] = form_view
             action['res_id'] = invoices.id
         else:
-            action = {'type': 'ir.actions.act_window_close'}
+            action['domain'] = [('id', 'in', invoices.ids),('move_type', '=', 'out_invoice')]
+        # if len(invoices) > 1 :
+        #     action['domain'] = [('id', 'in', invoices.ids),('move_type', '=', 'out_invoice')]
+        # elif len(invoices) == 1:
+        #     form_view = [(self.env.ref('account.view_move_form').id, 'form')]
+        #     if 'views' in action:
+        #         action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+        #     else:
+        #         action['views'] = form_view
+        #     action['res_id'] = invoices.id
+        # else:
+        #     action = {'type': 'ir.actions.act_window_close'}
 
         context = {
             'default_move_type': 'out_invoice',
         }
-        if len(self) == 1:
+        if len(self) <= 1:
             context.update({
                 'default_partner_id': self.partner_id.id,
-                'default_partner_shipping_id': self.partner_shipping_id.id,
                 'default_invoice_payment_term_id': self.payment_term_id.id or self.partner_id.property_payment_term_id.id or self.env['account.move'].default_get(['invoice_payment_term_id']).get('invoice_payment_term_id'),
                 'default_invoice_origin': self.name,
                 'default_user_id': self.user_id.id,
+                'default_request_id': self.id,
+                'default_invoice_date_due': self.due_date,
             })
         action['context'] = context
         return action
@@ -741,179 +750,6 @@ class CreditRequest(models.Model):
     def _get_invoice_grouping_keys(self):
         return ['company_id', 'partner_id']
 
-    def _nothing_to_invoice_error_message(self):
-        return _(
-            "There is nothing to invoice!\n\n"
-            "Reason(s) of this behavior could be:\n"
-            "- You should deliver your products before invoicing them: Click on the \"truck\" icon "
-            "(top-right of your screen) and follow instructions.\n"
-            "- You should modify the invoicing policy of your product: Open the product, go to the "
-            "\"Sales\" tab and modify invoicing policy from \"delivered quantities\" to \"ordered "
-            "quantities\". For Services, you should modify the Service Invoicing Policy to "
-            "'Prepaid'."
-        )
-
-    def _get_update_prices_lines(self):
-        """ Hook to exclude specific lines which should not be updated based on price list recomputation """
-        return self.credit_request_line.filtered(lambda line: not line.display_type)
-
-    def _get_invoiceable_lines(self, final=False):
-        """Return the invoiceable lines for order `self`."""
-        down_payment_line_ids = []
-        invoiceable_line_ids = []
-        pending_section = None
-        precision = self.env['decimal.precision'].precision_get('Product Unit of Measure')
-
-        for line in self.credit_request_line:
-            if line.display_type == 'line_section':
-                # Only invoice the section if one of its lines is invoiceable
-                pending_section = line
-                continue
-            if line.display_type != 'line_note' and float_is_zero(line.qty_to_invoice, precision_digits=precision):
-                continue
-            if line.qty_to_invoice > 0 or (line.qty_to_invoice < 0 and final) or line.display_type == 'line_note':
-                if line.is_downpayment:
-                    # Keep down payment lines separately, to put them together
-                    # at the end of the invoice, in a specific dedicated section.
-                    down_payment_line_ids.append(line.id)
-                    continue
-                if pending_section:
-                    invoiceable_line_ids.append(pending_section.id)
-                    pending_section = None
-                invoiceable_line_ids.append(line.id)
-
-        return self.env['sale.order.line'].browse(invoiceable_line_ids + down_payment_line_ids)
-
-    def _create_invoices(self, grouped=False, final=False, date=None):
-        """ Create invoice(s) for the given Sales Order(s).
-
-        :param bool grouped: if True, invoices are grouped by SO id.
-            If False, invoices are grouped by keys returned by :meth:`_get_invoice_grouping_keys`
-        :param bool final: if True, refunds will be generated if necessary
-        :param date: unused parameter
-        :returns: created invoices
-        :rtype: `account.move` recordset
-        :raises: UserError if one of the orders has no invoiceable lines.
-        """
-        if not self.env['account.move'].check_access_rights('create', False):
-            try:
-                self.check_access_rights('write')
-                self.check_access_rule('write')
-            except AccessError:
-                return self.env['account.move']
-
-        # 1) Create invoices.
-        invoice_vals_list = []
-        invoice_item_sequence = 0 # Incremental sequencing to keep the lines order on the invoice.
-        for order in self:
-            order = order.with_company(order.company_id).with_context(lang=order.partner_invoice_id.lang)
-
-            invoice_vals = order._prepare_invoice()
-            invoiceable_lines = order._get_invoiceable_lines(final)
-
-            if not any(not line.display_type for line in invoiceable_lines):
-                continue
-
-            invoice_line_vals = []
-            down_payment_section_added = False
-            for line in invoiceable_lines:
-                if not down_payment_section_added and line.is_downpayment:
-                    # Create a dedicated section for the down payments
-                    # (put at the end of the invoiceable_lines)
-                    invoice_line_vals.append(
-                        Command.create(
-                            order._prepare_down_payment_section_line(sequence=invoice_item_sequence)
-                        ),
-                    )
-                    down_payment_section_added = True
-                    invoice_item_sequence += 1
-                invoice_line_vals.append(
-                    Command.create(
-                        line._prepare_invoice_line(sequence=invoice_item_sequence)
-                    ),
-                )
-                invoice_item_sequence += 1
-
-            invoice_vals['invoice_line_ids'] += invoice_line_vals
-            invoice_vals_list.append(invoice_vals)
-
-        if not invoice_vals_list and self._context.get('raise_if_nothing_to_invoice', True):
-            raise UserError(self._nothing_to_invoice_error_message())
-
-        # 2) Manage 'grouped' parameter: group by (partner_id, currency_id).
-        if not grouped:
-            new_invoice_vals_list = []
-            invoice_grouping_keys = self._get_invoice_grouping_keys()
-            invoice_vals_list = sorted(
-                invoice_vals_list,
-                key=lambda x: [
-                    x.get(grouping_key) for grouping_key in invoice_grouping_keys
-                ]
-            )
-            for _grouping_keys, invoices in groupby(invoice_vals_list, key=lambda x: [x.get(grouping_key) for grouping_key in invoice_grouping_keys]):
-                origins = set()
-                payment_refs = set()
-                refs = set()
-                ref_invoice_vals = None
-                for invoice_vals in invoices:
-                    if not ref_invoice_vals:
-                        ref_invoice_vals = invoice_vals
-                    else:
-                        ref_invoice_vals['invoice_line_ids'] += invoice_vals['invoice_line_ids']
-                    origins.add(invoice_vals['invoice_origin'])
-                    payment_refs.add(invoice_vals['payment_reference'])
-                    refs.add(invoice_vals['ref'])
-                ref_invoice_vals.update({
-                    'ref': ', '.join(refs)[:2000],
-                    'invoice_origin': ', '.join(origins),
-                    'payment_reference': len(payment_refs) == 1 and payment_refs.pop() or False,
-                })
-                new_invoice_vals_list.append(ref_invoice_vals)
-            invoice_vals_list = new_invoice_vals_list
-
-        # 3) Create invoices.
-
-        # As part of the invoice creation, we make sure the sequence of multiple SO do not interfere
-        # in a single invoice. Example:
-        # SO 1:
-        # - Section A (sequence: 10)
-        # - Product A (sequence: 11)
-        # SO 2:
-        # - Section B (sequence: 10)
-        # - Product B (sequence: 11)
-        #
-        # If SO 1 & 2 are grouped in the same invoice, the result will be:
-        # - Section A (sequence: 10)
-        # - Section B (sequence: 10)
-        # - Product A (sequence: 11)
-        # - Product B (sequence: 11)
-        #
-        # Resequencing should be safe, however we resequence only if there are less invoices than
-        # orders, meaning a grouping might have been done. This could also mean that only a part
-        # of the selected SO are invoiceable, but resequencing in this case shouldn't be an issue.
-        if len(invoice_vals_list) < len(self):
-            SaleOrderLine = self.env['sale.order.line']
-            for invoice in invoice_vals_list:
-                sequence = 1
-                for line in invoice['invoice_line_ids']:
-                    line[2]['sequence'] = SaleOrderLine._get_invoice_line_sequence(new=sequence, old=line[2]['sequence'])
-                    sequence += 1
-
-        # Manage the creation of invoices in sudo because a salesperson must be able to generate an invoice from a
-        # sale order without "billing" access rights. However, he should not be able to create an invoice from scratch.
-        moves = self.env['account.move'].sudo().with_context(default_move_type='out_invoice').create(invoice_vals_list)
-
-        # 4) Some moves might actually be refunds: convert them if the total amount is negative
-        # We do this after the moves have been created since we need taxes, etc. to know if the total
-        # is actually negative or not
-        if final:
-            moves.sudo().filtered(lambda m: m.amount_total < 0).action_switch_invoice_into_refund_credit_note()
-        for move in moves:
-            move.message_post_with_view(
-                'mail.message_origin_link',
-                values={'self': move, 'origin': move.line_ids.sale_line_ids.order_id},
-                subtype_id=self.env['ir.model.data']._xmlid_to_res_id('mail.mt_note'))
-        return moves
 
     # MAIL #
 
@@ -998,6 +834,64 @@ class CreditRequest(models.Model):
         return super()._track_subtype(init_values)
 
     # PAYMENT #
+    def _get_payment_count(self):
+        for record in self:
+            record.payment_count = self._get_payment_transfer_count()
+
+    def _get_transfer_count(self):
+        for record in self:
+            record.transfer_count = self._get_payment_transfer_count('outbound')
+
+    #trabaja tanto para las trasferencias que se le hacen
+    #como para los pagos que realizan los clienes
+    def _get_payment_transfer_count(self, payment_type='inbound'):
+        return self.env['account.payment'].search_count(
+            [('request_id', '=', self.id),
+             ('partner_type', '=', 'customer'),
+             ('payment_type', '=', payment_type)
+            ]
+        )
+    
+    def action_view_payment(self):
+        return self.action_view_payment_transfer()
+    
+    def action_view_transfer(self):
+        return self.action_view_payment_transfer('outbound')
+
+    def action_view_payment_transfer(self, payment_type='inbound'):
+
+        if payment_type == 'inbound':
+            msg = f'Payment done for Contract {self.name}'
+            payments = self.payment_ids
+        else:
+            msg = f'Transfer done for Contract {self.name}'
+            payments = self.transfer_ids
+
+        payments = payments.filtered(lambda l: l.payment_type == payment_type)
+        action = self.env['ir.actions.actions']._for_xml_id('account.action_account_payments')
+        if len(payments) == 1:
+            form_view = [(self.env.ref('account.view_account_payment_form').id, 'form')]
+            if 'views' in action:
+                action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
+            else:
+                action['views'] = form_view
+            action['res_id'] = payments.id
+        else:
+            action['domain'] = [('id', 'in', payments.ids),('payment_type', '=', payment_type)]
+
+        context = {
+            'default_partner_type': 'customer',
+            'default_payment_type': payment_type
+        }
+        if len(self) == 1:
+            context.update({
+                'default_partner_id': self.partner_id.id,
+                'default_request_id': self.id,
+                'default_ref': msg,
+            })
+        action['context'] = context
+
+        return action
 
     def _force_lines_to_invoice_policy_order(self):
         for line in self.credit_request_line:
@@ -1094,19 +988,6 @@ class CreditRequest(models.Model):
 
     #=== BUSINESS METHODS ===#
 
-    def _create_upsell_activity(self):
-        if not self:
-            return
-
-        self.activity_unlink(['sale.mail_act_sale_upsell'])
-        for order in self:
-            order_ref = order._get_html_link()
-            customer_ref = order.partner_id._get_html_link()
-            order.activity_schedule(
-                'sale.mail_act_sale_upsell',
-                user_id=order.user_id.id or order.partner_id.user_id.id,
-                note=_("Upsell %(order)s for customer %(customer)s", order=order_ref, customer=customer_ref))
-
     def _prepare_analytic_account_data(self, prefix=None):
         """ Prepare SO analytic account creation values.
 
@@ -1154,41 +1035,3 @@ class CreditRequest(models.Model):
         # Override for correct taxcloud computation
         # when using coupon and delivery
         return True
-
-    #=== REPORTS FUNCTIONS ===#
-    def ministering_printing(self):
-        record_fields = {
-            'company_name': self.company_id.name,
-            'company_address_street_name': self.company_id.street + self.company_id,
-            'company_address_number':0,
-            'company_address_neighborhood':0,
-            'company_address_zip_code':0,
-            'company_address_municipality':0,
-            'company_address_state':0,
-            'company_address_country':0,
-            'credit_iou_date_day': 0,
-            'credit_iou_date_month':0,
-            'credit_iou_date_year':0,
-            'credit_iou_amount_numbers':0,
-            'credit_iou_amount_written':0,
-            'credit_iou_municipality':0,
-            'credit_iou_state':0,
-            'partner_iou_subscriber_name':0,
-            'partner_iou_subscriber_address_street_name':0,
-            'partner_iou_subscriber_address_number':0,
-            'partner_iou_subscriber_address_neighborhood':0,
-            'partner_iou_subscriber_address_zip_code':0,
-            'partner_iou_subscriber_address_municipality':0,
-            'partner_iou_subscriber_address_state':0,
-            'partner_iou_subscriber_representative':0,
-            'partner_iou_endorsement_name':0,
-            'partner_iou_endorsement_address_street_name':0,
-            'partner_iou_endorsement_address_number':0,
-            'partner_iou_endorsement_address_neighborhood':0,
-            'partner_iou_endorsement_address_zip_code':0,
-            'partner_iou_endorsement_address_municipality':0,
-            'partner_iou_endorsement_address_state':0,
-            'partner_iou_endorsement_representative':0,
-        }
-
-        return record_fields

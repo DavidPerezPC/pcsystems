@@ -23,7 +23,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['contacts','account'],
+    'depends': ['contacts','base_accounting_kit'],
 
     # always loaded
     'data': [
@@ -32,9 +32,12 @@
         'views/res_partner.xml',
         'views/views.xml',
         'reports/invoice_debt_voucher.xml',
+        'reports/credit_request_reports.xml',
         'views/templates.xml',
         'views/catalogs.xml',
-        'views/credit_request.xml'
+        'views/credit_request.xml',
+        'views/account_move.xml',
+        'views/account_payment.xml',
     ],
     # only loaded in demonstration mode
     'demo': [],

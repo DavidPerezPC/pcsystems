@@ -2,7 +2,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from collections import defaultdict
-from datetime import timedelta
+from datetime import datetime, timedelta
+import locale
 
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
@@ -214,7 +215,7 @@ class CreditRequestMinistering(models.Model):
 
     request_id = fields.Many2one(
         "farmerscredit.credit.request",
-        string="Season/Crop Info",
+        string="Credit Request",
         help="General Info for Season/Crop",
     )
 
@@ -228,3 +229,74 @@ class CreditRequestMinistering(models.Model):
         string="Date",
         help="Date for this ministering",
     )
+
+    partner_id = fields.Many2one(
+        'res.partner',
+        related='request_id.partner_id'
+    )
+
+    def get_ministering_name(self):
+        
+        name = "Ministracion_" + \
+                self.request_id.name.replace(' ','') + "_" + \
+                datetime.strftime(self.date_ministering, "%Y_%m_%d")
+
+        return name
+
+    #=== REPORTS FUNCTIONS ===#
+    def ministering_printing(self):
+
+        locale.setlocale(locale.LC_ALL, 'es_ES')
+        request = self.request_id
+        for line in request.credit_request_line:
+            date_due = line.season_id.date_end
+            break
+
+        amount_text ="${:,.2f}".format(self.credit_granted) 
+        amount_principal = int(self.credit_granted)
+        amount_fractional = amount_text.split(".")[1]
+        company = self.request_id.company_id
+        suscriber = self.partner_id
+        endorse = self.request_id.partner_endorsement_id
+        record_fields = {
+            'company_name': company.name,
+            'company_address_street_name': company.street,
+            'company_address_number':company.street,
+            'company_address_neighborhood': (company.street2 or ''),
+            'company_address_zip_code': company.zip,
+            'company_address_municipality': company.city,
+            'company_address_state': company.state_id.name,
+            'company_address_country': company.country_id.name,
+            'season_end_dia': datetime.strftime(date_due, "%d"),
+            'season_end_date_month': datetime.strftime(date_due, "%B").upper(),
+            'season_end_date_year': datetime.strftime(date_due, "%Y"),
+            'credit_iou_dia': datetime.strftime(self.date_ministering, "%d"),
+            'credit_iou_date_month': datetime.strftime(self.date_ministering, "%B").upper(),
+            'credit_iou_date_year': datetime.strftime(self.date_ministering, "%Y"),
+            'credit_iou_amount_numbers': amount_text,
+            'credit_iou_amount_written': company.currency_id.amount_to_text(amount_principal).upper() + \
+                                           f" {amount_fractional}/100 M.N." ,
+            'credit_iou_municipality': company.city,
+            'credit_iou_state': company.state_id.name,
+            'credit_interest_rate': "{:.2f}%".format(self.request_id.interest_rate * 100),
+            'credit_arrears': self.request_id.arrears,
+            'credit_arrears_written': 'DOS PUNTO CINCO',
+            'partner_iou_subscriber_name': suscriber.name,
+            'partner_iou_subscriber_address_street_name': suscriber.street,
+            'partner_iou_subscriber_address_number':suscriber.street,
+            'partner_iou_subscriber_address_neighborhood': (suscriber.street2 or ''),
+            'partner_iou_subscriber_address_zip_code': suscriber.zip,
+            'partner_iou_subscriber_address_municipality': suscriber.city,
+            'partner_iou_subscriber_address_state': suscriber.state_id.name,
+            'partner_iou_subscriber_representative': suscriber.name,
+            'partner_iou_endorsement_name': endorse.name,
+            'partner_iou_endorsement_address_street_name': endorse.street,
+            'partner_iou_endorsement_address_number': endorse.street,
+            'partner_iou_endorsement_address_neighborhood': endorse.street2 or '',
+            'partner_iou_endorsement_address_zip_code': endorse.zip,
+            'partner_iou_endorsement_address_municipality': endorse.city,
+            'partner_iou_endorsement_address_state': endorse.state_id.name,
+            'partner_iou_endorsement_representative': endorse.name,
+        }
+
+        return record_fields

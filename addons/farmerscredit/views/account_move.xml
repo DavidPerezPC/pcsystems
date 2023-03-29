@@ -1,0 +1,15 @@
+<odoo>
+    <data>
+    <record  id="account_move_inherit_form_fc" model="ir.ui.view">
+        <field name="name">farmerscredit_account_move_inherit_form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[1]/field[@name='partner_id']" position="after">
+                <field name='request_id'  
+                       placeholder="Select Farmer's Contract"/>             
+            </xpath>
+        </field>
+    </record>    
+  </data>
+</odoo>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-24 02:31+0000\n"
-"PO-Revision-Date: 2023-02-23 19:42-0700\n"
+"POT-Creation-Date: 2023-03-29 18:38+0000\n"
+"PO-Revision-Date: 2023-03-29 11:59-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -22,6 +22,13 @@ msgstr ""
 #: model:ir.actions.report,print_report_name:farmerscredit.action_invoice_docx_debt_voucher
 msgid "'Pagare Factura %s' % (object.name)"
 msgstr ""
+
+#. module: farmerscredit
+#: model:ir.actions.report,print_report_name:farmerscredit.action_credit_request_ministering_iou
+msgid ""
+"'Pagare_Ministracion %s (%)' % (object.name, datetime.strftime(object.date_ministering,"
+"\"%Y%m%d\"))"
+msgstr "'Pagare_Ministracion_%s ' % (object.name)"
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
@@ -50,16 +57,22 @@ msgstr ""
 #: model:ir.model.fields,help:farmerscredit.field_res_users__type
 #, python-format
 msgid ""
-"- Contact: Use this to organize the contact details of employees of a given company (e.g. CEO, CFO, ...).\n"
-"- Invoice Address : Preferred address for all invoices. Selected by default when you invoice an order that belongs to this company.\n"
-"- Delivery Address : Preferred address for all deliveries. Selected by default when you deliver an order that belongs to this company.\n"
-"- Endorsement: Person who supports in case the borrower presents problems during the term of the contract, ...).\n"
+"- Contact: Use this to organize the contact details of employees of a given company (e.g. CEO, "
+"CFO, ...).\n"
+"- Representative : Legal Representative for this Partner.\n"
+"- Notary : Notary that validatet the Public Deed.\n"
+"- Endorsement: Person who supports in case the borrower presents problems during the term of the "
+"contract, ...).\n"
 "- Mate: Mate or Spouse of the borrower, ...)"
 msgstr ""
-"- Contacto: Se utiliza para organizar los detalles de los contactos y/o empleados de cierta compañia (e.g. CEO, CFO, …).\n"
-"- Facturación: Dirección predeterminada para las facturas. Se selecciona de forma automática cuando le realizas una orden o factura a esta compañía..\n"
-"- Entrega: Dirección predeterminada para las entregas. Se selecciona de forma automática cuando realizas la entrega a esta compañía.\n"
-"- Aval: Persona que soporta o responde a los compromisos adquiridos por el prestatario, cuándo presentan atrasos en los pagos…).\n"
+"- Contacto: Se utiliza para organizar los detalles de los contactos y/o empleados de cierta "
+"compañia (e.g. CEO, CFO, …).\n"
+"- Facturación: Dirección predeterminada para las facturas. Se selecciona de forma automática "
+"cuando le realizas una orden o factura a esta compañía..\n"
+"- Entrega: Dirección predeterminada para las entregas. Se selecciona de forma automática cuando "
+"realizas la entrega a esta compañía.\n"
+"- Aval: Persona que soporta o responde a los compromisos adquiridos por el prestatario, cuándo "
+"presentan atrasos en los pagos…).\n"
 "- Cónyuge: Esposo o Pareja del prestatario …)"
 
 #. module: farmerscredit
@@ -74,6 +87,21 @@ msgid ""
 "                      ________________________________________________________\n"
 "                      <br/>"
 msgstr ""
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
+msgid "<span class=\"o_stat_text\">Invoiced</span>"
+msgstr "Facturado"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
+msgid "<span class=\"o_stat_text\">Payments</span>"
+msgstr "Pagos"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
+msgid "<span class=\"o_stat_text\">Transfers</span>"
+msgstr "Efectivo"
 
 #. module: farmerscredit
 #. odoo-python
@@ -124,12 +152,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__activity_type_icon
 msgid "Activity Type Icon"
 msgstr ""
-
-#. module: farmerscredit
-#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__type
-#: model:ir.model.fields,field_description:farmerscredit.field_res_users__type
-msgid "Address Type"
-msgstr "Tipo de Dirección"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__age
@@ -187,6 +209,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__partner_id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_guarantees__partner_id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_line__partner_id
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_ministering__partner_id
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_tree
 msgid "Applicant"
 msgstr "Solicitante"
 
@@ -200,6 +224,11 @@ msgstr "Referencia"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__area
 msgid "Area"
 msgstr "Superficie"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__arrears
+msgid "Arrears"
+msgstr "Moratorio"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__message_attachment_count
@@ -232,6 +261,11 @@ msgstr "Libro"
 #: model:ir.model.fields,field_description:farmerscredit.field_res_users__birth_certificate
 msgid "Brith Certificate"
 msgstr "Acta Nacimiento"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Business Data"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__curp
@@ -306,6 +340,12 @@ msgid "Contact"
 msgstr "Contacto"
 
 #. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__type
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__type
+msgid "Contact Type"
+msgstr "Tipo de Dirección"
+
+#. module: farmerscredit
 #: model:ir.ui.menu,name:farmerscredit.contacts_list
 msgid "Contacts"
 msgstr "Contactos"
@@ -313,6 +353,9 @@ msgstr "Contactos"
 #. module: farmerscredit
 #. odoo-python
 #: code:addons/farmerscredit/models/credit_request.py:0
+#: model:ir.model.fields,field_description:farmerscredit.field_account_bank_statement_line__request_id
+#: model:ir.model.fields,field_description:farmerscredit.field_account_move__request_id
+#: model:ir.model.fields,field_description:farmerscredit.field_account_payment__request_id
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_credit_request__state__contract
 #, python-format
 msgid "Contract"
@@ -324,6 +367,17 @@ msgid "Contract Info"
 msgstr "Información Contrato"
 
 #. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_account_bank_statement_line__request_id
+#: model:ir.model.fields,help:farmerscredit.field_account_move__request_id
+msgid "Contract's Invoice (created on behalf this credit Contract)"
+msgstr "Facturas creadas desde este contrato"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_account_payment__request_id
+msgid "Contract's transfer to loan (created on behalf this credit Contract)"
+msgstr "Transferencias en efectivo realizadas a este contrato"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__country_code
 msgid "Country code"
 msgstr "Código País"
@@ -331,7 +385,7 @@ msgstr "Código País"
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
 msgid "Create Ministering"
-msgstr ""
+msgstr "Crear Ministración"
 
 #. module: farmerscredit
 #: model_terms:ir.actions.act_window,help:farmerscredit.action_credit_request
@@ -348,7 +402,6 @@ msgstr "Crear una Solicitud de Crédito, el primer paso para un nuevo Crédito"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__create_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__create_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__create_uid
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__create_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -363,7 +416,6 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__create_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__create_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__create_date
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__create_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__create_date
 msgid "Created on"
 msgstr "Creado el"
@@ -386,17 +438,15 @@ msgid "Credit Amount per Hectare for this Crop in this Season"
 msgstr "Monto de Crédito por Hectárea para la Temporada"
 
 #. module: farmerscredit
-#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_season_crop_ministering__credit_per_unit
-msgid "Credit Amount per Hectare for this Ministering"
-msgstr "Monto por Hectárea para esta Ministración"
-
-#. module: farmerscredit
 #. odoo-python
 #: code:addons/farmerscredit/models/credit_request.py:0
 #: model:ir.actions.act_window,name:farmerscredit.action_credit_request
 #: model:ir.model,name:farmerscredit.model_farmerscredit_credit_request
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_ministering__request_id
 #: model:ir.ui.menu,name:farmerscredit.credit_request_list
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_filter
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_tree
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_tree
 #, python-format
 msgid "Credit Request"
@@ -416,6 +466,18 @@ msgstr "Cultivos por Temporada"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__credit_request_line
 msgid "Credit Request Lines"
 msgstr "Detalles de la Solicitud"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_pivot
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_tree
+msgid "Credit Request Minestering"
+msgstr "Ministraciones"
+
+#. module: farmerscredit
+#: model:ir.actions.act_window,name:farmerscredit.action_credit_request_ministering
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_calendar
+msgid "Credit Request Ministering"
+msgstr "Minisitraciones"
 
 #. module: farmerscredit
 #: model:ir.model,name:farmerscredit.model_farmerscredit_credit_request_references
@@ -441,11 +503,6 @@ msgstr "Solicitud de Crédito"
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_line__credit_amount
 msgid "Credit amount given for this crop"
 msgstr "Monto asignado para este cultivo"
-
-#. module: farmerscredit
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__credit_per_unit
-msgid "Credit x Ha."
-msgstr "Crédito x Ha."
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_line__currency_id
@@ -532,11 +589,15 @@ msgstr ""
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
 msgid "Customer Signature"
-msgstr ""
+msgstr "Firma"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_ministering__date_ministering
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__date_ministering
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__business_folio_date
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_date
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__business_folio_date
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_date
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_filter
 msgid "Date"
 msgstr "Fecha"
 
@@ -572,7 +633,6 @@ msgstr "Fecha para la tercera Ministración"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_ministering__date_ministering
-#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_season_crop_ministering__date_ministering
 msgid "Date for this ministering"
 msgstr "Fecha para esta Ministración"
 
@@ -587,6 +647,12 @@ msgid "Date of credit request"
 msgstr "Fecha Solicitud"
 
 #. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_date
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_date
+msgid "Date that this Public Deed was registered"
+msgstr "Fecha de Inscripción en el Registro Público"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__date_end
 msgid "Date to"
 msgstr "Fecha Término"
@@ -595,11 +661,6 @@ msgstr "Fecha Término"
 #: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
 msgid "Del valor del presente pagaré me (nos) obligo (amos) a pagar igualmente a"
 msgstr ""
-
-#. module: farmerscredit
-#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__delivery
-msgid "Delivery Address"
-msgstr "Dirección de entrega"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_line__name
@@ -622,7 +683,6 @@ msgstr "Descartado"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__display_name
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__display_name
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__display_name
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__display_name
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__display_name
 msgid "Display Name"
 msgstr "Nombre"
@@ -644,10 +704,21 @@ msgid "Done"
 msgstr "Hecho"
 
 #. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__due_date
+msgid "Due Date"
+msgstr "Vencimiento"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__due_date
+msgid "Due date for this Credit Request"
+msgstr "Fecha de Vencimiento para la Solicitud de Crédito"
+
+#. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
 msgid ""
 "En caso de incumplimiento en el pago en la fecha estipulada en el presente\n"
-"                        pagaré, me obligo a pagar un interés moratorio, que resulte de multiplicar\n"
+"                        pagaré, me obligo a pagar un interés moratorio, que resulte de "
+"multiplicar\n"
 "                        por 1.5 veces la tasa de interés ordinaria."
 msgstr ""
 
@@ -879,8 +950,16 @@ msgstr "Filtros"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__inscription_folio
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__business_folio
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__business_folio
 msgid "Folio"
-msgstr ""
+msgstr "Folio"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__business_folio
+#: model:ir.model.fields,help:farmerscredit.field_res_users__business_folio
+msgid "Folio assigned for Public Deed"
+msgstr "Folio asignado a la Escritura Pública"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__message_follower_ids
@@ -896,11 +975,6 @@ msgstr ""
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
 msgstr ""
-
-#. module: farmerscredit
-#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_season_crop_ministering__season_crop_id
-msgid "Genaral Info for Season/Crop"
-msgstr "Información Temporada/Cultivo"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_ministering__request_id
@@ -975,7 +1049,6 @@ msgstr "Administra los Créditos de Agricultores"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__id
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__id
 msgid "ID"
 msgstr ""
@@ -994,7 +1067,7 @@ msgstr ""
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Icono que indica una excepción de actividad."
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__message_needaction
@@ -1015,7 +1088,7 @@ msgstr ""
 #. module: farmerscredit
 #: model:ir.model,name:farmerscredit.model_farmerscredit_season_crop_info
 msgid "Information for Seasons and Crops"
-msgstr ""
+msgstr "Información para Temporadas y Cultivos"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__initial_date
@@ -1028,14 +1101,20 @@ msgid "Inscription"
 msgstr "Inscripción"
 
 #. module: farmerscredit
-#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__invoice
-msgid "Invoice Address"
-msgstr "Dirección de factura"
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__interest_rate
+msgid "Interest"
+msgstr "Interés"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__interest_stop_date
+msgid "Interest will stop running from this date, only acumulated debt with no more interest"
+msgstr "Fecha que indica el fin del cobro de intereses para el Contrato"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__invoice_count
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__transfer_count
 msgid "Invoice Count"
-msgstr ""
+msgstr "#Facturas"
 
 #. module: farmerscredit
 #: model:ir.actions.report,name:farmerscredit.action_invoice_debt_voucher
@@ -1045,12 +1124,17 @@ msgstr "Pagaré"
 #. module: farmerscredit
 #: model:ir.actions.report,name:farmerscredit.action_invoice_docx_debt_voucher
 msgid "Invoice Docx Debt Voucher"
-msgstr ""
+msgstr "Pagaré (Docx)"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__total_invoiced
+msgid "Invoiced"
+msgstr "Facturado"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__invoice_ids
-msgid "Invoices"
-msgstr "Facturas"
+msgid "Invoices issued on behalf this Contract"
+msgstr "Facturas emitidas con cargo a este Contrato"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_res_partner__is_farmer
@@ -1063,6 +1147,12 @@ msgstr "Agricultor?"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__message_is_follower
 msgid "Is Follower"
 msgstr ""
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__business_folio_date
+#: model:ir.model.fields,help:farmerscredit.field_res_users__business_folio_date
+msgid "Issued Date for this Folio"
+msgstr "Fecha de emisión para este Folio"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__issued_date
@@ -1091,7 +1181,6 @@ msgstr "Asiento contable"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees____last_update
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots____last_update
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info____last_update
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering____last_update
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons____last_update
 msgid "Last Modified on"
 msgstr "Última modificación el"
@@ -1106,7 +1195,6 @@ msgstr "Última modificación el"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__write_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__write_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__write_uid
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__write_uid
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__write_uid
 msgid "Last Updated by"
 msgstr "Actualizada por"
@@ -1121,7 +1209,6 @@ msgstr "Actualizada por"
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__write_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_lots__write_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__write_date
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__write_date
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__write_date
 msgid "Last Updated on"
 msgstr "Actualizado el"
@@ -1130,6 +1217,11 @@ msgstr "Actualizado el"
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__type__leased
 msgid "Leased"
 msgstr "Arrendado"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Legal Info"
+msgstr "Información Legal"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__lines_count
@@ -1224,6 +1316,7 @@ msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__ministering_ids
+#: model:ir.ui.menu,name:farmerscredit.credit_request_list_ministering
 #: model_terms:ir.ui.view,arch_db:farmerscredit.crops_form
 #: model_terms:ir.ui.view,arch_db:farmerscredit.seasons_form
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
@@ -1241,9 +1334,9 @@ msgid "Ministering Count"
 msgstr "#Ministraciones"
 
 #. module: farmerscredit
-#: model:ir.model,name:farmerscredit.model_farmerscredit_season_crop_ministering
-msgid "Ministering for Seasons and Crops"
-msgstr "Ministraciones para Temporadas y Cultivos"
+#: model:ir.actions.report,name:farmerscredit.action_credit_request_ministering_iou
+msgid "Ministering IOU Voucher"
+msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model,name:farmerscredit.model_farmerscredit_credit_request_ministering
@@ -1261,6 +1354,18 @@ msgstr "Meses"
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_guarantees__type__mortgage
 msgid "Mortgage"
 msgstr "Hipotecario"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_notary_municipality
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_notary_municipality
+msgid "Municipality"
+msgstr "Municipio"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_notary_municipality
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_notary_municipality
+msgid "Municipality that this Notary was authorized"
+msgstr "Municipio en el que trabaja el Notario"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__my_activity_date_deadline
@@ -1312,13 +1417,31 @@ msgstr ""
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__notary
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__delivery
 msgid "Notary"
 msgstr "Notaría"
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
+msgid "Notary Data"
+msgstr "Datos Notariales"
+
+#. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.farmerscredit_res_partner_inherit_form
 msgid "Notary Information"
 msgstr "Información Notarial"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_notary_num
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_notary_num
+msgid "Notary authorization number that registered this Public Deed"
+msgstr "Número de Notario que realiza el registro de la Escritura Pública"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_notary_num
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_notary_num
+msgid "Notary#"
+msgstr "Notario#"
 
 #. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_tree
@@ -1347,8 +1470,12 @@ msgstr ""
 
 #. module: farmerscredit
 #: model_terms:ir.actions.act_window,help:farmerscredit.action_credit_request
-msgid "Once the Credit Request is confirmed, it becomes a Contract.<br> You will be able to create an Sales Orders and Invoices and collect the payment."
-msgstr "Un vez que la Solicitud es confirmada, se convierte en Contrato. <br> Se podrán crear Ventas y Facturas y realizar pagos de la mismas."
+msgid ""
+"Once the Credit Request is confirmed, it becomes a Contract.<br> You will be able to create an "
+"Sales Orders and Invoices and collect the payment."
+msgstr ""
+"Un vez que la Solicitud es confirmada, se convierte en Contrato. <br> Se podrán crear Ventas y "
+"Facturas y realizar pagos de la mismas."
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__require_signature
@@ -1404,9 +1531,25 @@ msgid "Partner Credit Warning"
 msgstr "Alerta de Crédito"
 
 #. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__payment_count
+msgid "Payment Count"
+msgstr "#Pagos"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__payment_term_id
 msgid "Payment Terms"
 msgstr "Términos de Pago"
+
+#. module: farmerscredit
+#: model:ir.model,name:farmerscredit.model_account_payment
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__total_payments
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__payment_ids
+msgid "Payments done to this Contract"
+msgstr "Pagos realizados al Contrato"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_references__is_personal
@@ -1445,13 +1588,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/farmerscredit/models/credit_request.py:0
 #, python-format
-msgid "Product prices have been recomputed according to pricelist %s."
-msgstr ""
-
-#. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
 msgid "Product taxes have been recomputed according to fiscal position %s."
 msgstr ""
 
@@ -1464,6 +1600,12 @@ msgstr "Périto"
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_partner_guarantees__name
 msgid "Property/Good description or features"
 msgstr "Descripción o Características de la Propiedad o Bien"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_num
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_num
+msgid "Public Deed#"
+msgstr "Escritura Pública#"
 
 #. module: farmerscredit
 #: model:ir.model.fields.selection,name:farmerscredit.selection__farmerscredit_partner_lots__ownership_type__public
@@ -1498,9 +1640,19 @@ msgid "Reference's Telephone"
 msgstr "Telefono"
 
 #. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__interest_rate
+msgid "Regular interest rate for this credit"
+msgstr "Tasa de interés normal para este Crédito"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_references__relationship
 msgid "Relationship"
 msgstr "Parentesco"
+
+#. module: farmerscredit
+#: model:ir.model.fields.selection,name:farmerscredit.selection__res_partner__type__invoice
+msgid "Representative"
+msgstr "Dirección de factura"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__request_date
@@ -1522,7 +1674,8 @@ msgstr "Estatus"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__require_signature
-msgid "Request a online signature to the applicant in order to confirm credit request automatically."
+msgid ""
+"Request a online signature to the applicant in order to confirm credit request automatically."
 msgstr ""
 
 #. module: farmerscredit
@@ -1553,6 +1706,11 @@ msgid "Search Credit Request"
 msgstr "Buscar Solicitud de Crédito"
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_filter
+msgid "Search Credit Request Ministering"
+msgstr "Buscar Ministraciones"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_line__season_id
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_crops__season_ids
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_info__season_id
@@ -1577,8 +1735,6 @@ msgstr "Temporadas donde se utilizan el Cultivo"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_line__season_crop_info_id
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request_ministering__request_id
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_season_crop_ministering__season_crop_id
 msgid "Season/Crop Info"
 msgstr "Info Temporada/Cultivo"
 
@@ -1608,10 +1764,16 @@ msgid "Security Token"
 msgstr ""
 
 #. module: farmerscredit
+#: model_terms:ir.ui.view,arch_db:farmerscredit.account_move_inherit_form_fc
+#: model_terms:ir.ui.view,arch_db:farmerscredit.account_payment_inherit_form_fc
+msgid "Select Farmer's Contract"
+msgstr "Selecciona el Contrato del Agricultor"
+
+#. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__birth_date
 #: model:ir.model.fields,help:farmerscredit.field_res_users__birth_date
 msgid "Select or type the birth date"
-msgstr ""
+msgstr "Selecciona o proporciona la Fecha de Nacimiento"
 
 #. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_res_partner__sex
@@ -1623,6 +1785,7 @@ msgstr "Selecciona sexo, F=Femenino o M=Masculino"
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__partner_id
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_guarantees__partner_id
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_line__partner_id
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request_ministering__partner_id
 msgid "Select the Applicant for this Credit (must be a Farmer)"
 msgstr "Selecciona el Solicitante para este Crédito (debe de ser un Agricultor)"
 
@@ -1716,6 +1879,18 @@ msgid "Starting date of this Season"
 msgstr "Fecha en la que inicia la Temporada"
 
 #. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_notary_state
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_notary_state
+msgid "State"
+msgstr "Estado"
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_notary_state
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_notary_state
+msgid "State that this Notary was authorized"
+msgstr "Estado donde el Notario fue autorizado"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__state
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_seasons__status
 msgid "Status"
@@ -1734,6 +1909,11 @@ msgstr ""
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_seasons__status
 msgid "Status of the Season, only valid can be used with operations"
 msgstr "Estatus de la Temporada, solamente los Vigentes pueden asignrse a un Crédito"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__interest_stop_date
+msgid "Stop at"
+msgstr "Fecha Congelamiento"
 
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_partner_guarantees__supplier
@@ -1778,20 +1958,10 @@ msgid ""
 msgstr ""
 
 #. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
-msgid ""
-"There is nothing to invoice!\n"
-"\n"
-"Reason(s) of this behavior could be:\n"
-"- You should deliver your products before invoicing them: Click on the \"truck\" icon (top-right of your screen) and follow instructions.\n"
-"- You should modify the invoicing policy of your product: Open the product, go to the \"Sales\" tab and modify invoicing policy from \"delivered quantities\" to \"ordered quantities\". For Services, you should modify the Service Invoicing Policy to 'Prepaid'."
-msgstr ""
-
-#. module: farmerscredit
 #: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__campaign_id
-msgid "This is a name that helps you keep track of your different campaign efforts, e.g. Fall_Drive, Christmas_Special"
+msgid ""
+"This is a name that helps you keep track of your different campaign efforts, e.g. Fall_Drive, "
+"Christmas_Special"
 msgstr ""
 
 #. module: farmerscredit
@@ -1810,6 +1980,11 @@ msgid "This is the source of the link, e.g. Search Engine, another domain, or na
 msgstr ""
 
 #. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_farmerscredit_credit_request__arrears
+msgid "Times to multiply Interest Rate for Arrears charges"
+msgstr "Veces que se multiplica el Interés Normal para calcular los moratorios"
+
+#. module: farmerscredit
 #: model_terms:ir.ui.view,arch_db:farmerscredit.invoice_debt_voucher
 msgid "Tipo de crédito: COMERCIAL"
 msgstr ""
@@ -1823,6 +1998,7 @@ msgstr "Indique si es un Agricultor"
 #. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__amount_total
 #: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_form
+#: model_terms:ir.ui.view,arch_db:farmerscredit.view_credit_request_ministering_tree
 msgid "Total"
 msgstr ""
 
@@ -1849,6 +2025,16 @@ msgid "Total area available for credit"
 msgstr ""
 
 #. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__total_transfers
+msgid "Transfers"
+msgstr "Efectivo"
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__transfer_ids
+msgid "Transfers done to this Contract"
+msgstr "Transferencias en efectivo (dinero) que se han emitido a este Contrato"
+
+#. module: farmerscredit
 #: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__type_name
 msgid "Type Name"
 msgstr ""
@@ -1859,15 +2045,14 @@ msgid "Type of the exception activity on record."
 msgstr ""
 
 #. module: farmerscredit
-#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__amount_untaxed
-msgid "Untaxed Amount"
-msgstr ""
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_num
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_num
+msgid "Type the Public Deed Number"
+msgstr "Proporcione el Número de Escritura Pública"
 
 #. module: farmerscredit
-#. odoo-python
-#: code:addons/farmerscredit/models/credit_request.py:0
-#, python-format
-msgid "Upsell %(order)s for customer %(customer)s"
+#: model:ir.model.fields,field_description:farmerscredit.field_farmerscredit_credit_request__amount_untaxed
+msgid "Untaxed Amount"
 msgstr ""
 
 #. module: farmerscredit
@@ -1888,6 +2073,18 @@ msgstr ""
 #, python-format
 msgid "View Quotation"
 msgstr ""
+
+#. module: farmerscredit
+#: model:ir.model.fields,field_description:farmerscredit.field_res_partner__public_deed_vol
+#: model:ir.model.fields,field_description:farmerscredit.field_res_users__public_deed_vol
+msgid "Volume"
+msgstr ""
+
+#. module: farmerscredit
+#: model:ir.model.fields,help:farmerscredit.field_res_partner__public_deed_vol
+#: model:ir.model.fields,help:farmerscredit.field_res_users__public_deed_vol
+msgid "Volume# where the Public Deed was registered"
+msgstr "Número de Volumen donde la Escritura Pública fue registrada"
 
 #. module: farmerscredit
 #. odoo-python

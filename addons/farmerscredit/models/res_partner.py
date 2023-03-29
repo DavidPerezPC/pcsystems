@@ -9,15 +9,16 @@ class Partner(models.Model):
 
     type = fields.Selection(
         [('contact', 'Contact'),
-         ('invoice', 'Invoice Address'),
-         ('delivery', 'Delivery Address'),
+         ('invoice', 'Representative'),
+         ('delivery', 'Notary'),
          ('private', 'Endorsement'),
          ('other', 'Mate'),
-        ], string='Address Type',
+        ], string='Contact Type',
         default='private',
-        help=_("- Contact: Use this to organize the contact details of employees of a given company (e.g. CEO, CFO, ...).\n"
-             "- Invoice Address : Preferred address for all invoices. Selected by default when you invoice an order that belongs to this company.\n"
-             "- Delivery Address : Preferred address for all deliveries. Selected by default when you deliver an order that belongs to this company.\n"
+        help=_(\
+             "- Contact: Use this to organize the contact details of employees of a given company (e.g. CEO, CFO, ...).\n"
+             "- Representative : Legal Representative for this Partner.\n"
+             "- Notary : Notary that validatet the Public Deed.\n"
              "- Endorsement: Person who supports in case the borrower presents problems during the term of the contract, ...).\n"
              "- Mate: Mate or Spouse of the borrower, ...)")
             )
@@ -86,6 +87,47 @@ class Partner(models.Model):
         string="Total Area",
         help="Total area available for credit",
         compute="_get_total_area", store=True, readonly=True,
+    )
+
+    #INFORMACIÓN PARA NOTARIOS (type=DELIVERY) y REPRESENTANTES (type=INVOICE)
+    public_deed_num = fields.Char(
+        string="Public Deed#",
+        help="Type the Public Deed Number"
+    )
+
+    public_deed_vol = fields.Char(
+        string = "Volume",
+        help = "Volume# where the Public Deed was registered" 
+    )
+
+    public_deed_date = fields.Date(
+        string="Date",
+        help="Date that this Public Deed was registered"
+    )
+
+    public_deed_notary_num = fields.Char(
+        string="Notary#",
+        help="Notary authorization number that registered this Public Deed"
+    )
+
+    public_deed_notary_municipality = fields.Char(
+        string="Municipality",
+        help="Municipality that this Notary was authorized"
+    )
+
+    public_deed_notary_state  = fields.Char(
+        string="State",
+        help="State that this Notary was authorized"
+    )
+
+    business_folio = fields.Char(
+        string="Folio",
+        help="Folio assigned for Public Deed"
+    )
+
+    business_folio_date = fields.Date(
+        string="Date",
+        help="Issued Date for this Folio"
     )
 
     @api.depends("birth_date")

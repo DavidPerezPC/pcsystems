@@ -111,6 +111,26 @@
                     </field>
                 </page>
             </xpath>         
+            <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[1]/form[1]/sheet[1]/group[1]" position="after">
+                <notebook colspan="4" attrs="{'invisible': [('type', 'not in', ['invoice', 'delivery'])]}">
+                    <page name="legal_info" string="Legal Info">
+                        <group>
+                            <group name="notary_data" string="Notary Data">
+                                <field name='public_deed_num' />
+                                <field name='public_deed_vol' />
+                                <field name='public_deed_date' />
+                                <field name='public_deed_notary_num' />
+                                <field name='public_deed_notary_municipality' />
+                                <field name='public_deed_notary_state' />
+                            </group>
+                            <group name="bussines_data" string="Business Data">
+                                <field name='business_folio' />
+                                <field name='business_folio_date' />
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>           
         </field>
     </record>
   </data>

@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+    <record  id="account_payment_inherit_form_fc" model="ir.ui.view">
+        <field name="name">farmerscredit_account_payment_inherit_form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" 
+            ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='payment_method_line_id']" position="after">
+                <field name='request_id'  
+                       placeholder="Select Farmer's Contract"/>             
+            </xpath>
+        </field>
+    </record>    
+  </data>
+</odoo>

@@ -1,0 +1,12 @@
+<odoo>
+    <data>
+        <record id="action_credit_request_ministering_iou" model="ir.actions.report">
+            <field name="name">Ministering IOU Voucher</field>
+            <field name="model">farmerscredit.credit.request.ministering</field>
+            <field name="report_type">docx</field>
+            <field name="report_name">farmerscredit.ministering_iou_voucher</field>
+            <field name="print_report_name">'Pagare_Ministracion %s (%)' % (object.name, datetime.strftime(object.date_ministering,"%Y%m%d"))</field>
+            <field name="binding_model_id" ref="model_farmerscredit_credit_request_ministering"></field>
+        </record>
+    </data>
+</odoo>
