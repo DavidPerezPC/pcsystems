@@ -1,0 +1,37 @@
+<odoo>
+  <data>
+    <!--record  id="res_bank_form_inherited" model="ir.ui.view">
+        <field name="name">caprepa.res_bank_form</field>
+        <field name="model">res.bank</field>
+        <field name="inherit_id" ref="base.view_res_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bic']" position="after">
+              <field name="abm_code"/>
+            </xpath>      
+        </field>
+    </record>
+
+    <record  id="view_partner_bank_form_inherited" model="ir.ui.view">
+        <field name="name">caprepa.view_partner_bank_form</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='bank_id']" position="after">
+              <field name="mx_clabe"/>
+            </xpath>      
+        </field>
+    </record-->
+
+    <record  id="res_partner_view_form_private_inherited" model="ir.ui.view">
+        <field name="name">caprepa.res_partner_view_form_private</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_view_form_private"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/sheet[1]/group[2]/field[1]/tree[1]/field[@name='acc_number']" position="after">
+              <!--field name="mx_clabe"/-->
+              <field name="l10n_mx_edi_clabe" />
+            </xpath>      
+        </field>
+    </record>
+  </data>
+</odoo>

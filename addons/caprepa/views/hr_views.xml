@@ -5,6 +5,13 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='job_id']" position="replace">
+                <field name="salary_daily" widget="monetary" />
+                <field name="salary_base" widget="monetary" />
+            </xpath>
+            <xpath expr="//form[1]/sheet[1]/div[3]/h2[1]/field[1]" position="replace">
+                <field name="job_id" placeholder="Job Position..."/>
+            </xpath>
             <xpath expr="//form[1]/sheet[1]/group[1]/group[2]/field[@name='coach_id']" position="after">
               <field name="admission_date"/>
             </xpath>      
@@ -21,6 +28,9 @@
             <xpath expr="//field[@name='pin']" position="replace" />
             <xpath expr="//field[@name='barcode']" position="attributes">
                 <attribute name="string">Collaborator ID</attribute>
+            </xpath>
+            <xpath expr="//field[@name='bank_account_id']" position="after">
+              <field name="mx_clabe" />
             </xpath>
         </field>
     </record>

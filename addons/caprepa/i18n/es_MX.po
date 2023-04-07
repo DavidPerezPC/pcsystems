@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-23 00:11+0000\n"
-"PO-Revision-Date: 2023-03-22 17:14-0700\n"
+"POT-Creation-Date: 2023-04-07 02:05+0000\n"
+"PO-Revision-Date: 2023-04-06 19:06-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -18,14 +18,44 @@ msgstr ""
 "X-Generator: Poedit 3.2.2\n"
 
 #. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__mx_clabe
+msgid "18 digit account number for this account (CLABE at Mexico)"
+msgstr "Número de Cuenta (18 dígitos) CLABE utilizada en México para SPEI"
+
+#. module: caprepa
 #: model:ir.model.fields,field_description:caprepa.field_hr_employee__admission_date
 msgid "Admission Date"
 msgstr "Fecha Ingreso"
 
 #. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__salary_base
+msgid "Base Salary"
+msgstr "Sueldo Base"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__salary_base
+msgid "Base Salary for this Employee"
+msgstr "Sueldo Base del Empleado"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__mx_clabe
+msgid "CLABE"
+msgstr ""
+
+#. module: caprepa
 #: model_terms:ir.ui.view,arch_db:caprepa.caprepa_hr_employee_form
 msgid "Collaborator ID"
 msgstr "ID Colaborador"
+
+#. module: caprepa
+#: model:ir.model.fields,field_description:caprepa.field_hr_employee__salary_daily
+msgid "Daily Salary"
+msgstr "Sueldo Diario"
+
+#. module: caprepa
+#: model:ir.model.fields,help:caprepa.field_hr_employee__salary_daily
+msgid "Daily Salary for this Employee"
+msgstr "Sueldo Diario del Empleado"
 
 #. module: caprepa
 #: model:ir.model.fields,help:caprepa.field_hr_employee__license_expires
@@ -46,6 +76,11 @@ msgstr "Empleado"
 #: model:ir.model.fields,field_description:caprepa.field_hr_employee__license_expires
 msgid "Expires on"
 msgstr "Expira el"
+
+#. module: caprepa
+#: model_terms:ir.ui.view,arch_db:caprepa.caprepa_hr_employee_form
+msgid "Job Position..."
+msgstr "Puesto de Trabajo…."
 
 #. module: caprepa
 #: model:ir.model.fields,field_description:caprepa.field_hr_employee__driver_license

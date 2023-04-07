@@ -40,8 +40,25 @@ class HrEmployee(models.Model):
         help="Driver License expiration date"
     )
     
-        
+    mx_clabe = fields.Char(
+        string="CLABE",
+        help="18 digit account number for this account (CLABE at Mexico)",
+        related='bank_account_id.l10n_mx_edi_clabe',
+        readonly=True,
+        size=18,
+    )
 
+    salary_daily = fields.Float(
+        string='Daily Salary',
+        help='Daily Salary for this Employee',
+        digits=(10,2)
+    )
+        
+    salary_base = fields.Float(
+        string='Base Salary',
+        help='Base Salary for this Employee',
+        digits=(10,2)
+    )
 # class caprepa(models.Model):
 #     _name = 'caprepa.caprepa'
 #     _description = 'caprepa.caprepa'
