@@ -300,3 +300,60 @@ class CreditRequestMinistering(models.Model):
         }
 
         return record_fields
+    
+
+class CreditRequestStatement(models.Model):
+    _name = 'farmerscredit.credit.request.statement'
+    _description = 'Statement for the Credit Request'
+    _order = 'date, id'
+
+    request_id = fields.Many2one(
+        "farmerscredit.credit.request",
+        string="Credit Request",
+        help="General Info for Season/Crop",
+    )
+
+    move_id = fields.Many2one(
+        "account.move",
+        string="Move",
+        help="Registered Account Move",
+    )
+
+    credit = fields.Float(
+        string="Credits",
+        help=" Amount paid",
+        digits=(10,2)
+    )
+
+    debit = fields.Float(
+        string="Debit",
+        help="Credit Amount used from the Credit Request",
+        digits=(10,2)
+    )
+
+    interest = fields.Float(
+        string="Interest",
+        help="Calculated Interest",
+        digits=(10,2)
+    )
+
+    balance = fields.Float(
+        string="Balance",
+        help="Balance",
+        digits=(10,2)
+    ) 
+
+    date = fields.Date(
+        string="Date",
+        help="Date for this movement",
+    )
+
+    days = fields.Integer(
+        string="Days",
+        help="Days for calculating interest"
+    )
+
+    ref = fields.Char(
+        string="Reference",
+        help="Reference for this move"
+    )

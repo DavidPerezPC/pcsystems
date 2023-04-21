@@ -96,6 +96,13 @@ class CreditRequest(models.Model):
         default=lambda self: fields.Date.today()
     )   
 
+    statement_date = fields.Date(
+        string="Statement Date",
+        readonly=False, copy=False,
+        help="Date used for Statement",
+        default=lambda self: fields.Date.today()
+    )   
+
     due_date = fields.Date(
         string="Due Date",
         help="Due date for this Credit Request",
@@ -138,9 +145,15 @@ class CreditRequest(models.Model):
         comodel_name="res.currency",
         ondelete="restrict",
         string="Curency",
-        help="Currency for this operation")
+        help="Currency for this operation",
+        default=33)
     
-    
+    statement_lines = fields.One2many(
+        comodel_name='farmerscredit.credit.request.statement',
+        inverse_name='request_id',
+        string="Credit Request Statement Lines",
+        copy=False, readonly=True)
+
     credit_request_line = fields.One2many(
         comodel_name='farmerscredit.credit.request.line',
         inverse_name='request_id',
@@ -1028,3 +1041,60 @@ class CreditRequest(models.Model):
         # Override for correct taxcloud computation
         # when using coupon and delivery
         return True
+
+    def credit_request_statament(self):
+
+        statament_lines = self._get_statement_lines()
+        self.write({'statement_lines': (5,0,0)})
+        self.write({'statement_lines': statament_lines})
+
+
+    def _get_statement_lines(self):
+        sql = f"""    
+        SELECT aml.date, DATE '{self.statement_date}' - aml.date days, 
+            aml.ref, m.name as move_name, aml.name, 
+            aml.debit, aml.credit, m.id move_id
+        FROM account_move_line aml 
+            LEFT JOIN account_journal j ON (aml.journal_id = j.id)
+            LEFT JOIN account_account acc ON (aml.account_id = acc.id) 
+            LEFT JOIN res_currency c ON (aml.currency_id=c.id)
+            LEFT JOIN account_move m ON (m.id=aml.move_id)
+        WHERE m.request_id = {self.id}
+            AND aml.date <= '{self.statement_date}'
+            AND m.state IN ('posted')
+            AND aml.account_id IN (3,4) 
+            AND (((((aml.journal_id in (1, 2, 3, 4, 6, 7, 8, 9)) 
+                AND (aml.parent_state = 'posted')) 
+                AND (aml.company_id in (1))) 
+                AND ((aml.display_type not in ('line_section', 'line_note')) OR aml.display_type IS NULL)) 
+                AND ((aml.parent_state != 'cancel') OR aml.parent_state IS NULL)) 
+                AND (aml.company_id IS NULL  OR (aml.company_id in (1))) 
+                AND aml.full_reconcile_id IS NULL 
+        ORDER BY aml.date, aml.id;"""
+
+        self.env.cr.execute(sql)
+        statement = self.env.cr.dictfetchall()
+        statement_lines = []
+        ini_balance = 0.0
+        for line in statement:
+            ini_balance += line['debit'] or 0.0
+            ini_balance -= line['credit'] or 0.0
+            interest = 0
+            if line['debit'] > 0.0:
+                interest = ((self.interest_rate / 365) * line['days']) * line['debit']
+                ini_balance += interest
+            statement_lines.append(
+                [0, 0,
+                 {
+                    'date': line['date'],
+                    'debit': line['debit'] or 0.0,
+                    'credit': line['credit'] or 0.0,
+                    'days': line['days'],
+                    'move_id': line['move_id'],
+                    'ref': line['ref'],
+                    'interest': interest,
+                    'balance': ini_balance
+                 }
+                ])
+
+        return statement_lines

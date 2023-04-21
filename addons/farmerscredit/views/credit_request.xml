@@ -284,6 +284,23 @@
                             </group>
                         </group>
                     </page>
+                    <page string="Statement" name="statement_operations" attrs="{'invisible': [('total_invoiced', '=', 0.0), ('total_transfers', '=', 0.0), ('total_payments', '=', 0.0)]}">
+                            <field name="statement_date" />
+                            <button name="credit_request_statament"
+                                string="Statement" type="object"
+                            />
+                                <field name="statement_lines">
+                                    <tree>
+                                        <field name="date" />
+                                        <field name="move_id" />
+                                        <field name="debit" sum="Total" />
+                                        <field name="credit" sum="Total" />
+                                        <field name="days" />
+                                        <field name="interest" sum="Total" />
+                                        <field name="balance" />
+                                    </tree>
+                                </field>
+                    </page>
                     <page groups="base.group_no_one" string="Customer Signature" name="customer_signature" attrs="{'invisible': [('require_signature', '=', False), ('signed_by', '=', False), ('signature', '=', False), ('signed_on', '=', False)]}">
                         <group>
                             <field name="signed_by"/>
