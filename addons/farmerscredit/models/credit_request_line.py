@@ -12,6 +12,8 @@ from odoo.osv import expression
 from odoo.tools import float_is_zero, float_compare, float_round
 
 import phonenumbers
+from odoo.addons.docx_report_pro.controllers.controllers import ReportControllerDocx as repdocx
+import requests
 
 class CreditRequestLine(models.Model):
     _name = 'farmerscredit.credit.request.line'
@@ -244,6 +246,34 @@ class CreditRequestMinistering(models.Model):
         return name
 
     #=== REPORTS FUNCTIONS ===#
+    def print_ministering(self, jsonparam):
+
+        url = self.env['ir.config_parameter'].get_param('web.base.url')
+        url += "/report/download"
+        #report = repdocx()
+        data =  jsonparam 
+        context = self.env.context
+        #res = report.report_download(data)
+        res = requests.get(url,data=jsonparam)
+        #report = self.env.ref('__export__.ir_act_report_xml_479_975aab7e')
+
+        report = {
+            'type': 'ir.actions.act_url',
+            'url': f'/report/download?data={jsonparam}',
+
+        }
+        # report = {
+        #     'type': 'ir.actions.report.xml',
+        #     'report_name': 'farmerscredit.ministering_template',
+        #     'datas': {
+        #         'model': 'farmerscredit.credit.request.ministering',
+        #         'id': self.id,
+        #         'ids': [self.id],
+        #     },
+        #     'nodestroy': True,
+        # }         
+        return report
+    
     def ministering_printing(self):
 
         locale.setlocale(locale.LC_ALL, 'es_ES')

@@ -13,6 +13,8 @@ from odoo.tools import float_is_zero, format_amount, format_date, html_keep_url,
 from odoo.tools.sql import create_index
 
 from odoo.addons.payment import utils as payment_utils
+import requests
+from odoo.addons.docx_report_pro.controllers.controllers import ReportControllerDocx as repdocx
 
 READONLY_FIELD_STATES = {
     state: [('readonly', True)]
@@ -292,12 +294,12 @@ class CreditRequest(models.Model):
     # Remaining non stored computed fields (hide/make fields readonly, ...)
     amount_undiscounted = fields.Float(
         string="Amount Before Discount",
-        compute='_compute_amount_undiscounted', digits=0)
+        compute='_compute_amounts', digits=0)
     country_code = fields.Char(related='company_id.account_fiscal_country_id.code', string="Country code")
     partner_credit_warning = fields.Text(
         compute='_compute_partner_credit_warning',
         groups='account.group_account_invoice,account.group_account_readonly')
-    tax_totals = fields.Binary(compute='_compute_tax_totals', exportable=False)
+    tax_totals = fields.Binary(compute='_compute_amounts', exportable=False)
     terms_type = fields.Selection(related='company_id.terms_type')
     type_name = fields.Char(string="Type Name", compute='_compute_type_name')
 
@@ -377,15 +379,29 @@ class CreditRequest(models.Model):
         #     order.amount_untaxed = sum(credit_request_lines.mapped('price_subtotal'))
         #     order.amount_total = sum(credit_request_lines.mapped('price_total'))
 
-            invoices = self.invoice_ids.filtered(lambda l: l.move_type == 'out_invoice')
-            payments = self.payment_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'inbound')
-            transfers = self.transfer_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'outbound')
+            invoices = credit.invoice_ids.filtered(lambda l: l.move_type == 'out_invoice')
+            payments = credit.payment_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'inbound')
+            transfers = credit.transfer_ids.filtered(lambda l: l.partner_type == 'customer' and l.payment_type == 'outbound')
+            has_movtos = (len(invoices) > 0 or len(payments) > 0 or len(transfers) > 0)
+            if has_movtos and not credit.statement_lines:                
+                credit.statement_date = fields.Date.today()
+                credit.credit_request_statament()
+                # statament_lines = self._get_statement_lines()
+                # credit.writh({'statement_lines': (2, credit.id)})
+                # credit.write({'statement_lines': (0,0, [statament_lines])})
+        
             #for inv in self.invoice_ids:
             #    if inv.move_type == 'out_invoice':
             #        total += inv.amount_total
             credit.total_invoiced = sum(invoices.mapped('amount_total'))
             credit.total_payments = sum(payments.mapped('amount'))
             credit.total_transfers = sum(transfers.mapped('amount'))
+            credit.amount_tax = sum(credit.statement_lines.mapped('interest'))
+            credit.amount_undiscounted = sum(credit.credit_request_line.mapped('credit_amount'))
+            credit.amount_untaxed = (credit.total_invoiced - credit.total_payments + credit.total_transfers) or \
+                        credit.amount_undiscounted
+            credit.amount_total = credit.amount_untaxed + credit.amount_tax
+            credit.tax_totals = 0
 
 
     @api.depends('partner_id')
@@ -416,10 +432,11 @@ class CreditRequest(models.Model):
     @api.depends('amount_total', 'amount_untaxed')
     def _compute_tax_totals(self):
         for order in self:
-            credit_request_lines = order.credit_request_line.filtered(lambda x: not x.display_type)
-            order.tax_totals = self.env['account.tax']._prepare_tax_totals(
-                [x._convert_to_tax_base_line_dict() for x in credit_request_lines],
-            )
+            credit_request_lines = order.credit_request_line
+            order.tax_totals = 0
+            # order.tax_totals = self.env['account.tax']._prepare_tax_totals(
+            #     [x._convert_to_tax_base_line_dict() for x in credit_request_lines],
+            # )
 
     @api.depends('state')
     def _compute_type_name(self):
@@ -703,7 +720,7 @@ class CreditRequest(models.Model):
     def action_update_taxes(self):
         self.ensure_one()
 
-        lines_to_recompute = self.credit_request_line.filtered(lambda line: not line.display_type)
+        lines_to_recompute = self.credit_request_line
         lines_to_recompute._compute_tax_id()
         self.show_update_fpos = False
 
@@ -722,9 +739,9 @@ class CreditRequest(models.Model):
                 [('request_id', '=', self.id),('move_type', '=', 'out_invoice')])
 
     def action_view_invoice(self):
-        invoices = self.mapped('invoice_ids')
+        invoices = self.mapped('invoice_ids').filtered(lambda l: l.move_type == 'out_invoice')
         action = self.env['ir.actions.actions']._for_xml_id('account.action_move_out_invoice_type')
-        if len(invoices) == 1 :
+        if len(invoices) <= 1 :
             form_view = [(self.env.ref('account.view_move_form').id, 'form')]
             if 'views' in action:
                 action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
@@ -883,7 +900,7 @@ class CreditRequest(models.Model):
         msg += self.name
         payments = payments.filtered(lambda l: l.payment_type == payment_type)
         action = self.env['ir.actions.actions']._for_xml_id('account.action_account_payments')
-        if len(payments) == 1:
+        if len(payments) <= 1:
             form_view = [(self.env.ref('account.view_account_payment_form').id, 'form')]
             if 'views' in action:
                 action['views'] = form_view + [(state,view) for state,view in action['views'] if view != 'form']
@@ -897,7 +914,7 @@ class CreditRequest(models.Model):
             'default_partner_type': 'customer',
             'default_payment_type': payment_type
         }
-        if len(self) == 1:
+        if len(self) <= 1:
             context.update({
                 'default_partner_id': self.partner_id.id,
                 'default_request_id': self.id,
@@ -929,15 +946,12 @@ class CreditRequest(models.Model):
     def _get_credit_request_lines_to_report(self):
         down_payment_lines = self.credit_request_line.filtered(lambda line:
             line.is_downpayment
-            and not line.display_type
             and not line._get_downpayment_state()
         )
 
         def show_line(line):
             if not line.is_downpayment:
                 return True
-            elif line.display_type and down_payment_lines:
-                return True  # Only show the down payment section if down payments were posted
             elif line in down_payment_lines:
                 return True  # Only show posted down payments
             else:
@@ -1042,10 +1056,166 @@ class CreditRequest(models.Model):
         # when using coupon and delivery
         return True
 
+    #REPORTING
+    def action_print_ministering(self):
+
+        #report_obj = self.env['ir.actions.report']
+        #report = report_obj.render_docx('farmerscredit.ministering_template', self.ministering_ids.ids)
+        #report = report_obj._get_report_from_name('farmerscredit.ministering_template')
+        #return report 
+        #docids = self.ministering_ids.ids
+        #docs = self.env['farmerscredit.credit.request.ministering'].browse(docids)
+        #return {
+        #    'doc_ids': docids,
+        #    'doc_model': self.env['farmerscredit.credit.request.ministering'],
+        #    'docs': docs
+        #}
+        # report = {
+        #     'type': 'ir.actions.report',
+        #     'report_name': 'farmerscredit.ministering_template',
+        #     'datas': {
+        #         'model': 'farmerscredit.credit.request.ministering',
+        #         'ids': self.ministering_ids,
+        #     },
+        #     'nodestroy': True,
+        # }  
+
+        for m in self.ministering_ids:
+            #url = self.env['ir.config_parameter'].get_param('web.base.url')
+            #url += "/report/download"
+            # report = repdocx()
+            data =  f'["/report/docx/farmerscredit.ministering_template/{m.id}","docx"]'
+            # context = self.env.context
+            # res = report.report_download(data)
+            #res = requests.post(url,json=data)
+            #print(res)
+            m.print_ministering(data)
+             
+        #return report
+
+    def prepare_contract_report(self):
+        
+        data = {
+            'company_representative_name': company_representative_name,
+            'farmer_name': farmer_name,
+            'company_public_deed_num': company_public_deed_num,
+            'company_public_deed_vol': company_public_deed_vol,
+            'company_public_deed_date_day': company_public_deed_date_day,
+            'company_public_deed_date_month': company_public_deed_date_month,
+            'company_public_deed_date_year': company_public_deed_date_year,
+            'company_public_deed_notary_name': company_public_deed_notary_name,
+            'company_public_deed_notary_num': company_public_deed_notary_num,
+            'company_public_deed_notary_municipality': company_public_deed_notary_municipality,
+            'company_public_deed_notary_state': company_public_deed_notary_state,
+            'company_business_folio': company_business_folio,
+            'company_business_folio_date_day': company_business_folio_date_day,
+            'company_business_folio_date_month': company_business_folio_date_month,
+            'company_business_folio_date_year': company_business_folio_date_year,
+            'company_representative_public_deed_num': company_representative_public_deed_num,
+            'company_representative_public_deed_vol': company_representative_public_deed_vol,
+            'company_representative_public_deed_date_day': company_representative_public_deed_date_day,
+            'company_representative_public_deed_date_month': company_representative_public_deed_date_month,
+            'company_representative_public_deed_date_year': company_representative_public_deed_date_year,
+            'company_representative_public_deed_notary_name': company_representative_public_deed_notary_name,
+            'company_representative_public_deed_notary_num': company_representative_public_deed_notary_num,
+            'company_representative_public_deed_notary_municipality': company_representative_public_deed_notary_municipality,
+            'company_representative_public_deed_notary_state': company_representative_public_deed_notary_state,
+            'company_representative_business_folio': company_representative_business_folio,
+            'company_representative_business_folio_date_day': company_representative_business_folio_date_day,
+            'company_representative_business_folio_date_month': company_representative_business_folio_date_month,
+            'company_representative_business_folio_date_year': company_representative_business_folio_date_year,
+            'farmer_main_activity': farmer_main_activity,
+            'farmer_marital_status': farmer_marital_status,
+            'farmer_total_area': farmer_total_area,
+            'farmer_address_neighborhood': farmer_address_neighborhood,
+            'farmer_address_municipality': farmer_address_municipality,
+            'farmer_address_state': farmer_address_state,
+            'farmer_contract_owner_name': farmer_contract_owner_name,
+            'farmer_contract_owner_start_date_day': farmer_contract_owner_start_date_day,
+            'farmer_contract_owner_start_date_month': farmer_contract_owner_start_date_month,
+            'farmer_contract_owner_start_date_year': farmer_contract_owner_start_date_year,
+            'farmer_contract_owner_expiration_date_day': farmer_contract_owner_expiration_date_day,
+            'farmer_contract_owner_expiration_date_month': farmer_contract_owner_expiration_date_month,
+            'farmer_contract_owner_expiration_date_year': farmer_contract_owner_expiration_date_year,
+            'credit_amount_numbers': credit_amount_numbers,
+            'credit_amount_written': credit_amount_written,
+            'credit_aportacion_amount_numbers': credit_aportacion_amount_numbers,
+            'credit_aportacion_amount_written': credit_aportacion_amount_written,
+            'credit_total_amount_numbers': credit_total_amount_numbers,
+            'credit_total_amount_written': credit_total_amount_written,
+            'farmer_crop': farmer_crop,
+            'farmer_crop_season': farmer_crop_season,
+        }
+
+    def prepare_statement_report(self):
+
+        domain = [('credit','=', 0.0)]
+        fields = ['date', 'move_id', 'days', 'debit:sum', 'interest:sum']
+        statement_lines, detaild_lines = self._get_edc_detailed_lines()
+
+        data = {
+            'name': self.name,
+            'partner_name': self.partner_id.name,
+            'due_date': self.due_date,
+            'statement_date': self.statement_date,
+            'user_id': self.user_id.name,
+            'total_debits': self.total_invoiced + self.total_transfers,
+            'total_credits': self.total_payments,
+            'total_interest': self.amount_tax,
+            'total_balance': self.amount_total,
+            'statement_lines': self.statement_lines.read(),
+        }
+
+        return data
+
+    def _get_edc_detailed_lines(self):
+
+        lines = self.statement_lines.read()
+        acum_moves = []
+        detail_moves = []
+        for line in lines:
+            sdate = line['date'].strftime("%x")
+            try:
+                index = next(i for i,di in enumerate(acum_moves) if di['date']==sdate)
+            except StopIteration:
+                acum_moves.append({'date': sdate, 
+                                   'move_id': line['move_id'][1],
+                                   'debit': line['debit'], 
+                                   'interest': line['interest'],
+                                   'days': line['days'],
+                                   'balance': line['balance']})
+                pass
+            ref = line['ref'].split(",")
+            if ref[0] == 'HABILITACION':
+                detail_moves.append({
+                    'ref': ref[1],
+                    'quantity': '',
+                    'product_uom_id': '', 
+                    'price_unit': line['debit'],
+                    'debit': line['debit'],
+                    'date': line['date'] 
+                })
+            else:
+                ref = ref[1].split("|")
+                for lin in ref:
+                    l = lin.split(";")
+                    detail_moves.append({                   
+                        'ref': l[0],
+                        'quantity': l[1],
+                        'product_uom_id': l[2], 
+                        'price_unit': l[3],
+                        'debit': l[4],
+                        'date': line['date'] 
+                    })
+        return acum_moves, detail_moves
+
+
+
+    #LOGIC FOR STATETMENT
     def credit_request_statament(self):
 
         statament_lines = self._get_statement_lines()
-        self.write({'statement_lines': (5,0,0)})
+        self.mapped('statement_lines').unlink()
         self.write({'statement_lines': statament_lines})
 
 
@@ -1053,7 +1223,23 @@ class CreditRequest(models.Model):
         sql = f"""    
         SELECT aml.date, DATE '{self.statement_date}' - aml.date days, 
             aml.ref, m.name as move_name, aml.name, 
-            aml.debit, aml.credit, m.id move_id
+            aml.debit, aml.credit, m.id move_id,
+            case when m.payment_id is not null then 
+                (select concat( 'HABILITACION,', coalesce( bank_reference, 'SIN OBSERVACION' ))
+                from account_payment ap 
+                where ap.id = m.payment_id 
+                )
+			else 
+                (select concat('INSUMOS,', string_agg( 
+							concat( aml2."name", ';', aml2.quantity, ';', 
+							uu.name->'es_MX', ';', 
+							aml2.price_unit, ';', 
+							aml2.price_subtotal), '|' )) 
+                from account_move_line aml2
+                    join uom_uom uu  on (uu.id = aml2.product_uom_id)
+                where aml2.move_id = m.id and  aml2.display_type = 'product'
+                group by aml2.move_id
+                ) end as referencia
         FROM account_move_line aml 
             LEFT JOIN account_journal j ON (aml.journal_id = j.id)
             LEFT JOIN account_account acc ON (aml.account_id = acc.id) 
@@ -1091,7 +1277,7 @@ class CreditRequest(models.Model):
                     'credit': line['credit'] or 0.0,
                     'days': line['days'],
                     'move_id': line['move_id'],
-                    'ref': line['ref'],
+                    'ref': line['referencia'],
                     'interest': interest,
                     'balance': ini_balance
                  }

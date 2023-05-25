@@ -133,7 +133,10 @@
                         attrs="{'invisible': ['|', ('lines_count', '=', 0), '|', 
                                             ('state', 'in', ['authorized', 'contract']), 
                                             ('ministering_count', '!=', 0)]}"
-                />                
+                />
+                <button name="action_print_ministering" type="object" 
+                    string="Print Ministerings" data-hotkey="p"
+                    attrrs="{'invisible': [('ministergin_count', '=', 0)]}"/>                
                 <field name="state" widget="statusbar" statusbar_visible="request,authorized,contract"/>
             </header>
             <div groups="account.group_account_invoice,account.group_account_readonly"
@@ -282,6 +285,7 @@
                                     </tree>
                                 </field>
                             </group>
+
                         </group>
                     </page>
                     <page string="Statement" name="statement_operations" attrs="{'invisible': [('total_invoiced', '=', 0.0), ('total_transfers', '=', 0.0), ('total_payments', '=', 0.0)]}">
@@ -292,7 +296,8 @@
                                 <field name="statement_lines">
                                     <tree>
                                         <field name="date" />
-                                        <field name="move_id" />
+                                        <field name="move_id" optional="hide" />
+                                        <field name="ref" />
                                         <field name="debit" sum="Total" />
                                         <field name="credit" sum="Total" />
                                         <field name="days" />
