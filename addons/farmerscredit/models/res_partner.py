@@ -236,12 +236,27 @@ class PartnerGuarantees(models.Model):
         string="Section",
         help="Enter the book's section for this guarantee")    
 
+    estimated_value_written = fields.Char(
+        string="Value written",
+        compute="_compute_written_value",
+        store = False
+    )
+
     # def name_get(self):
     #     res = []
     #     for rec in self:
     #         res.append((rec.id, rec.description))
     #     return res
     
+    def _compute_written_value(self):
+        
+        for record in self:
+            amount_principal = int(record.estimated_value)
+            amount_fractional = "${:,.2f}".format(amount_principal).split(".")[1] 
+            amount_text = self.env.company.currency_id.amount_to_text(amount_principal).upper() + \
+                                           f" {amount_fractional}/100 M.N.)"
+            record.estimated_value_written = amount_text
+
 class PartnerLots(models.Model):
     _name = 'farmerscredit.partner.lots'
     _description = "Lots of the Farmers"

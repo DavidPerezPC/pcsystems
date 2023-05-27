@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from datetime import timedelta
+from datetime import timedelta, datetime
 from itertools import groupby
 from markupsafe import Markup
+import locale
 
 from odoo import api, fields, models, SUPERUSER_ID, _
 from odoo.exceptions import AccessError, UserError, ValidationError
@@ -1095,58 +1096,52 @@ class CreditRequest(models.Model):
 
     def prepare_contract_report(self):
         
+        partner_lots = self.partner_id.lot_ids
+        guarantees = self.guarantees_ids
+        ministerings = self.ministering_ids.read()
+        credit_line = self.credit_request_line.read()[0]
+
+        #para determinar el principal
+        credit_amount = sum(self.credit_request_line.mapped('credit_amount'))
+        amount_text = "${:,.2f}".format(credit_amount)
+        amount_principal = int(credit_amount)
+        amount_fractional = amount_text.split(".")[1] 
+        amount_text = self.company_id.currency_id.amount_to_text(amount_principal).upper() + \
+                                           f" {amount_fractional}/100 M.N."
+
+        #para determinar la aportación
+        quota_amount = sum(self.credit_request_line.mapped('quota_amount'))
+        quota_amount_text = "${:,.2f}".format(quota_amount)
+        amount_principal = int(quota_amount)
+        amount_fractional = quota_amount_text.split(".")[1] 
+        quota_amount_text += " (" + self.company_id.currency_id.amount_to_text(amount_principal).upper() + \
+                                           f" {amount_fractional}/100 M.N.)"    
+
+        locale.setlocale(locale.LC_ALL, 'es_ES')
+        due_date_text = datetime.strftime(self.due_date, "%d de %B de %Y")
         data = {
-            'company_representative_name': company_representative_name,
-            'farmer_name': farmer_name,
-            'company_public_deed_num': company_public_deed_num,
-            'company_public_deed_vol': company_public_deed_vol,
-            'company_public_deed_date_day': company_public_deed_date_day,
-            'company_public_deed_date_month': company_public_deed_date_month,
-            'company_public_deed_date_year': company_public_deed_date_year,
-            'company_public_deed_notary_name': company_public_deed_notary_name,
-            'company_public_deed_notary_num': company_public_deed_notary_num,
-            'company_public_deed_notary_municipality': company_public_deed_notary_municipality,
-            'company_public_deed_notary_state': company_public_deed_notary_state,
-            'company_business_folio': company_business_folio,
-            'company_business_folio_date_day': company_business_folio_date_day,
-            'company_business_folio_date_month': company_business_folio_date_month,
-            'company_business_folio_date_year': company_business_folio_date_year,
-            'company_representative_public_deed_num': company_representative_public_deed_num,
-            'company_representative_public_deed_vol': company_representative_public_deed_vol,
-            'company_representative_public_deed_date_day': company_representative_public_deed_date_day,
-            'company_representative_public_deed_date_month': company_representative_public_deed_date_month,
-            'company_representative_public_deed_date_year': company_representative_public_deed_date_year,
-            'company_representative_public_deed_notary_name': company_representative_public_deed_notary_name,
-            'company_representative_public_deed_notary_num': company_representative_public_deed_notary_num,
-            'company_representative_public_deed_notary_municipality': company_representative_public_deed_notary_municipality,
-            'company_representative_public_deed_notary_state': company_representative_public_deed_notary_state,
-            'company_representative_business_folio': company_representative_business_folio,
-            'company_representative_business_folio_date_day': company_representative_business_folio_date_day,
-            'company_representative_business_folio_date_month': company_representative_business_folio_date_month,
-            'company_representative_business_folio_date_year': company_representative_business_folio_date_year,
-            'farmer_main_activity': farmer_main_activity,
-            'farmer_marital_status': farmer_marital_status,
-            'farmer_total_area': farmer_total_area,
-            'farmer_address_neighborhood': farmer_address_neighborhood,
-            'farmer_address_municipality': farmer_address_municipality,
-            'farmer_address_state': farmer_address_state,
-            'farmer_contract_owner_name': farmer_contract_owner_name,
-            'farmer_contract_owner_start_date_day': farmer_contract_owner_start_date_day,
-            'farmer_contract_owner_start_date_month': farmer_contract_owner_start_date_month,
-            'farmer_contract_owner_start_date_year': farmer_contract_owner_start_date_year,
-            'farmer_contract_owner_expiration_date_day': farmer_contract_owner_expiration_date_day,
-            'farmer_contract_owner_expiration_date_month': farmer_contract_owner_expiration_date_month,
-            'farmer_contract_owner_expiration_date_year': farmer_contract_owner_expiration_date_year,
-            'credit_amount_numbers': credit_amount_numbers,
-            'credit_amount_written': credit_amount_written,
-            'credit_aportacion_amount_numbers': credit_aportacion_amount_numbers,
-            'credit_aportacion_amount_written': credit_aportacion_amount_written,
-            'credit_total_amount_numbers': credit_total_amount_numbers,
-            'credit_total_amount_written': credit_total_amount_written,
-            'farmer_crop': farmer_crop,
-            'farmer_crop_season': farmer_crop_season,
+            'farmer_name': self.partner_id.name,
+            'farmer_total_area': credit_line['area'],
+            'partner_lots': partner_lots.read(),
+            'guarantees': guarantees.read(),
+            'contract_amount': credit_amount,
+            'contract_amount_text': amount_text,
+            'quota_amount': quota_amount,
+            'quota_amount_text': quota_amount_text,
+            'credit_no_quota': credit_amount - quota_amount,
+            'due_date_text': due_date_text,
+            'farmer_address_street': self.partner_id.street or '',
+            'farmer_address_neighborhood': self.partner_id.street2 or '',
+            'farmer_address_city': self.partner_id.city or '',
+            'farmer_address_state': self.partner_id.state_id.name,
+            'farmer_address_zip_code': self.partner_id.zip,
+            'farmer_crop': credit_line['crop_id'][1],
+            'farmer_crop_season': credit_line['season_id'][1],
+            'ministerings': ministerings,
         }
 
+        return data
+    
     def prepare_statement_report(self):
 
         domain = [('credit','=', 0.0)]

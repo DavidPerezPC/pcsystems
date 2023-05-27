@@ -98,6 +98,17 @@ class CreditRequestLine(models.Model):
         compute="_compute_amounts", store=True, readonly=True,
     )
 
+    quota_amount = fields.Monetary(     
+        string="Amount",
+        help="Credit amount given for this crop",
+        compute="_compute_amounts", store=True, readonly=True, 
+    )
+
+    credit_no_qouta = fields.Monetary(
+        string="Amount no Quota",
+        help="Credit amount given for this crop withou quota",
+        compute="_compute_amounts", store=True, readonly=True, 
+    )
 
     @api.onchange('crop_id')
     def _onchange_crop_id(self):
@@ -130,8 +141,11 @@ class CreditRequestLine(models.Model):
     def _compute_amounts(self):
         amount_total = 0
         for rec in self:
-            line_amount = (rec.credit_per_unit * rec.area) + (rec.quota_per_unit * rec.area)
-            rec.credit_amount = line_amount
+            quota_amount = (rec.quota_per_unit * rec.area)
+            line_amount = (rec.credit_per_unit * rec.area)
+            rec.credit_no_qouta = line_amount
+            rec.quota_amount = quota_amount
+            rec.credit_amount = line_amount + quota_amount
             amount_total += line_amount
 
         return amount_total
@@ -237,6 +251,18 @@ class CreditRequestMinistering(models.Model):
         related='request_id.partner_id'
     )
 
+    ministering_number = fields.Char(
+        string="Ministering name",
+        compute='_compute_ministering_data',
+        store=False
+    )
+
+    ministering_date_range = fields.Char(
+        string="Ministering Date Range",
+        compute='_compute_ministering_data',
+        store=False
+    )
+
     def get_ministering_name(self):
         
         name = "Ministracion_" + \
@@ -244,6 +270,23 @@ class CreditRequestMinistering(models.Model):
                 datetime.strftime(self.date_ministering, "%Y_%m_%d")
 
         return name
+    
+    def _compute_ministering_data(self):
+        min_name = ['Primera',
+                    'Segunda',
+                    'Tercera',
+                    'Cuarta',
+                    'Quinta',
+                    'Sexta',
+                    'Septima'
+                    ]
+        count = 0
+        locale.setlocale(locale.LC_ALL, 'es_ES')
+        for records in self:
+            for record in records:
+                record.ministering_number = min_name[count]
+                record.ministering_date_range = datetime.strftime(record.date_ministering, "%B de %Y")
+                count += 1
 
     #=== REPORTS FUNCTIONS ===#
     def print_ministering(self, jsonparam):
