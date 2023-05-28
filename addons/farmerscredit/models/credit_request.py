@@ -1144,21 +1144,24 @@ class CreditRequest(models.Model):
     
     def prepare_statement_report(self):
 
-        domain = [('credit','=', 0.0)]
-        fields = ['date', 'move_id', 'days', 'debit:sum', 'interest:sum']
+        locale.setlocale(locale.LC_ALL, 'es_ES')
         statement_lines, detaild_lines = self._get_edc_detailed_lines()
+        statement_date_long = datetime.strftime(self.statement_date, "%A, %d de %B de %Y")
 
         data = {
             'name': self.name,
             'partner_name': self.partner_id.name,
             'due_date': self.due_date,
             'statement_date': self.statement_date,
+            'statement_date_long': statement_date_long,
+            'interest_rate': "{:.2%}".format(self.interest_rate),
             'user_id': self.user_id.name,
             'total_debits': self.total_invoiced + self.total_transfers,
             'total_credits': self.total_payments,
             'total_interest': self.amount_tax,
             'total_balance': self.amount_total,
-            'statement_lines': self.statement_lines.read(),
+            'statement_lines': statement_lines,
+            'detailed_lines': detaild_lines,
         }
 
         return data
@@ -1188,7 +1191,7 @@ class CreditRequest(models.Model):
                     'product_uom_id': '', 
                     'price_unit': line['debit'],
                     'debit': line['debit'],
-                    'date': line['date'] 
+                    'date': datetime.strftime(line['date'],"%d/%b/%Y"),
                 })
             else:
                 ref = ref[1].split("|")
@@ -1197,14 +1200,12 @@ class CreditRequest(models.Model):
                     detail_moves.append({                   
                         'ref': l[0],
                         'quantity': l[1],
-                        'product_uom_id': l[2], 
-                        'price_unit': l[3],
-                        'debit': l[4],
-                        'date': line['date'] 
+                        'product_uom_id': l[2].replace('"',''), 
+                        'price_unit': float(l[3]),
+                        'debit': float(l[4]),
+                        'date': datetime.strftime(line['date'],"%d/%b/%Y"), 
                     })
         return acum_moves, detail_moves
-
-
 
     #LOGIC FOR STATETMENT
     def credit_request_statament(self):
