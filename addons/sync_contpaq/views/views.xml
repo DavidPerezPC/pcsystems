@@ -1,0 +1,71 @@
+<odoo>
+  <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="account_tree_form">
+      <field name="name">sync_contpaq_account</field>
+      <field name="model">sync.contpaq.account</field>
+      <field name="arch" type="xml">
+        <tree string="Cuentas Contpaq" editable="top">
+          <field name="code"/>
+          <field name="name"/>
+          <field name="account_id"/>
+          <field name="partner_id" />
+          <field name="analytic_account_id" />
+          <field name="company_id" />
+        </tree>
+      </field>
+    </record>
+
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="sync_contpaq_account_action_window">
+      <field name="name">Relación Cuentas Contpaq Odoo</field>
+      <field name="type">ir.actions.act_window</field>
+      <field name="res_model">sync.contpaq.account</field>
+      <field name="view_id" ref="account_tree_form"/>
+      <field name="view_mode">tree,form</field>
+      <!--field name="search_view_id" ref="filters_seasons_tree"/-->
+    </record>
+
+    <!-- server action to the one above -->
+  <!--
+
+    <record model="ir.actions.server" id="sync_contpaq.action_server">
+      <field name="name">Sync Contpaq Account Sever</field>
+      <field name="model_id" ref="model_sync_contpaq_account"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree",
+          "res_model": sync.contpaq.account,
+        }
+      </field>
+    </record>
+-->
+    <!-- Top menu item -->
+<!--
+    <menuitem name="sync_contpaq" id="sync_contpaq.menu_root"/>
+-->
+    <!-- menu categories -->
+    <menuitem parent="account.menu_finance_entries" name="Contpaq" 
+          id="menu_action_account_sync"
+          sequence="5"/>
+
+    <menuitem name="Cuentas Contpaq" id="menu_action_sync_contpaq_account" 
+      parent="menu_action_account_sync"
+      action="sync_contpaq_account_action_window"
+      sequence="1"
+      />
+<!--
+    <menuitem name="Menu 2" id="sync_contpaq.menu_2" parent="sync_contpaq.menu_root"/>
+-->
+    <!-- actions -->
+<!--    
+    <menuitem name="List" id="sync_contpaq.menu_1_list" parent="sync_contpaq.menu_1"
+              action="sync_contpaq.action_window"/>
+
+    <menuitem name="Server to list" id="sync_contpaq" parent="sync_contpaq.menu_2"
+              action="sync_contpaq.action_server"/>
+-->
+  
+</odoo>
