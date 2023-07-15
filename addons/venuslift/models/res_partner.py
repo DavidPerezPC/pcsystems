@@ -19,7 +19,6 @@ class Partner(models.Model):
     credit_limit_changed = fields.Boolean(string='Indicates if credit limit has changed', store=False, default=False)
 
 
-
    
     # @api.onchange('credit_limit')
     # def credit_limit_onchange(self):
