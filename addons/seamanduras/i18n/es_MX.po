@@ -1,0 +1,181 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* seamanduras
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-07-21 01:40+0000\n"
+"PO-Revision-Date: 2023-07-20 18:54-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__age
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__age
+msgid "Age"
+msgstr "Edad"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__assignment_amount
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__assignment_amount
+msgid "Amount"
+msgstr "Monto"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__has_assignments
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__has_assignments
+msgid "Assignments?"
+msgstr "Asignaciones?"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__birth_date
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__birth_date
+msgid "Birth Date"
+msgstr "Nació el"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__curp
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__curp
+msgid "CURP"
+msgstr ""
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__age
+#: model:ir.model.fields,help:seamanduras.field_res_users__age
+msgid "Calculate age old"
+msgstr "Edad calculada"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__marital_state__conjugal
+msgid "Conjugal Society"
+msgstr "Sociedad Conyugal"
+
+#. module: seamanduras
+#: model:ir.model,name:seamanduras.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__marital_state__divorced
+msgid "Divorced"
+msgstr "Divorciado"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__ine
+#: model:ir.model.fields,help:seamanduras.field_res_users__ine
+msgid "Enter the INE number issued by Goverment"
+msgstr "Proporcione el número de INE emitido por la autoridad"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__nss
+#: model:ir.model.fields,help:seamanduras.field_res_users__nss
+msgid "Enter the Social Security Number"
+msgstr "Proporcione el Números de Seguridad Social (NSS)"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__curp
+#: model:ir.model.fields,help:seamanduras.field_res_users__curp
+msgid "Enter the Unique Identification Population Key assigned by Goverment"
+msgstr "Proporcione el Número Único de Identificación asignado por el gobierno"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__assignment_amount
+#: model:ir.model.fields,help:seamanduras.field_res_users__assignment_amount
+msgid "Enter the assignment amount"
+msgstr "Proporcione el monto de asignación"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__sex__female
+msgid "Female"
+msgstr "Femenino"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__ine
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__ine
+msgid "INE"
+msgstr ""
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__has_assignments
+#: model:ir.model.fields,help:seamanduras.field_res_users__has_assignments
+msgid "Indicate if has Assignments"
+msgstr "Marca/desmarca si cuenta o no con asignaciones"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__sex__male
+msgid "Male"
+msgstr "Masculino"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__marital_state
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__marital_state
+msgid "Marital State"
+msgstr "Estado Civil"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__nss
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__nss
+msgid "SSN"
+msgstr "NSS"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__birth_date
+#: model:ir.model.fields,help:seamanduras.field_res_users__birth_date
+msgid "Select or type the birth date"
+msgstr "Seleccione o proporcione la fecha de nacimiento"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__sex
+#: model:ir.model.fields,help:seamanduras.field_res_users__sex
+msgid "Select sex, F=Female or M=Male"
+msgstr "Seleccione el sexo: F=Femenino o M=Masculino"
+
+#. module: seamanduras
+#: model:ir.model.fields,help:seamanduras.field_res_partner__marital_state
+#: model:ir.model.fields,help:seamanduras.field_res_users__marital_state
+msgid "Select the marital state"
+msgstr "Seccione el Estado Civil"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__marital_state__separated
+msgid "Separated Goods"
+msgstr "Bienes separados"
+
+#. module: seamanduras
+#: model:ir.model.fields,field_description:seamanduras.field_res_partner__sex
+#: model:ir.model.fields,field_description:seamanduras.field_res_users__sex
+msgid "Sex"
+msgstr "Sexo"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__marital_state__single
+msgid "Single"
+msgstr "Soltero"
+
+#. module: seamanduras
+#: model:ir.model.fields.selection,name:seamanduras.selection__res_partner__marital_state__widower
+msgid "Widower"
+msgstr "Viudo"
+
+#. module: seamanduras
+#: model_terms:ir.ui.view,arch_db:seamanduras.seamanduras_res_partner_inherit_form
+msgid "eg. 074711637582"
+msgstr ""
+
+#. module: seamanduras
+#: model_terms:ir.ui.view,arch_db:seamanduras.seamanduras_res_partner_inherit_form
+msgid "eg. 293882992020"
+msgstr ""
+
+#. module: seamanduras
+#: model_terms:ir.ui.view,arch_db:seamanduras.seamanduras_res_partner_inherit_form
+msgid "eg. AAPR630321HDFLRC01"
+msgstr ""
