@@ -20,5 +20,18 @@
             </xpath>                  
         </field>
     </record>
+
+    <record id="customer_multi_search_view" model="ir.ui.view">
+      <field name="name">Search</field>
+      <field name="model">res.partner</field>
+      <field name="inherit_id" ref="base.view_res_partner_filter"/>
+      <field name="arch" type="xml">
+        <field name="name" position="after">
+          <field name="nss" string="NSS" filter_domain="[('nss','ilike', self)]"/>
+          <field name="curp" string="CURP" filter_domain="[('curp','ilike', self)]"/>
+          <field name="city" string="Municipality" filter_domain="[('city', 'ilike', self)]"/>               	
+        </field>
+      </field>
+    </record>
   </data>
 </odoo>

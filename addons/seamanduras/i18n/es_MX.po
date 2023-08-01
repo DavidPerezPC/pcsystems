@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 01:40+0000\n"
-"PO-Revision-Date: 2023-07-20 18:54-0700\n"
+"POT-Creation-Date: 2023-08-01 16:50+0000\n"
+"PO-Revision-Date: 2023-08-01 09:52-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: es_MX\n"
@@ -44,6 +44,7 @@ msgstr "Nació el"
 #. module: seamanduras
 #: model:ir.model.fields,field_description:seamanduras.field_res_partner__curp
 #: model:ir.model.fields,field_description:seamanduras.field_res_users__curp
+#: model_terms:ir.ui.view,arch_db:seamanduras.customer_multi_search_view
 msgid "CURP"
 msgstr ""
 
@@ -119,6 +120,16 @@ msgstr "Masculino"
 #: model:ir.model.fields,field_description:seamanduras.field_res_users__marital_state
 msgid "Marital State"
 msgstr "Estado Civil"
+
+#. module: seamanduras
+#: model_terms:ir.ui.view,arch_db:seamanduras.customer_multi_search_view
+msgid "Municipality"
+msgstr "Municipio"
+
+#. module: seamanduras
+#: model_terms:ir.ui.view,arch_db:seamanduras.customer_multi_search_view
+msgid "NSS"
+msgstr "NSS"
 
 #. module: seamanduras
 #: model:ir.model.fields,field_description:seamanduras.field_res_partner__nss
