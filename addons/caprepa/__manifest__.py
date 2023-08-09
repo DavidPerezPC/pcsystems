@@ -19,13 +19,17 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'hr', 'l10n_mx'],
+    'depends': ['base', 'l10n_mx', 'l10n_mx_hr', 'multi_branch_base'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/hr_views.xml',
         'views/res_partner_bank.xml',
+        'views/res_branch.xml',
+        'views/caprepa_brands.xml',
+        'views/caprepa_structure.xml',
+        'views/caprepa_expenses.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

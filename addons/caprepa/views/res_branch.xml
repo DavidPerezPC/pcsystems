@@ -1,0 +1,58 @@
+<odoo>
+  <data>
+    <record  id="res_branch_form_inherited" model="ir.ui.view">
+        <field name="name">caprepa.res_branch_form_inherited</field>
+        <field name="model">res.branch</field>
+        <field name="inherit_id" ref="multi_branch_base.view_branch_form"/>
+        <field name="arch" type="xml">
+            <!--xpath expr="//form[1]/sheet[1]/div[1]/h1[1]" position="after">
+              <label for="code" class="oe_edit_only"/>
+                <h2>
+                    <field name="code"/>
+                </h2>
+            </xpath-->
+            <xpath expr="//form[1]/sheet[1]/div[1]" position="after">
+              <div>
+                <group>
+                  <group>
+                    <field name="has_routes"/>
+                    <field name="analytic_plan_id"/>
+                    <field name="analytic_account_id"/>
+                  </group>
+                </group>
+              </div>
+            </xpath>      
+        </field>
+    </record>
+    <record  id="res_branch_tree_inherited" model="ir.ui.view">
+        <field name="name">caprepa.res_branch_tree_inherited</field>
+        <field name="model">res.branch</field>
+        <field name="inherit_id" ref="multi_branch_base.view_branch_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+              <field name="code"/>
+              <field name="brand_id" />
+              <!--field name="analytic_plan_id"/>
+              <field name="analytic_account_id"/-->
+            </xpath>      
+        </field>
+    </record>
+    <record  id="res_branch_search_inherited" model="ir.ui.view">
+      <field name="name">caprepa.res_branch_search_inherited</field>
+      <field name="model">res.branch</field>
+      <field name="inherit_id" ref="multi_branch_base.res_branch_search"/>
+      <field name="arch" type="xml">
+          <xpath expr="//field[@name='name']" position="before">
+            <field name="code"/>
+            <field name="brand_id" />
+            <field name="analytic_plan_id"/>
+            <field name="analytic_account_id"/>
+          </xpath>      
+          <xpath expr="//filter[@name='groupby_company']" position="after">
+            <filter string="Brand" name="groupby_brand" context="{'group_by': 'brand_id'}"/>
+          </xpath>      
+
+      </field>
+    </record>
+  </data>
+</odoo>

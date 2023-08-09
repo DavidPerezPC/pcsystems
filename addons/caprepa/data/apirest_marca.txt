@@ -1,0 +1,224 @@
+Les comparto los servicios de ingresos de las distintas marcas
+
+- Consultar utilizando el metodo GET
+ - Se establecio una KEY fija (9979322a790ca689f82bd0420a25f717)
+ - Las fechas son en formato AAAA-MM-AA Ejemplo: para el 22 de abril del año 2023 seria: 2023-04-22
+ - Header: Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJ2YWxlYW1pZ29KV1QiLCJzdWIiOiJyZXBvcnRlc2Z1bmRhY2lvbiIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2ODczOTE1MTh9.i7jXNuu7HvfKSIR813Pv1M7DpKUuowV4V9zcpTGmrMnBfS0sSb20by0KxFCTp54IcI22cWlsMp2X30sc22Vaaw
+PRESICO MEXICO
+
+http://api.pro.presico.mx.presico.mx/operation/income/{dataStart}/{dateEnd}/{KEY}
+http://api.pro.presico.mx.presico.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'ZACATLAN', 
+ 'route': 'ZACATLAN-P-R3', 
+ 'paymentCapital': '23627.00', 
+ 'paymentInterest': '9353.00', 
+ 'fullPaymentInsurance': '2156.00', 
+ 'lifeInsurancePayments': '1150.00', 
+ 'covidInsurancePayments': '805.00', 
+ 'additionalInsurancePayments': '201.00', 
+ 'numberAdditional': '277', 
+ 'plusInsurancePayments': None
+ }
+
+CASITA MEXICO
+http://api.pro.casita.mx.presico.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'ZACATLAN CASITA', 
+ 'route': 'ZACATLAN-C-R1', 
+ 'paymentCapital': '85853.00', 
+ 'paymentInterest': '34247.00', 
+ 'fullPaymentInsurance': '8543.00', 
+ 'lifeInsurancePayments': '4630.00', 
+ 'covidInsurancePayments': '3241.00', 
+ 'additionalInsurancePayments': '672.00', 
+ 'numberAdditional': '937', 
+ 'plusInsurancePayments': None
+ }
+
+MODERNA MEXICO
+http://api.pro.prestamoslamoderna.com/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'ZACATECAS', 
+ 'route': 'ZACATECAS-M-R3', 
+ 'paymentCapital': '88176.00', 
+ 'paymentInterest': '36040.00', 
+ 'fullPaymentInsurance': '9937.00', 
+ 'lifeInsurancePayments': '5000.00', 
+ 'covidInsurancePayments': '3479.00', 
+ 'additionalInsurancePayments': '1458.00', 
+ 'numberAdditional': '1973', 
+ 'plusInsurancePayments': None
+ }
+
+LUPITA MEXICO
+http://api.pro.lalupita.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'XALAPA', 
+ 'route': 'XALAPA-LL-R2', 
+ 'paymentCapital': '114750.00', 
+ 'paymentInterest': '34425.00', 
+ 'fullPaymentInsurance': '7789.00', 
+ 'lifeInsurancePayments': '4590.00', 
+ 'covidInsurancePayments': '3199.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': None
+ }
+
+GUERITA MEXICO
+http://api.pro.laguerita.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'VERACRUZ', 
+ 'route': 'VERACRUZ-LG-R3', 
+ 'paymentCapital': '9750.00', 
+ 'paymentInterest': '3900.00', 
+ 'fullPaymentInsurance': '780.00', 
+ 'lifeInsurancePayments': '390.00', 
+ 'covidInsurancePayments': '273.00', 
+ 'additionalInsurancePayments': '117.00', 
+ 'numberAdditional': '170', 
+ 'plusInsurancePayments': None
+ }
+
+
+CIUDADES PRESICO MEXICO
+http://api.ciudadespresico.presico.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'branch': 'XALAPA', 
+ 'route': 'XALAPA-PC-R1', 
+ 'paymentCapital': '31408.00', 
+ 'paymentInterest': '12410.00', 
+ 'fullPaymentInsurance': '2482.00', 
+ 'lifeInsurancePayments': '1460.00', 
+ 'covidInsurancePayments': '1022.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': None
+ }
+
+
+PRESICO GUATEMALA
+http://api.guatemala.presico.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'zone': 'TECUN UMAN', 
+ 'route': 'TECUN UMAN-P-R6', 
+ 'paymentCapital': '3168.00', 
+ 'paymentInterest': '1232.00', 
+ 'fullPaymentInsurance': '176.00', 
+ 'lifeInsurancePayments': '176.00', 
+ 'covidInsurancePayments': '0.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': 0
+ }
+
+CASITA GUATEMALA
+http://api.pro.casita.presico.gt/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'zone': 'TECUN UMAN', 
+ 'route': 'TECUN UMAN-C-R3', 
+ 'paymentCapital': '4320.00', 
+ 'paymentInterest': '1680.00', 
+ 'fullPaymentInsurance': '240.00', 
+ 'lifeInsurancePayments': '240.00', 
+ 'covidInsurancePayments': '0.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': 0
+ }
+
+
+PRESICO COLOMBIA
+http://api.pro.presico.presico.co/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'zone': 'TUNJA', 
+ 'route': 'TUNJA-P-R3', 
+ 'paymentCapital': '1862000.00', 
+ 'paymentInterest': '708000.00', 
+ 'fullPaymentInsurance': '68000.00', 
+ 'lifeInsurancePayments': '68000.00', 
+ 'covidInsurancePayments': '0.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': 0
+ }
+
+
+PRESICO PERU
+http://api.presico.peru.presico.mx/operation/income/2022-05-20/2022-05-30/9979322a790ca689f82bd0420a25f717
+{'zone': 'AREQUIPA', 
+ 'route': 'AREQUIPA-PP-R1', 
+ 'paymentCapital': '1247.00', 
+ 'paymentInterest': '464.00', 
+ 'fullPaymentInsurance': '58.00', 
+ 'lifeInsurancePayments': '58.00', 
+ 'covidInsurancePayments': '0.00', 
+ 'additionalInsurancePayments': '0.00', 
+ 'numberAdditional': '0', 
+ 'plusInsurancePayments': 0
+}
+
+Fundacion Amiga Grupal
+http://system.fundacionamiga.com:8085/reports/ingressReport?startDate={startDate}&endDate={endDate}
+http://system.fundacionamiga.com:8085/reports/ingressReport?startDate=2022-05-20&endDate=2022-05-30
+json: 
+{'interest': 867.0, 
+ 'paymentDate': '2022-05-25', 
+ 'groupName': 'CHICAS SAN JORGE', 
+ 'branchName': 'MAZATLAN', 
+ 'insuranceDeath': 0.0, 
+ 'insuranceCredit': 0.0, 
+ 'savings': 230.0, 
+ 'personalLoan': 0.0, 
+ 'insuranceAssault': 0.0, 
+ 'finantial': 3938.0, 
+ 'personalLoanInterest': 0.0, 
+ 'brandName': 'FUNDACIONAMIGA'
+ }
+
+
+ValeAmigo
+
+traer ahorros por mes
+initialDate = fecha inicial mes
+endDate = fecha final mes
+http://system.valeamigo.com:8080/reports/thrifts?initialDate=2023-06-01&endDate=2023-06-30
+{'idBranch': 191, 
+ 'branch': 'Puerto Peñasco', 
+ 'amount': '729.56'
+ }
+
+traer ingresos por mes
+initialDate = fecha inicial mes
+endDate = fecha final mes
+http://system.valeamigo.com:8080/reports/payments?initialDate=2023-06-01&endDate=2023-06-30
+{'idBranch': 1, 
+ 'branch': 'Mazatlán', 
+ 'finitialLoanPricipal': '2013872.40', 
+ 'finitialLoanInterest': '778983.24', 
+ 'insurancePurchase': '81271.95', 
+ 'insuranceDeath': '13154.65', 
+ 'insuranseAssault': '16365.40', 
+ 'personalLoanCapital': '544781.55', 
+ 'peronalLoanInterest': '211175.56', 
+ 'donation': '9025.53', 
+ 'insuranceCovid': '183929.38'
+ }
+
+traer ingresos por descuento en comision mes
+initialDate = fecha primer corte del mes
+endDate = fecha segundo corete del mes
+http://system.valeamigo.com:8080/reports/discount-commision?initialDate=2023-06-09&endDate=2023-06-24
+{'idBranch': 187, 
+ 'branch': 'Patzcuaro', 
+ 'amount': '5000.85'
+ }
+
+Las Moneditas
+URL = http://api2.moneditas.com.mx/reports/incomes?startDate=2023-06-01&endDate=2023-06-01
+Header: 'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJicmFuZCI6IkxhcyBtb25lZGl0YXMifQ.-02oaSyOFfEg0vapM7RcYEuJlp4o8zBbXwYm-0rbKBI'
+{'brand': 'LAS MONEDITAS', 
+ 'branch': 'JOJUTLA', 
+ 'concept': 'PAGO >> GERARDO MONTOYA GUADARRAMA', 
+ 'amount': 392, 
+ 'date': '2023-06-01'
+ }
+
+llamado en general:
+url = 'http://api.pro.casita.presico.gt/operation/income/2023-06-01/2023-06-30/9979322a790ca689f82bd0420a25f717'
+response = requests.get(url=url, headers=headers_api)
+datos = json.loads(response.text)
+datos
+    

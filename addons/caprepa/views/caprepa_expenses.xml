@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+<!--        form view       -->
+        <record id="view_expenses_form" model="ir.ui.view">
+            <field name="name">caprepa.expenses.form</field>
+            <field name="model">caprepa.expenses</field>
+            <field name="arch" type="xml">
+                <form string="Expesnes">
+                    <sheet>
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name='code'/>
+                                <field name='default_code'/>
+                                <field name='category_id'/>
+                                <field name='product_id'/>
+                                <field name='account_id'/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+<!--        tree view       -->
+        <record id="view_expenses_tree" model="ir.ui.view">
+            <field name="name">caprepa.expenses.tree</field>
+            <field name="model">caprepa.expenses</field>
+            <field name="arch" type="xml">
+                <tree string="Expenses" multi_edit="1">
+                    <header>
+                        <button name='action_create_category_product' type='object' string='Create Products' />
+                    </header>
+                    <field name="code"/>
+                    <field name="default_code"/>
+                    <field name="name"/>
+                    <field name="category_id"/>
+                    <field name="product_id"/>
+                    <field name="account_id"/>
+                </tree>
+            </field>
+        </record>
+<!--        search view     -->
+        <record id="expenses_search" model="ir.ui.view">
+            <field name="name">caprepa.expenses.search</field>
+            <field name="model">caprepa.expenses</field>
+            <field name="arch" type="xml">
+                <search string="Expenses">
+                    <field name="name" string="Expense"/>
+                    <field name="code" string="Code"/>
+                    <field name="default_code" string="Product Code"/>
+                    <field name="category_id" string="Category"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Category" name="groupby_category"
+                                context="{'group_by': 'category_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+<!--        View action for branch views        -->
+        <record id="action_expenses_form" model="ir.actions.act_window">
+            <field name="name">Expenses</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">caprepa.expenses</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_smiling_face">
+                Create a new Expense
+              </p><p>
+                Create and manage Expesnes for the branches.
+              </p>
+            </field>
+        </record>
+<!--        Menu item       -->
+        <menuitem action="action_expenses_form" id="menu_action_expenses_form" parent="base.menu_users"/>
+    </data>
+</odoo>
