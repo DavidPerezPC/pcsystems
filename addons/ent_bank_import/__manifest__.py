@@ -22,13 +22,14 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['account_bank_statement_import_csv'],
+    'depends': ['l10n_mx_edi','account_bank_statement_import_csv'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+        'wizard/account_move_inverted.xml',
     ],
     'installable': True,
 }
