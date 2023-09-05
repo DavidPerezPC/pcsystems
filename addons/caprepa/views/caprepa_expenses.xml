@@ -35,7 +35,8 @@
                 <tree string="Expenses" multi_edit="1">
                     <header>
                         <button name='action_create_category_product' type='object' string='Create Products' />
-                    </header>
+                        <button name='action_create_budgets' type='object' string="Create Budgets"/>
+                        <button name='action_create_budgets_byroute' type='object' string="Create Budgets by Route"/>                    </header>
                     <field name="code"/>
                     <field name="default_code"/>
                     <field name="name"/>

@@ -61,7 +61,7 @@ class CaprepaBrands(models.Model):
         string='Company',
         default=False, #lambda self: self.env.company,
     )
-    
+
     branch_ids = fields.One2many(
         'res.branch',
         'brand_id',
@@ -191,6 +191,17 @@ class CaprepaStructure(models.Model):
         string="Full Code",
     )
 
+    branch_name = fields.Char(
+        string="Branch Name",
+        help="This branch whill hold all analytics account assigned"
+    )
+
+    branch_id = fields.Many2one(
+        comodel_name="res.branch",
+        string="Branch",
+        help="Branch assigned"
+    )
+
     def action_assign_parent(self):
 
         parent_id = False
@@ -242,8 +253,17 @@ class CaprepaStructure(models.Model):
     
     def action_create_brands(self):
 
+        
         company01 = self #self.filtered(lambda r: r.company_code == '001')
+
+
         for rec in company01:
+
+            print(f"Procesando Cuenta: {rec.full_code} {rec.name}")
+            if rec.branch_name:
+                branchid = self._get_branch_new(rec)           
+            else:
+                branchid = False
 
             if rec.is_root and rec.is_brand:
                 brand_id, plan_id = self._create_analytic_plan(rec)
@@ -252,10 +272,27 @@ class CaprepaStructure(models.Model):
             elif rec.is_brand:
                 brand_id, plan_id = self._create_analytic_plan(rec, root_brand, root_plan)
             else:
-                branch_id = self._create_branch_account(rec, brand_id, plan_id)
+                account_id  = self._create_branch_account(rec, brand_id, plan_id, branchid)
         
         return True
 
+    def _get_branch_new(self, rec):
+
+        branchobj = self.env['res.branch']
+        branch = branchobj.search([('name', '=', rec.branch_name)])
+     
+        if branch:
+            branchid = branch[0]
+        else:
+            branchid = branchobj.sudo().create(
+                {'name': rec.branch_name,
+                 'code': rec.full_code,
+                 'company_id': rec.company_id.id,
+                 }
+            )
+
+        return branchid        
+    
     def _create_analytic_plan(self, rec, parent=None, plan=None):
         
         cname = f"{rec.brand_code} {rec.name}"
@@ -273,7 +310,13 @@ class CaprepaStructure(models.Model):
                 data.update({'parent_id': parent.id,
                              'code': parent.code + rec.brand_code
                              })
-            brand_id = brandobj.sudo().create(data)
+                brandid = brandobj.search([('code', '=', data['code']),
+                                   ('name', '=', data['name'])
+                            ])
+                if brandid:
+                    brand_id = brandid[0]
+                else:
+                    brand_id = brandobj.sudo().create(data)
 
         if not plan:
             domain = [('name', '=', cname)]
@@ -296,47 +339,71 @@ class CaprepaStructure(models.Model):
 
         return brand_id, plan_id
 
-    def _create_branch_account(self, rec, brand, plan_id):
+    def _create_branch_account(self, rec, brand, plan_id, branchid):
         
         cname = rec.name
-        branchobj = self.env['res.branch']
         analyticobj = self.env['account.analytic.account']
-
-        branch = branchobj.search([('name', '=', cname),
-                                   ('code', '=', rec.full_code)])
         analytic = analyticobj.search([('name', '=', cname),
                                        ('code', '=', rec.full_code)])
 
         if analytic:
             analyticid = analytic[0]
+            if not analyticid.branch_id:
+                analyticid.branch_id = branchid.id
         else:
             analyticid = analyticobj.sudo().create(
                 {
                     'name': cname,
                     'code': rec.full_code,
                     'plan_id': plan_id.id,
-                    'company_id': rec.company_id.id
+                    'company_id': rec.company_id.id,
+                    'branch_id': branchid.id
                 }
             )
 
-        if branch:
-            branchid = branch[0]
-            branchid.brand_id = brand.id
-            branchid.analytic_plan_id = plan_id.id
-            branchid.analytic_account_id = analyticid.id
-        else:
-            branchid = branchobj.sudo().create(
-                {'name': rec.name,
-                 'code': rec.full_code,
-                 'brand_id': brand.id,
-                 'company_id': rec.company_id.id,
-                 'analytic_plan_id': plan_id.id,
-                 'analytic_account_id': analyticid.id,
-                 'has_routes': brand.parent_id is not False,
-                 }
-            )
+        return analyticid
+
+    # def _create_branch_account(self, rec, brand, plan_id):
         
-        return branchid
+    #     cname = rec.name
+    #     branchobj = self.env['res.branch']
+    #     analyticobj = self.env['account.analytic.account']
+
+    #     branch = branchobj.search([('name', '=', cname),
+    #                                ('code', '=', rec.full_code)])
+    #     analytic = analyticobj.search([('name', '=', cname),
+    #                                    ('code', '=', rec.full_code)])
+
+    #     if analytic:
+    #         analyticid = analytic[0]
+    #     else:
+    #         analyticid = analyticobj.sudo().create(
+    #             {
+    #                 'name': cname,
+    #                 'code': rec.full_code,
+    #                 'plan_id': plan_id.id,
+    #                 'company_id': rec.company_id.id
+    #             }
+    #         )
+
+    #     if branch:
+    #         branchid = branch[0]
+    #         branchid.brand_id = brand.id
+    #         branchid.analytic_plan_id = plan_id.id
+    #         branchid.analytic_account_id = analyticid.id
+    #     else:
+    #         branchid = branchobj.sudo().create(
+    #             {'name': rec.name,
+    #              'code': rec.full_code,
+    #              'brand_id': brand.id,
+    #              'company_id': rec.company_id.id,
+    #              'analytic_plan_id': plan_id.id,
+    #              'analytic_account_id': analyticid.id,
+    #              'has_routes': brand.parent_id is not False,
+    #              }
+    #         )
+        
+    #     return branchid
 
 
 

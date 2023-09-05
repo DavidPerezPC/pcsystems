@@ -61,6 +61,7 @@
                 <field name="company_name"/>
                 <field name="brand_code"/>
                 <field name="name"/>
+                <field name="branch_name"/>
                 <field name="full_code"/>
                 <field name="parent_id"/>
                 <field name="is_brand"/>

@@ -35,14 +35,30 @@ class ResBranch(models.Model):
         domain="[('parent_id', '=', False)]"
     )
 
-    analytic_account_id = fields.Many2one(
-        comodel_name='account.analytic.account',
-        string="Analytic",
-        help="Anaytic account that identifies this branch in Budget",
-        tracking=1,
-        #domain="[('company_idplan_id', '=', self.analytic_plan_id)]"
+    analytic_account_ids = fields.One2many(
+        'account.analytic.account', 
+        'branch_id', 
+        "Analytic Accounts"
     )
 
     _sql_constraints = [
         ('name_uniq', 'unique (code,name)', 'The Branch name must be unique !')
     ]
+
+class ResBranchAnalytic(models.Model):     
+    _inherit = 'account.analytic.account'
+
+    def _get_branch_domain(self):
+        """methode to get branch domain"""
+        company = self.env.company
+        branch_ids = self.env.user.branch_ids
+        branch = branch_ids.filtered(
+            lambda branch: branch.company_id == company)
+        return [('id', 'in', branch.ids)]
+
+    branch_id = fields.Many2one(
+        comodel_name='res.branch', 
+        string='Branch', store=True,
+        domain=_get_branch_domain,
+        help='Leave this field empty if this analytic account is'
+             ' shared between all branches')

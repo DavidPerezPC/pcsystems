@@ -1,0 +1,14 @@
+<odoo>
+    <record  id="account_payment_form_inherited" model="ir.ui.view">
+        <field name="name">caprepa.account_payment_form_inherited</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form[1]/header[1]/button[@name='action_post']" position="attributes">
+              <field name="x_need_approval" invisible="1"/>
+              <field name="x_review_result" invisible="1" />
+              <attribute name="attrs">{'invisible': ['|', ('state', '!=', 'draft'), '&amp;', ('x_need_approval', '=', True ), ('x_review_result', '!=', 'approved')]}</attribute>
+            </xpath>      
+        </field>
+    </record>
+</odoo>

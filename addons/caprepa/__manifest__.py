@@ -30,6 +30,8 @@
         'views/caprepa_brands.xml',
         'views/caprepa_structure.xml',
         'views/caprepa_expenses.xml',
+        #'views/account_payment.xml',
+        'views/analytic_account.xml',
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

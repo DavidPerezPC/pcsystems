@@ -67,6 +67,8 @@ class CaprepaExpenses(models.Model):
                 product = product_obj.search([('default_code', '=', rec.default_code)])
                 if product:
                     productid = product[0]
+                    if account and not rec.account_id:
+                        rec.account_id = account[0].id
                 else:
                     data = {
                         'name': rec.name,
@@ -85,5 +87,78 @@ class CaprepaExpenses(models.Model):
                 rec.product_id = productid.id 
 
 
+    def action_create_budgets(self, byroute=False):
+
+        company = self.env.company 
+
+        branchobj = self.env['res.branch']
+        branches =  branchobj.search([('company_id','=', company.id)])
+        bb = self.env['budget.budget']
+
+        for expense in self:
+            if not expense.account_id:
+                continue                 
+            bpid = self._get_budgetary_position(expense, company.id)
+
+        bps = self.env['account.budget.post'].search([('company_id', '=', company.id)])
+        date_from = '2023-08-01'
+        date_to = '2023-08-31'
+
+        for branch in branches:
+            print(f"Brach: {branch['code']} {branch['name']}")
+            blines = []
+            for analytic_acc in branch.analytic_account_ids:
+                if byroute:
+                    blines = []
+                for bp in bps:
+                    blines.append([0, 0, 
+                                {
+                                    'general_budget_id': bp.id,
+                                    'analytic_account_id': analytic_acc.id,
+                                    'date_from': date_from,
+                                    'date_to': date_to,
+                                    'planned_amount': 1,
+                                    'company_id': company.id
+                                }])
+                if byroute:
+                    budget = {
+                        'name': f"Budget of {branch.name} in {analytic_acc.name}",
+                        'date_from': date_from,
+                        'date_to': date_to,
+                        'budget_line': blines
+                    }
+                    bid = bb.sudo().create(budget)
+
+            if not byroute:
+                budget = {
+                    'name': f"Budget of {branch.name}",
+                    'date_from': date_from,
+                    'date_to': date_to,
+                    'budget_line': blines
+                }
+                bid = bb.sudo().create(budget)
+
+
+        return True
     
-    
+    def action_create_budgets_byroute(self):
+        return self.action_create_budgets(True)
+
+    def _get_budgetary_position(self, expense, company):
+
+        bpobj = self.env['account.budget.post']
+        name = expense.name
+        bp = bpobj.search([('name', '=', name),
+                           ('company_id', '=', company)
+                           ])
+        if bp:
+            bp = bp[0]
+        else:
+            bp = bpobj.sudo().create(
+                {
+                    'name': name,
+                    'account_ids':  [(4,expense.account_id.id)],
+                }
+            )
+
+        return bp
