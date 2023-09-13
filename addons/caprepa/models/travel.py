@@ -1236,32 +1236,4 @@ class PurchaseOrderLine(models.Model):
             'order_id': po.id,
         }
 
-    def _convert_to_middle_of_day(self, date):
-        """Return a datetime which is the noon of the input date(time) according
-        to order user's time zone, convert to UTC time.
-        """
-        return timezone(self.order_id.user_id.tz or self.company_id.partner_id.tz or 'UTC').localize(datetime.combine(date, time(12))).astimezone(UTC).replace(tzinfo=None)
 
-    def _update_date_planned(self, updated_date):
-        self.date_planned = updated_date
-
-    def _track_qty_received(self, new_qty):
-        self.ensure_one()
-        # don't track anything when coming from the accrued expense entry wizard, as it is only computing fields at a past date to get relevant amounts
-        # and doesn't actually change anything to the current record
-        if  self.env.context.get('accrual_entry_date'):
-            return
-        if new_qty != self.qty_received and self.order_id.state == 'purchase':
-            self.order_id.message_post_with_view(
-                'purchase.track_po_line_qty_received_template',
-                values={'line': self, 'qty_received': new_qty},
-                subtype_id=self.env.ref('mail.mt_note').id
-            )
-
-    def _validate_analytic_distribution(self):
-        for line in self.filtered(lambda l: not l.display_type):
-            line._validate_distribution(**{
-                'product': line.product_id.id,
-                'business_domain': 'purchase_order',
-                'company_id': line.company_id.id,
-            })

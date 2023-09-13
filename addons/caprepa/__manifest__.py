@@ -32,7 +32,10 @@
         'views/caprepa_expenses.xml',
         #'views/account_payment.xml',
         'views/analytic_account.xml',
+        'views/caprepa_expenses_flow.xml',
+        'views/account_move.xml',
         'views/templates.xml',
+        'data/ir_sequence.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

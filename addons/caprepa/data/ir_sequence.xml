@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="caprepa_expenses_flow_code" model="ir.sequence">
+            <field name="name">Expenses Flow</field>
+            <field name="code">caprepa_expenses_flow_code</field>
+            <field name="prefix">EXP/</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="caprepa_expenses_flow_form_view" model="ir.ui.view">
+        <field name="name">caprepa.expenses.flow.form</field>
+        <field name="model">caprepa.expenses.flow</field>
+        <field name="arch" type="xml">
+            <form string="Expense Flow">
+                <header>
+                    <button name="action_reset_to_draft" id="action_reset_to_draft"
+                            string="Reset to Draft" type='object'
+                            attrs="{'invisible': [('state', '=', 'draft')]}"
+                             />
+                    <button name="action_validate_expense" id="action_validate_expense"
+                            string="Validate" type='object' class="btn-primary"
+                            attrs="{'invisible': [ '|', ('state', '!=', 'draft'), '|', ('number', '=', False), ('analytic_distribution', '=', False)]}"
+                             />
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done,cancel"/>
+                </header>
+                <sheet>
+                    <!--div class="oe_button_box" name="button_box">
+                        <button name="action_view_children_brands" type="object" class="oe_stat_button" icon="fa-bars">
+                            <field string="SubBrands" name="children_count" widget="statinfo"/>
+                        </button>
+                        <button name="action_view_analytical_accounts" type="object" class="oe_stat_button" icon="fa-bars">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value"><field name="all_account_count"/></span>
+                                <span class="o_stat_text">Analytic Accounts</span>
+                            </div>
+                        </button>
+                    </div-->
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group col="3">
+                        <group name="general_group" string="General Info">
+                            <field name="number" />
+                            <field name="date" />
+                        </group>
+                        <group name="company_branch_group" 
+                            string="Company/Branch Info">
+                            <field name="company_id" groups="base.group_multi_company"  attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="branch_id"  attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="analytic_distribution" widget="analytic_distribution"
+                                 attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <field name="analytic_account_id" invisible="1"/>
+                        </group>
+                        <group name="employee_group" string="Employee Info">
+                            <field name="employee_id"/>
+                            <field name="department_id" />
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Invoices" name="invoices_page">
+                            <field name="invoice_ids" mode="tree"  widget="many2many"
+                                context="{'default_expense_flow_id': active_id}">
+                                <tree>
+                                    <field name="state" invisible="1"/>
+                                    <field name="company_id" invisible="1" />
+                                    <!--field name='readonly' invisible="1"/-->
+                                    <field name="name"/>
+                                    <field name="partner_id" />
+                                    <field name="ref" />
+                                    <field name="date" />
+                                    <field name="amount_total" sum="Total Amount" string="Total"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="caprepa_expenses_flow_tree_view" model="ir.ui.view">
+        <field name="name">caprepa.expenses.flow.tree</field>
+        <field name="model">caprepa.expenses.flow</field>
+        <field name="arch" type="xml">
+            <tree string="Expense Flow" multi_edit="1">
+                <field name="number"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="branch_id" />
+                <field name="analytic_distribution" widget="analytic_distribution"/>
+            </tree>
+        </field>
+    </record>
+
+    <!--        View action for expense flow  views        -->
+    <record id="action_caprepa_expenses_flow_form" model="ir.actions.act_window">
+        <field name="name">Expense Flow</field>
+        <field name="res_model">caprepa.expenses.flow</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree'}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('caprepa_expenses_flow_form_view')})]"/>
+        <field name="help" type="html">
+          <p class="o_view_nocontent_smiling_face">
+              Click to add a new Expense.
+          </p>
+        </field>
+    </record>
+
+<!--        Menu item       -->
+    <menuitem
+        id="caprepa_flows_menu"
+        parent="account.menu_finance_entries"
+        name="Caprepa"
+        sequence="5"/>
+
+    <menuitem action="action_caprepa_expenses_flow_form" 
+        id="menu_action_caprepa_expenses_flow_form" 
+        parent="caprepa_flows_menu"
+        name="Expense"
+    />
+
+</odoo>
