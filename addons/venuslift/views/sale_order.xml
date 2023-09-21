@@ -23,9 +23,7 @@
             <field name="is_courtesy" />
             <field name="has_negative_stock"  readonly="1" attrs="{'invisible': ['|', ('state', 'not in', ['draft', 'sent']), ('id', '=', False)]}"/>
             <field name="ready_to_deliver"  
-                  attrs="{'invisible': ['|', '|', ('id', '=', False), ('state', 'in', ['draft', 'sent']), 
-                                              ('invoice_status', '=', 'to invoice')
-                                              ]}"/>
+                  attrs="{'invisible': ['|', ('id', '=', False), ('state', 'in', ['draft', 'sent'])]}"/>
         </xpath>
         <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
           <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['sent']), ('has_negative_stock', '=', True)]}</attribute>
