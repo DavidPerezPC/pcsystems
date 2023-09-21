@@ -29,7 +29,8 @@
         # 'security/ir.model.access.csv',
         'views/res_partner.xml',
         'views/stock.xml',
-        'views/sale_order.xml',        
+        'views/sale_order.xml',
+        'views/account_payment.xml',        
         'views/templates.xml',
     ],
     # only loaded in demonstration mode

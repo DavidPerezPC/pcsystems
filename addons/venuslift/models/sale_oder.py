@@ -72,7 +72,7 @@ class SaleOrder(models.Model):
             demand = 0 
             uom_changed = False
             has_negative_stock = False
-            location_id = self.warehouse_id.lot_stock_id
+            location_id = rec.warehouse_id.lot_stock_id
             for line in rec.order_line:
                 if line.product_id.type == 'product':
                     delivered += line.qty_delivered
