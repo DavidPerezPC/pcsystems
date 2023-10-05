@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+    <record id="fixcfdi_account_move_inherit_form" model="ir.ui.view">
+      <field name="name">fixcfdi_account_move_inherit_form</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='button_draft']" position="after">
+          <button name="fix_post_time" string="Actualiza Hora" 
+              type="object" groups="account.group_account_invoice" 
+              attrs="{'invisible' : ['|', ('move_type', 'not in', ('out_invoice', 'out_refund')), '|', ('state', '!=', 'posted'), ('l10n_mx_edi_cfdi_uuid', '!=', False)]}"
+          />
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
