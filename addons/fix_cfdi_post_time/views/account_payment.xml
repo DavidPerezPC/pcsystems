@@ -1,0 +1,38 @@
+<odoo>
+  <data>
+    <record id="fixcfdi_account_move_inherit_form" model="ir.ui.view">
+      <field name="name">fixcfdi_account_move_inherit_form</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='button_draft']" position="after">
+          <button name="fix_post_time" string="Actualiza Hora" 
+              type="object" groups="account.group_account_invoice" 
+              attrs="{'invisible' : ['|', ('move_type', 'not in', ('out_invoice', 'out_refund')), '|', ('state', '!=', 'posted'), ('l10n_mx_edi_cfdi_uuid', '!=', False)]}"
+          />
+        </xpath>
+      </field>
+    </record>
+    
+    <record id="fixcfdi_account_payment_inherit_form" model="ir.ui.view">
+      <field name="name">fixcfdi_account_payment_inherit_form</field>
+      <field name="model">account.payment</field>
+      <field name="inherit_id" ref="account.view_account_payment_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='mark_as_sent']" position="after">
+          <field name="l10n_mx_edi_has_errors" invisible="1" />
+          <button name="fix_post_time" string="Actualiza Hora" 
+              type="object"
+              attrs="{'invisible' : ['|', ('reconciled_invoices_count', '=', 0), 
+                                     '|', ('partner_type', '!=', 'customer'),
+                                     '|', ('l10n_mx_edi_has_errors', '=', False),
+                                          ('payment_type', '!=', 'inbound')]}"
+          />
+        </xpath>
+        <!--xpath expr="//field[@name='amount']" position="replace">
+          <field digits="(12,2)" name="amount" />
+        </xpath-->
+      </field>
+    </record>
+  </data>
+</odoo>

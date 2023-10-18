@@ -11,6 +11,7 @@
     "demo_xml": [],
     "data": [
         "views/account_move.xml",
+        "views/account_payment.xml",
     ],
     "active": False,
     "installable": True,
