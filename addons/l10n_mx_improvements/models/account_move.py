@@ -52,6 +52,23 @@ class AccountMove(models.Model):
         amt_decimal = round(float("0."+amt_total.split(".")[1]),2)
         amt_decimal = (str(amt_decimal).split(".")[1] + "0000")[:2]
 
+        amount_ieps = 0
+        amount_iva = 0
+        for tax in tax_totals['groups_by_subtotal']['Importe sin impuestos']:
+            group_name = tax['tax_group_name']
+            group_amount = tax['tax_group_amount']
+            if group_name[:4] == 'IEPS':
+                amount_ieps += group_amount
+            elif group_name[:3] == 'IVA':
+                amount_iva += group_amount
+        dp = f"{self.currency_id.decimal_places}f"
+        expr = '"${:,.' + dp + '}".format(amount_ieps)'
+        amt_ieps = eval(expr)
+        expr = '"${:,.' + dp + '}".format(amount_iva)'
+        amt_iva = eval(expr)
+
+        line_ids, customs_numbers = self._get_invoice_lines() 
+
         invoice_vals = {
             'number': self.name,
             'stamp_date': cfdi_vals['stamp_date'],
@@ -77,8 +94,11 @@ class AccountMove(models.Model):
             'partner_vat': partner_id.vat,
             'zip': partner_id.zip,
             'partner_full_address': full_address,
-            'line_ids': self._get_invoice_lines(),
+            'customs_numbers': customs_numbers,
+            'line_ids': line_ids,
             'amt_untax': tax_totals['formatted_amount_untaxed'].replace(u'\xa0', u''),
+            'amt_iva': amt_iva,
+            'amt_ieps': amt_ieps,
             'amt_total': tax_totals['formatted_amount_total'].replace(u'\xa0', u''),
             'amt_text': f"{self.currency_id.amount_to_text(amt_entero)} {amt_decimal}/100 {self.currency_id.name}".upper(),
         }
@@ -113,21 +133,34 @@ class AccountMove(models.Model):
     def _get_invoice_lines(self):
 
         line_ids = []
+        customs_number = []
         for line in self.invoice_line_ids:
             line_uom = line.product_uom_id.unspsc_code_id
-            taxobj =''
+            tiva = ''
+            tieps= ''
             for tax in line.tax_ids:
-                taxobj += f"{tax.tax_group_id.id:02},"
-            taxobj = taxobj[:len(taxobj)-1]
+                if tax.description[:4] == 'IEPS':
+                    tieps += f"{tax.description},"
+                elif tax.description[:3] == 'IVA':
+                    tiva += f"{tax.description},"
+            tiva = tiva[:len(tiva)-1]
+            tieps = tieps[:len(tieps)-1]
             data = {
                 'product_id': line.product_id.unspsc_code_id.code,
                 'uom': f"{line_uom.code} {line_uom.name}",
                 'product_name': line.product_id.name,
                 'qty': line.quantity,
                 'price': "{:,.4f}".format(line.price_unit),
-                'taxobj': taxobj,
+                'taxobj': '02',
+                'tiva': tiva,
+                'tieps': tieps,
                 'subtotal': "{:,.4f}".format(line.price_subtotal)
             }
             line_ids.append(data)
+            if line.l10n_mx_edi_customs_number:
+                customs = line.l10n_mx_edi_customs_number.split(",")
+                for custom in customs:
+                    if custom not in customs_number:
+                        customs_number.append(custom)
         
-        return line_ids
+        return line_ids, ",".join(customs_number)
