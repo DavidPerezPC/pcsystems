@@ -7,6 +7,24 @@ from datetime import datetime, timedelta
 class PurchaseOrder(models.Model):
     _inherit = ['purchase.order']
 
+    @api.model
+    def default_get(self, fields_list):
+        res = super(PurchaseOrder, self).default_get(fields_list)
+        deliveryaddress_id = self.env['stock.picking.type'].browse(res['picking_type_id']).warehouse_id.partner_id.id
+        res.update({'delivery_address': deliveryaddress_id})
+        return res
+    
+    @api.onchange("picking_type_id")
+    def _get_delivery_address(self):
+        self.delivery_address = self.picking_type_id.warehouse_id.partner_id.id
+
+    delivery_address = fields.Many2one(
+        comodel_name='res.partner',
+        string="Delivery Address",
+        help="Addres where the products will be delivered",
+        domain=[('type', '=', 'delivery'), ('company_type', '=', 'person')], 
+    )
+    
     def get_data_toprint(self):
 
         partner_id = self.partner_id

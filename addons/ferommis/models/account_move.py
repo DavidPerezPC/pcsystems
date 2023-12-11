@@ -17,45 +17,51 @@ from io import BytesIO
 class AccountMove(models.Model):
     _inherit = ['account.move']
 
-    def button_draft(self):
-        exchange_move_ids = set()
-        if self:
-            self.env['account.full.reconcile'].flush_model(['exchange_move_id'])
-            self.env['account.partial.reconcile'].flush_model(['exchange_move_id'])
-            self._cr.execute(
-                """
-                    SELECT DISTINCT sub.exchange_move_id
-                    FROM (
-                        SELECT exchange_move_id
-                        FROM account_full_reconcile
-                        WHERE exchange_move_id IN %s
+    # def button_draft(self):
+    #     if self.move_type in ['out_invoice', 'out_refund']:
+    #         super(AccountMove, self).button_draft()
+    #     else:
+    #         exchange_move_ids = set()
+    #         if self:
+    #             self.env['account.full.reconcile'].flush_model(['exchange_move_id'])
+    #             self.env['account.partial.reconcile'].flush_model(['exchange_move_id'])
+    #             self._cr.execute(
+    #                 """
+    #                     SELECT DISTINCT sub.exchange_move_id
+    #                     FROM (
+    #                         SELECT exchange_move_id
+    #                         FROM account_full_reconcile
+    #                         WHERE exchange_move_id IN %s
 
-                        UNION ALL
+    #                         UNION ALL
 
-                        SELECT exchange_move_id
-                        FROM account_partial_reconcile
-                        WHERE exchange_move_id IN %s
-                    ) AS sub
-                """,
-                [tuple(self.ids), tuple(self.ids)],
-            )
-            exchange_move_ids = set([row[0] for row in self._cr.fetchall()])
+    #                         SELECT exchange_move_id
+    #                         FROM account_partial_reconcile
+    #                         WHERE exchange_move_id IN %s
+    #                     ) AS sub
+    #                 """,
+    #                 [tuple(self.ids), tuple(self.ids)],
+    #             )
+    #             exchange_move_ids = set([row[0] for row in self._cr.fetchall()])
 
-        for move in self:
-            if move.id in exchange_move_ids:
-                raise UserError(_('You cannot reset to draft an exchange difference journal entry.'))
-            if move.restrict_mode_hash_table and move.state == 'posted':
-                raise UserError(_('You cannot modify a posted entry of this journal because it is in strict mode.'))
-            # We remove all the analytics entries for this journal
-            move.mapped('line_ids.analytic_line_ids').unlink()
+    #         for move in self:
+    #             if move.id in exchange_move_ids:
+    #                 raise UserError(_('You cannot reset to draft an exchange difference journal entry.'))
+    #             if move.restrict_mode_hash_table and move.state == 'posted':
+    #                 raise UserError(_('You cannot modify a posted entry of this journal because it is in strict mode.'))
+    #             # We remove all the analytics entries for this journal
+    #             move.mapped('line_ids.analytic_line_ids').unlink()
 
-        #   self.mapped('line_ids').remove_move_reconcile()
-        self.write({'state': 'draft', 'is_move_sent': False})
+    #         #   self.mapped('line_ids').remove_move_reconcile()
+    #         self.write({'state': 'draft', 'is_move_sent': False})
 
     def get_invoice_data_toprint(self):
 
         cfdi_vals = self.sudo()._l10n_mx_edi_decode_cfdi()
         partner_id = self.partner_id
+        partner_vat = partner_id.vat
+        if partner_id.company_id != self.company_id:
+            partner_vat += f" - RFC MÉXICO: {cfdi_vals['customer_rfc']}"
         usage_text = dict(partner_id._fields['l10n_mx_edi_usage'].selection).get(cfdi_vals['usage'])
         regime_text = dict(partner_id._fields['l10n_mx_edi_fiscal_regime'].selection).get(partner_id.l10n_mx_edi_fiscal_regime)
         if cfdi_vals['payment_method'] == 'PUE':
@@ -116,7 +122,7 @@ class AccountMove(models.Model):
             'partner_name': partner_id.name,
             'regime': partner_id.l10n_mx_edi_fiscal_regime,
             'regime_text': regime_text,
-            'partner_vat': partner_id.vat,
+            'partner_vat': partner_vat,
             'zip': partner_id.zip,
             'partner_full_address': full_address,
             'customs_numbers': customs_numbers,

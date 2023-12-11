@@ -9,9 +9,10 @@
         "l10n_mx_edi_40"
     ],
     "demo_xml": [],
-    #"data": [
+    "data": [
     #    "views/res_partner.xml",
-    #],
+        "views/purchase_order.xml",
+    ],
     "active": False,
     "installable": True,
     "certificate": False,

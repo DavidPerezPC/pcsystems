@@ -1,0 +1,12 @@
+<odoo>
+    <record model="ir.ui.view" id="view_purchase_order_form_ferommis">
+        <field name="name">view.purchase.order.form.ferommis</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='picking_type_id']" position="after">
+                <field name="delivery_address"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

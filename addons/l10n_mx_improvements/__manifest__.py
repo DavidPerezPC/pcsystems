@@ -6,11 +6,13 @@
     "category": "Accounting",
     "description": "In order to operate easier, this module covers all requirements by customers",
     "depends": [      
-        "l10n_mx_edi_40"
+        "l10n_mx_edi_40",
+        "l10n_mx_edi_landing"
     ],
     "demo_xml": [],
     "data": [
         "views/res_partner.xml",
+        "views/stock_landed_cost.xml",
     ],
     "active": False,
     "installable": True,
