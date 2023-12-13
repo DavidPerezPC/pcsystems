@@ -25,6 +25,7 @@
     'data': [
         # 'security/ir.model.access.csv',
         'views/res_partner.xml',
+        'views/crm_lead.xml',       
         'views/views.xml',
         'views/templates.xml',
     ],

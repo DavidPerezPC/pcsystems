@@ -1,0 +1,24 @@
+<odoo>
+    <record  id="seamanduras_crm_lead_inherit_form" model="ir.ui.view">
+        <field name="name">seamanduras_crm_lead_inherit_form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field class="text-break" name="assignment_folio" placeholder="Folio asignado, ej: MG2329900034"/>
+            </xpath>
+            <xpath expr="//label[@for='expected_revenue']" position="after">
+                <label for="requested_amount" class="oe_edit_only pb-1"/>
+                <label for="payment_term_id" class="oe_edit_only pb-1"/>
+            </xpath>
+            <xpath expr="//field[@name='expected_revenue']" position="after">
+                <field name="requested_amount" class="oe_inline o_input_8ch" 
+                      widget="monetary" options="{'currency_field': 'company_currency'}"/>
+                <field name="payment_term_id" />
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="excutive_id" />
+            </xpath>
+        </field>
+    </record>
+</odoo>
