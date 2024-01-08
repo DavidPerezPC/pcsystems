@@ -10,8 +10,9 @@ class PurchaseOrder(models.Model):
     @api.model
     def default_get(self, fields_list):
         res = super(PurchaseOrder, self).default_get(fields_list)
-        deliveryaddress_id = self.env['stock.picking.type'].browse(res['picking_type_id']).warehouse_id.partner_id.id
-        res.update({'delivery_address': deliveryaddress_id})
+        if 'picking_type_id' in res and res['picking_type_id']:
+            deliveryaddress_id = self.env['stock.picking.type'].browse(res['picking_type_id']).warehouse_id.partner_id.id
+            res.update({'delivery_address': deliveryaddress_id})
         return res
     
     @api.onchange("picking_type_id")
@@ -24,7 +25,7 @@ class PurchaseOrder(models.Model):
         help="Addres where the products will be delivered",
         domain=[('type', '=', 'delivery'), ('company_type', '=', 'person')], 
     )
-    
+
     def get_data_toprint(self):
 
         partner_id = self.partner_id
