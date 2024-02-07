@@ -26,6 +26,7 @@
                 <field name="obj_id"/>
                 <field name="local_id"/>
                 <field name="remote_id"/>
+                <field name="comments" />
             </tree>
         </field>
     </record>

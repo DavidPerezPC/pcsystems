@@ -1,0 +1,54 @@
+<odoo>
+    <record id="view_base_synchro_balanza_tree" model="ir.ui.view">
+        <field name="name">base.synchro.balanza.tree</field>
+        <field name="model">base.synchro.balanza</field>
+        <field name="arch" type="xml">
+            <tree string="Synchronized Server" class="o_base_synchro_server">
+                <field name="id_company"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="odoo_entry_id" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_base_synchro_balanza_form" model="ir.ui.view">
+        <field name="name">base.synchro.balanza.form</field>
+        <field name="model">base.synchro.balanza</field>
+        <field name="arch" type="xml">
+            <form string="Balanzas to Sync" class="o_base_synchro_server">
+                <sheet>
+                    <group colspan="4" col="4">
+                        <field name="id_company"/>
+                        <field name="name"/>
+                        <field name="date"/>
+                        <field name="odoo_entry_id" />
+                    </group>
+                </sheet>
+                <separator string="Accounts to Sync."/>
+                <field name="account_ids">
+                    <tree string="Values" editable="bottom">
+                        <field name="name"/>
+                        <field name="account_code"/>
+                        <field name="debit" sum="Debit" />
+                        <field name="credit" sum="Credit" />                        
+                    </tree>
+                </field>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_base_synchro_balanza_tree" model="ir.actions.act_window">
+        <field name="name">Balances to be synchronized</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">base.synchro.balanza</field>
+        <field name="binding_view_types">form</field>
+    </record>
+
+    <menuitem parent="base_synchro.next_id_62" 
+              name="Balances to Synchronize"
+              action="action_base_synchro_balanza_tree" 
+              id="menu_action_base_synchro_balanza_tree"
+    />
+
+</odoo>

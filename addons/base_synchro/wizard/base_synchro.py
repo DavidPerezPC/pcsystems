@@ -17,18 +17,27 @@ class RPCProxyOne(object):
     def __init__(self, server, ressource):
         """Class to store one RPC proxy server."""
         self.server = server
-        context = ssl.SSLContext()
-        local_url = "https://%s:%d/xmlrpc/common" % (
-            server.server_url,
-            server.server_port,
-        )
-        rpc = ServerProxy(local_url, context=context)
+        #context = ssl.SSLContext()
+        if server.server_port:
+            local_url = "http://%s:%d/xmlrpc/common" % (
+                                server.server_url,
+                                server.server_port,
+                                )
+        else:
+            local_url = "http://%s/xmlrpc/common" % (
+                                server.server_url,
+                                )            
+
+        #rpc = ServerProxy(local_url, context=context)
+        rpc = ServerProxy(local_url, allow_none=True)
         self.uid = rpc.login(server.server_db, server.login, server.password)
-        local_url = "https://%s:%d/xmlrpc/object" % (
-            server.server_url,
-            server.server_port,
-        )
-        self.rpc = ServerProxy(local_url, context=context)
+        #local_url = "http://%s:%d/xmlrpc/object" % (
+        #    server.server_url,
+        #    server.server_port if server.server_port else '',
+        #)
+        #self.rpc = ServerProxy(local_url, context=context)
+        local_url = local_url.replace("common", "object")
+        self.rpc = ServerProxy(local_url, allow_none=True)
         self.ressource = ressource
 
     def __getattr__(self, name):
@@ -84,17 +93,17 @@ class BaseSynchro(models.TransientModel):
         module = pool1.get("ir.module.module")
         model_obj = object.model_id.model
         module_id = module.search(
-            [("name", "ilike", "base_synchro"), ("state", "=", "installed")]
+           [("name", "ilike", "base_synchro"), ("state", "=", "installed")]
         )
         if not module_id:
-            raise ValidationError(
-                _(
-                    """If your Synchronization direction is/
-                          download or both, please install
-                          "Multi-DB Synchronization" module in targeted/
-                        server!"""
-                )
-            )
+           raise ValidationError(
+               _(
+                   """If your Synchronization direction is/
+                         download or both, please install
+                         "Multi-DB Synchronization" module in targeted/
+                       server!"""
+               )
+           )
         if object.action in ("d", "b"):
             sync_ids = pool1.get("base.synchro.obj").get_ids(
                 model_obj, dt, eval(object.domain), {"action": "d"}
@@ -193,6 +202,7 @@ class BaseSynchro(models.TransientModel):
                         "remote_id": (action == "d") and id or new_id,
                     }
                 )
+                self._cr.commit()
                 self.report_total += 1
                 self.report_create += 1
         return True
@@ -431,7 +441,10 @@ class BaseSynchro(models.TransientModel):
         threaded_synchronization = threading.Thread(
             target=self.upload_download()
         )
-        threaded_synchronization.run()
+        try:
+            threaded_synchronization.run()
+        except:
+            pass        
         id2 = self.env.ref("base_synchro.view_base_synchro_finish").id
         return {
             "binding_view_types": "form",

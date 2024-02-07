@@ -15,7 +15,10 @@
         "security/ir.model.access.csv",
         "wizard/base_synchro_view.xml",
         "views/base_synchro_view.xml",
+        "wizard/invoices_synchro_view.xml",       
         "views/res_request_view.xml",
+        "views/balanza_synchro_view.xml",
+        "views/account_synchro_view.xml"
     ],
     "installable": True,
 }

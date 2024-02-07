@@ -96,3 +96,5 @@ class BaseSynchroObjLine(models.Model):
     obj_id = fields.Many2one("base.synchro.obj", "Object", ondelete="cascade")
     local_id = fields.Integer("Local ID", readonly=True)
     remote_id = fields.Integer("Remote ID", readonly=True)
+    comments = fields.Char("Comments")
+    
