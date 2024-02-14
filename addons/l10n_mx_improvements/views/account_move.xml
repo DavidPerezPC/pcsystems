@@ -1,0 +1,21 @@
+<odoo>
+  <data>
+    <record id="l10n_mx_improvements_account_move_inherit_form" model="ir.ui.view">
+      <field name="name">l10n_mx_improvements_account_move_inherit_form</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='button_draft']" position="after">
+          <button name="action_payment_move_send" string="Send Receipt" 
+              type="object" groups="account.group_account_invoice" 
+              attrs="{'invisible' : ['|', '|', '|', 
+                                      ('move_type', '!=', 'entry'),
+                                      ('statement_line_id', '=', False),
+                                      ('state', '!=', 'posted'), 
+                                      ('l10n_mx_edi_cfdi_uuid', '=', False)]}"
+          />
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

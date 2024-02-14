@@ -12,13 +12,14 @@ class StockLandedCost(models.Model):
         string="Customs Date",
         help="Date the this purchase was processed by Customs", 
         copy=False
-    )
+    )   
 
     customs_name = fields.Selection(
         [('01', 'Reynosa'),
          ('02', 'Tijuana'),
          ('03', 'Veracruz'),
          ('04', 'AICM'),
+         ('05', 'Mazatlán')
         ]
     )
     

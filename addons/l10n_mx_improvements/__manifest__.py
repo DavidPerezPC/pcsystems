@@ -13,6 +13,7 @@
     "data": [
         "views/res_partner.xml",
         "views/stock_landed_cost.xml",
+        "views/account_move.xml",
     ],
     "active": False,
     "installable": True,
