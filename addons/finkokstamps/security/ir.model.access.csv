@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+finkokstamps_vats,finkokstamps.vats,model_finkokstamps_vats,account.group_account_readonly,1,1,1,1
+finkokstamps_stamps,finkokstamps.stamps,model_finkokstamps_stamps,account.group_account_readonly,1,1,1,1
+finkokstamps_import_wizard,finkokstamps.import.wizard,model_finkokstamps_import_wizard,account.group_account_readonly,1,1,1,1

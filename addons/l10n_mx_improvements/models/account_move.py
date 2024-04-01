@@ -53,6 +53,41 @@ class AccountMove(models.Model):
         mail_tmpl = self.env.ref('l10n_mx_improvements.mail_template_move_payment', raise_if_not_found=False)
         
         return mail_tmpl
+    
+    def update_cash_base_payment(self):
+
+        for inv in self:
+            if inv.move_type != 'in_invoice' and inv.amount_untaxed != 0.01:
+                continue
+
+            if len(inv.invoice_line_ids) > 1 or len(inv.invoice_line_ids[0].tax_ids) > 1:
+                raise UserWarning("Factura con mas de un artículo y/o con mas de un impuesto.")
+                return 
+            tax = inv.invoice_line_ids[0].tax_ids[0].amount / 100
+            new_base_amount = inv.amount_tax / tax
+            acc_id = inv.company_id.account_cash_basis_base_account_id.id
+            base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
+            sql = ""
+            for ml in base_ml_ids:
+                if ml.debit:
+                    sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
+                else:
+                    sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
+            self.env.cr.execute(sql)
+            cmonto = '{:20,.2f}'.format(new_base_amount).strip()
+            notification = {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': _('Monto Base Actualizado'),
+                    'type': 'success',
+                    'message': f"El monto base fue actualizado a: {cmonto}",
+                    'sticky': True,
+                        }
+                }
+            return notification
+
+            
 
 # class MailTemplate(models.Model):
 #     "Templates for sending email"

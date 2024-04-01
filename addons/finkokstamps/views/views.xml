@@ -1,0 +1,94 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <record model="ir.ui.view" id="finkok_vats_list">
+      <field name="name">Finkok Stamps Vats</field>
+      <field name="model">finkokstamps.vats</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="vat"/>
+          <field name="name" />
+          <field name="partner_id"/>
+          <field name="active"/>
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="finkok_stamps_list">
+      <field name="name">Finkok Stamps List</field>
+      <field name="model">finkokstamps.stamps</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="vat_id"/>
+          <field name="name" />
+          <field name="date"/>
+          <field name="stamps"/>
+          <field name="canceled"/>
+        </tree>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+    <record model="ir.actions.act_window" id="finkok_vats_action_window">
+      <field name="name">Finkok Vats Action Window</field>
+      <field name="res_model">finkokstamps.vats</field>
+      <field name="view_id" ref="finkok_vats_list"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="finkok_stamps_action_window">
+      <field name="name">Finkok Stamps Window</field>
+      <field name="res_model">finkokstamps.stamps</field>
+      <field name="view_id" ref="finkok_stamps_list"/>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="finkok_stamps.action_server">
+      <field name="name">finkok_stamps server</field>
+      <field name="model_id" ref="model_finkok_stamps_finkok_stamps"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+    <menuitem parent="account.menu_finance_receivables" name="Finkok" 
+          id="menu_action_finkok"
+          sequence="120"/>
+
+    <menuitem name="VATS" id="menu_action_finkok_vats" 
+      parent="menu_action_finkok"
+      action="finkok_vats_action_window"
+      sequence="1"
+      />
+
+    <menuitem name="Stamps" id="menu_action_finkok_stamps" 
+      parent="menu_action_finkok"
+      action="finkok_stamps_action_window"
+      sequence="10"
+      />
+<!--
+    <menuitem name="finkok_stamps" id="finkok_stamps.menu_root"/>
+-->
+    <!-- menu categories -->
+<!--
+    <menuitem name="Menu 1" id="finkok_stamps.menu_1" parent="finkok_stamps.menu_root"/>
+    <menuitem name="Menu 2" id="finkok_stamps.menu_2" parent="finkok_stamps.menu_root"/>
+-->
+    <!-- actions -->
+<!--
+    <menuitem name="List" id="finkok_stamps.menu_1_list" parent="finkok_stamps.menu_1"
+              action="finkok_stamps.action_window"/>
+    <menuitem name="Server to list" id="finkok_stamps" parent="finkok_stamps.menu_2"
+              action="finkok_stamps.action_server"/>
+-->
+  </data>
+</odoo>
