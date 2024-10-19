@@ -7,6 +7,7 @@ from odoo.addons.base.models.ir_ui_view import keep_query
 
 from reportlab.graphics.barcode import createBarcodeDrawing
 from reportlab.lib.units import mm
+import html2text
 
 try:
     import base64
@@ -74,6 +75,11 @@ class AccountMove(models.Model):
         msg_usd = "" 
         if self.currency_id != self.company_id.currency_id:
             msg_usd = "EL PAGO DEBERÁ SER EN DÓLARES ESTADOUNIDENSES O SU EQUIVALENTE EN PESOS AL DÍA"
+
+        notas = ""
+        if self.narration:
+            h = html2text.HTML2Text()
+            notas = h.handle(self.narration).strip()
 
         uuid_related = ''
         if self.l10n_mx_edi_origin:
