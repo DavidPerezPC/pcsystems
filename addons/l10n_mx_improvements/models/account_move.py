@@ -66,13 +66,20 @@ class AccountMove(models.Model):
             tax = inv.invoice_line_ids[0].tax_ids[0].amount / 100
             new_base_amount = inv.amount_tax / tax
             acc_id = inv.company_id.account_cash_basis_base_account_id.id
-            base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
+#            base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
+            base_ml_ids = inv.tax_cash_basis_created_move_ids
+            reversed_ids = [x for x in base_ml_ids['reversed_entry_id'].ids]
             sql = ""
-            for ml in base_ml_ids:
-                if ml.debit:
-                    sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
-                else:
-                    sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
+            for mov in base_ml_ids:
+                if sql != "":
+                    break
+                if mov.reversed_entry_id.id or mov.id in reversed_ids:
+                    continue
+                for ml in mov.line_ids.filtered(lambda acc: acc.account_id.id == acc_id):
+                    if ml.debit:
+                        sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
+                    else:
+                        sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
             self.env.cr.execute(sql)
             cmonto = '{:20,.2f}'.format(new_base_amount).strip()
             notification = {

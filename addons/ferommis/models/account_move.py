@@ -70,7 +70,7 @@ class AccountMove(models.Model):
             payment_method_text = 'Pago en parcialidades o diferido'
 
         export_code = '01'
-        export_text = 'No apica'
+        export_text = 'No aplica'
         msg_usd = "" 
         if self.currency_id != self.company_id.currency_id:
             msg_usd = "EL PAGO DEBERÁ SER EN DÓLARES ESTADOUNIDENSES O SU EQUIVALENTE EN PESOS AL DÍA"
@@ -141,6 +141,7 @@ class AccountMove(models.Model):
             'amt_total': tax_totals['formatted_amount_total'].replace(u'\xa0', u''),
             'amt_text': f"{self.currency_id.amount_to_text(amt_entero)} {amt_decimal}/100 {self.currency_id.name}".upper(),
             'msg_usd': msg_usd,
+            'notas': notas,
         }
         rfce  = self.l10n_mx_edi_cfdi_supplier_rfc
         rfcr = self.l10n_mx_edi_cfdi_customer_rfc
@@ -214,38 +215,38 @@ class AccountMove(models.Model):
         return line_ids, ",".join(customs_number)
 
 
-    def update_cash_base_payment(self):
+    # def update_cash_base_payment(self):
 
-        for inv in self:
-            if inv.move_type != 'in_invoice' and inv.amount_untaxed != 0.01:
-                continue
+    #     for inv in self:
+    #         if inv.move_type != 'in_invoice' and inv.amount_untaxed != 0.01:
+    #             continue
 
-            if len(inv.invoice_line_ids) > 1 or len(inv.invoice_line_ids[0].tax_ids) > 1:
-                raise UserWarning("Factura con mas de un artículo y/o con mas de un impuesto.")
-                return 
-            tax = inv.invoice_line_ids[0].tax_ids[0].amount / 100
-            new_base_amount = inv.amount_tax / tax
-            acc_id = inv.company_id.account_cash_basis_base_account_id.id
-            base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
-            sql = ""
-            for ml in base_ml_ids:
-                if ml.debit:
-                    sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
-                else:
-                    sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
-            self.env.cr.execute(sql)
-            cmonto = '{:20,.2f}'.format(new_base_amount).strip()
-            notification = {
-                'type': 'ir.actions.client',
-                'tag': 'display_notification',
-                'params': {
-                    'title': _('Monto Base Actualizado'),
-                    'type': 'success',
-                    'message': f"El monto base fue actualizado a: {cmonto}",
-                    'sticky': True,
-                        }
-                }
-            return notification
+    #         if len(inv.invoice_line_ids) > 1 or len(inv.invoice_line_ids[0].tax_ids) > 1:
+    #             raise UserWarning("Factura con mas de un artículo y/o con mas de un impuesto.")
+    #             return 
+    #         tax = inv.invoice_line_ids[0].tax_ids[0].amount / 100
+    #         new_base_amount = inv.amount_tax / tax
+    #         acc_id = inv.company_id.account_cash_basis_base_account_id.id
+    #         base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
+    #         sql = ""
+    #         for ml in base_ml_ids:
+    #             if ml.debit:
+    #                 sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
+    #             else:
+    #                 sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
+    #         self.env.cr.execute(sql)
+    #         cmonto = '{:20,.2f}'.format(new_base_amount).strip()
+    #         notification = {
+    #             'type': 'ir.actions.client',
+    #             'tag': 'display_notification',
+    #             'params': {
+    #                 'title': _('Monto Base Actualizado'),
+    #                 'type': 'success',
+    #                 'message': f"El monto base fue actualizado a: {cmonto}",
+    #                 'sticky': True,
+    #                     }
+    #             }
+    #         return notification
 
             
             
