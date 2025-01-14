@@ -1,0 +1,50 @@
+<odoo>
+
+    <record id="import_moves_wizard_view" model="ir.ui.view">
+        <field name="name">Import Contpaq Journal Entries</field>
+        <field name="model">sync.contpaq.import.wizard</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Import Contpaq Journal Entries">
+                <group col="4">
+                    <!--field name="file_name" invisible="1" /-->
+                    <field name="journal_id"/>
+                    <field name="company_id"/>
+                    <field name="partner_id" />
+                    <field name="account_balance_id" />
+                    <!--field name="upload_file" 
+                        widget="binary"
+                        options="{'accepted_file_extensions': '.txt'}" 
+                        filename="file_name"/-->
+                    <field name="file_ids"
+                        widget="many2many_binary"
+                        options="{'accepted_file_extensions': '.txt'}" 
+                    />
+                </group>
+                <footer>
+                    <button name="sync_contpaq_journal_entry" string="Import"
+                            type="object"
+                            class="btn-primary"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_import_moves_wizard" model="ir.actions.act_window">
+        <field name="name">Import Journal Entries Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sync.contpaq.import.wizard</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="import_moves_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Import Entries" id="menu_action_import_moves_wizard" 
+      parent="menu_action_account_sync"
+      action="action_import_moves_wizard"
+      sequence="5"
+      />
+</odoo>

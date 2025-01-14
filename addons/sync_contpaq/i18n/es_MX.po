@@ -1,0 +1,212 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sync_contpaq
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-06-21 05:43+0000\n"
+"PO-Revision-Date: 2023-06-20 22:59-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 3.3.1\n"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_import_wizard__account_balance_id
+msgid "Account used to Balance the Journal Entries registered"
+msgstr "Cuenta Contable para cuadrar las pólizas generadas"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__analytic_account_id
+msgid "Analytic Account"
+msgstr "Cuenta Analítica"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__account_balance_id
+msgid "Balance Account"
+msgstr "Cuenta Cuadre"
+
+#. module: sync_contpaq
+#: model_terms:ir.ui.view,arch_db:sync_contpaq.import_moves_wizard_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__code
+msgid "Code"
+msgstr "Código"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__company_id
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_import_wizard__company_id
+msgid "Company for this Journal Entries"
+msgstr "Compañía que en la que se registran las Pólizas Contables"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_account__company_id
+msgid "Company in Odoo that will use this Account"
+msgstr "Compañía de Odoo que utilizará esta cuenta contable"
+
+#. module: sync_contpaq
+#: model:ir.ui.menu,name:sync_contpaq.menu_action_account_sync
+msgid "Contpaq"
+msgstr ""
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_account__name
+msgid "Contpaq Account Name"
+msgstr "Nombre Contpaq"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_account__code
+msgid "Contpaq Account to be redirected to Odoo Account"
+msgstr "Cuenta contable en Contpaq que será  contabilizada con esta Cuenta Odoo"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__create_uid
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__create_uid
+msgid "Created by"
+msgstr "Creada por"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__create_date
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__create_date
+msgid "Created on"
+msgstr "Creada el"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__partner_id
+msgid "Creditor"
+msgstr "Acreedor"
+
+#. module: sync_contpaq
+#: model:ir.ui.menu,name:sync_contpaq.menu_action_sync_contpaq_account
+#: model_terms:ir.ui.view,arch_db:sync_contpaq.account_tree_form
+msgid "Cuentas Contpaq"
+msgstr ""
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__display_name
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_account__account_id
+msgid "Equivalent Odoo Account for the Contpaq Account"
+msgstr "Cuenta equivalente en Odoo para la Cuenta Contpaq"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__file_ids
+msgid "File(s)"
+msgstr "Archivo(s)"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__id
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: sync_contpaq
+#: model_terms:ir.ui.view,arch_db:sync_contpaq.import_moves_wizard_view
+msgid "Import"
+msgstr "Importar"
+
+#. module: sync_contpaq
+#: model_terms:ir.ui.view,arch_db:sync_contpaq.import_moves_wizard_view
+msgid "Import Contpaq Journal Entries"
+msgstr "Importar Pólizas Contpaq"
+
+#. module: sync_contpaq
+#: model:ir.ui.menu,name:sync_contpaq.menu_action_import_moves_wizard
+msgid "Import Entries"
+msgstr "Importar Pólizas"
+
+#. module: sync_contpaq
+#: model:ir.actions.act_window,name:sync_contpaq.action_import_moves_wizard
+msgid "Import Journal Entries Wizard"
+msgstr "Asistente para Importar Pólizas"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_import_wizard__journal_id
+msgid "Journal where Entries will be registered"
+msgstr "Diario en el que se registran las Pólizas importadas"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account____last_update
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard____last_update
+msgid "Last Modified on"
+msgstr "Modificado el"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__write_uid
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Modificado por"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__write_date
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_import_wizard__write_date
+msgid "Last Updated on"
+msgstr "Modificado el"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__account_id
+msgid "Odoo Acc."
+msgstr "Cta Odoo"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,field_description:sync_contpaq.field_sync_contpaq_account__partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_import_wizard__partner_id
+msgid "Partner to assign to the Journal Entries registered"
+msgstr "Empresa que se asigna a las Pólizas Contables generadas"
+
+#. module: sync_contpaq
+#: model:ir.actions.act_window,name:sync_contpaq.sync_contpaq_account_action_window
+msgid "Relación Cuentas Contpaq Odoo"
+msgstr ""
+
+#. module: sync_contpaq
+#: model:ir.model,name:sync_contpaq.model_sync_contpaq_account
+msgid "Relación de Cuentas Contpaq con Odoo"
+msgstr ""
+
+#. module: sync_contpaq
+#: model:ir.model.fields,help:sync_contpaq.field_sync_contpaq_account__partner_id
+msgid "Select partner that uses this Odoo Account, leave blank if is not needed"
+msgstr "Selecciona la empresa que se utiliza para esta Cuenta Odoo, dejar en blanco sino se necesita"
+
+#. module: sync_contpaq
+#: model_terms:ir.ui.view,arch_db:sync_contpaq.import_moves_wizard_view
+msgid "or"
+msgstr "ó"
+
+#. module: sync_contpaq
+#: model:ir.model,name:sync_contpaq.model_sync_contpaq_import_wizard
+msgid "sync.contpaq.import.wizard"
+msgstr "Asistente para Sincronizar Contpaq"
