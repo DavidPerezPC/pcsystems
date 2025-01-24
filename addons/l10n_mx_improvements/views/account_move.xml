@@ -1,0 +1,22 @@
+<odoo>
+  <data>
+    <record id="l10n_mx_improvements_account_move_inherit_form" model="ir.ui.view">
+      <field name="name">l10n_mx_improvements_account_move_inherit_form</field>
+      <field name="model">account.move</field>
+      <field name="inherit_id" ref="account.view_move_form"/>
+      <field name="arch" type="xml">
+        <xpath expr="//button[@name='button_draft']" position="after">
+          <field name='amount_untaxed' invisible="1" />
+          <button name="action_payment_move_send" string="Send Receipt" 
+              type="object" groups="account.group_account_invoice" 
+              invisible="move_type != 'entry' or state != 'posted' or not statement_line_id or not l10n_mx_edi_cfdi_uuid",
+          />
+          <button name="update_cash_base_payment" string="Cambia Base Impuesto" 
+              type="object" groups="account.group_account_invoice" 
+              invisible="move_type != 'in_invoice' or not tax_cash_basis_created_move_ids or amount_untaxed != 0.01"
+          />
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>

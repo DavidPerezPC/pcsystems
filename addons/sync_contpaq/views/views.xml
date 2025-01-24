@@ -49,7 +49,7 @@
     <!-- menu categories -->
     <menuitem parent="account.menu_finance_entries" name="Contpaq" 
           id="menu_action_account_sync"
-          sequence="5"/>
+          sequence="15"/>
 
     <menuitem name="Cuentas Contpaq" id="menu_action_sync_contpaq_account" 
       parent="menu_action_account_sync"
