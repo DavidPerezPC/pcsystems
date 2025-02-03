@@ -58,15 +58,14 @@ class AccountMove(models.Model):
     #         self.write({'state': 'draft', 'is_move_sent': False})
 
     def get_invoice_data_toprint(self):
-
-        cfdi_vals = self.sudo()._l10n_mx_edi_decode_cfdi()
+        cfdi_vals = self._l10n_mx_edi_get_extra_invoice_report_values()
         partner_id = self.partner_id
         partner_vat = partner_id.vat
         if partner_id.country_id != self.company_id.country_id:
             partner_vat += f" - RFC MÉXICO: {cfdi_vals['customer_rfc']}"
-        usage_text = dict(partner_id._fields['l10n_mx_edi_usage'].selection).get(cfdi_vals['usage'])
+        usage_text = f"{cfdi_vals['usage']} - {cfdi_vals['usage_desc']}"
         regime_text = dict(partner_id._fields['l10n_mx_edi_fiscal_regime'].selection).get(partner_id.l10n_mx_edi_fiscal_regime)
-        if cfdi_vals['payment_method'] == 'PUE':
+        if self.l10n_mx_edi_payment_policy == 'PUE':
             payment_method_text = 'Pago en una sola exhibición'
         else:
             payment_method_text = 'Pago en parcialidades o diferido'
@@ -83,25 +82,25 @@ class AccountMove(models.Model):
             notas = h.handle(self.narration).strip()
 
         uuid_related = ''
-        if self.l10n_mx_edi_origin:
-            uuid_related = self.l10n_mx_edi_origin[3:]
+        if self.l10n_mx_edi_cfdi_origin:
+            uuid_related = self.l10n_mx_edi_cfdi_origin[3:]
 
-        if cfdi_vals['ext_trade_node']:
+        if self.l10n_mx_edi_external_trade: 
             export_code = 'xx'
             export_text = 'xxxxxxxxxx'
 
         full_address = f"{partner_id.street or ''} {partner_id.street2 or ''} {partner_id.city or ''} {partner_id.city_id.name or ''} {partner_id.state_id.name or ''} {partner_id.country_id.name or ''}"
         tax_totals = self.tax_totals
-        amt_total = tax_totals['formatted_amount_total'].replace(u'\xa0', u'')
+        amt_total = f"{self.amount_total}"
         amt_entero = int(self.amount_total)
         amt_decimal = round(float("0."+amt_total.split(".")[1]),2)
         amt_decimal = (str(amt_decimal).split(".")[1] + "0000")[:2]
 
         amount_ieps = 0
         amount_iva = 0
-        for tax in tax_totals['groups_by_subtotal']['Importe sin impuestos']:
-            group_name = tax['tax_group_name']
-            group_amount = tax['tax_group_amount']
+        for tax in tax_totals['subtotals'][0]['tax_groups']:
+            group_name = tax['group_name']
+            group_amount = tax['display_base_amount_currency']
             if group_name[:4] == 'IEPS':
                 amount_ieps += group_amount
             elif group_name[:3] == 'IVA':
@@ -112,7 +111,7 @@ class AccountMove(models.Model):
         expr = '"${:,.' + dp + '}".format(amount_iva)'
         amt_iva = eval(expr)
 
-        line_ids, customs_numbers = self._get_invoice_lines() 
+        line_ids, customs_numbers = self.get_invoice_ferommis_lines() 
 
         invoice_vals = {
             'number': self.name,
@@ -142,16 +141,16 @@ class AccountMove(models.Model):
             'partner_full_address': full_address,
             'customs_numbers': customs_numbers,
             'line_ids': line_ids,
-            'amt_untax': tax_totals['formatted_amount_untaxed'].replace(u'\xa0', u''),
+            'amt_untax': self.amount_untaxed,
             'amt_iva': amt_iva,
             'amt_ieps': amt_ieps,
-            'amt_total': tax_totals['formatted_amount_total'].replace(u'\xa0', u''),
-            'amt_text': f"{self.currency_id.amount_to_text(amt_entero)} {amt_decimal}/100 {self.currency_id.name}".upper(),
+            'amt_total': self.amount_total,
+            'amt_text': self.amount_total_words,
             'msg_usd': msg_usd,
             'notas': notas,
         }
-        rfce  = self.l10n_mx_edi_cfdi_supplier_rfc
-        rfcr = self.l10n_mx_edi_cfdi_customer_rfc
+        rfce  = cfdi_vals['supplier_rfc']
+        rfcr = cfdi_vals['customer_rfc']
         total = "%.*f"  % (self.currency_id.decimal_places, self.l10n_mx_edi_cfdi_amount)
         uuid = cfdi_vals['uuid']
         sello = cfdi_vals['sello'][-8:]
@@ -178,7 +177,7 @@ class AccountMove(models.Model):
 
         return qrcode_image
     
-    def _get_invoice_lines(self):
+    def get_invoice_ferommis_lines(self):
 
         line_ids = []
         customs_number = []
@@ -187,10 +186,10 @@ class AccountMove(models.Model):
             tiva = ''
             tieps= ''
             for tax in line.tax_ids:
-                if tax.description[:4] == 'IEPS':
-                    tieps += f"{tax.description},"
-                elif tax.description[:3] == 'IVA':
-                    tiva += f"{tax.description},"
+                if tax.name[:4] == 'IEPS':
+                    tieps += f"{tax.name},"
+                elif tax.name[:3] == 'IVA':
+                    tiva += f"{tax.name},"            
             tiva = tiva[:len(tiva)-1]
             tieps = tieps[:len(tieps)-1]
             data = {

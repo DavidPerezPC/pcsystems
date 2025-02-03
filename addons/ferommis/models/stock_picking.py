@@ -65,7 +65,7 @@ class StockPicking(models.Model):
                 'product_id': line.product_id.unspsc_code_id.code,
                 'uom': f"{line_uom.code} {line_uom.name}",
                 'product_name': product_name,
-                'qty': line.qty_done,
+                'qty': line.quantity,
             }
             line_ids.append(data)
         

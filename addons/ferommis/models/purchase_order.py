@@ -37,16 +37,16 @@ class PurchaseOrder(models.Model):
         ship_to_street =  f"{partner_id.street or ''} {partner_id.street2 or ''} {partner_id.zip or ''}"
         ship_to_city_state  = f"{partner_id.city or ''} {partner_id.city_id.name or ''} {partner_id.state_id.name or ''} {partner_id.country_id.name or ''}"
         tax_totals = self.tax_totals
-        amt_total = tax_totals['formatted_amount_total'].replace(u'\xa0', u'')
+        amt_total = f"{tax_totals['total_amount_currency']}"
         amt_entero = int(self.amount_total)
         amt_decimal = round(float("0."+amt_total.split(".")[1]),2)
         amt_decimal = (str(amt_decimal).split(".")[1] + "0000")[:2]
 
         amount_ieps = 0
         amount_iva = 0
-        for tax in tax_totals['groups_by_subtotal']['Importe sin impuestos']:
-            group_name = tax['tax_group_name']
-            group_amount = tax['tax_group_amount']
+        for tax in tax_totals['subtotals'][0]['tax_groups']:
+            group_name = tax['group_name']
+            group_amount = tax['display_base_amount_currency']
             if group_name[:4] == 'IEPS':
                 amount_ieps += group_amount
             elif group_name[:3] == 'IVA':
@@ -71,10 +71,10 @@ class PurchaseOrder(models.Model):
             'date_due': self.date_planned.strftime("%d/%m/%Y"),
             'approver': self.user_id.name,
             'line_ids': line_ids,
-            'amt_untax': tax_totals['formatted_amount_untaxed'].replace(u'\xa0', u''),
+            'amt_untax': self.amount_untaxed,
             'amt_iva': amt_iva,
             'amt_ieps': amt_ieps,
-            'amt_total': tax_totals['formatted_amount_total'].replace(u'\xa0', u''),
+            'amt_total': self.amount_total,
             'amt_text': f"{self.currency_id.amount_to_text(amt_entero)} {amt_decimal}/100 {self.currency_id.name}".upper(),
         }
 
@@ -94,10 +94,10 @@ class PurchaseOrder(models.Model):
                 product_name = line.product_id.description_purchase or line.product_id.name
                 pass
             for tax in line.taxes_id:
-                if tax.description[:4] == 'IEPS':
-                    tieps += f"{tax.description},"
-                elif tax.description[:3] == 'IVA':
-                    tiva += f"{tax.description},"
+                if tax.name[:4] == 'IEPS':
+                    tieps += f"{tax.name},"
+                elif tax.name[:3] == 'IVA':
+                    tiva += f"{tax.name},"
             tiva = tiva[:len(tiva)-1]
             tieps = tieps[:len(tieps)-1]
             data = {

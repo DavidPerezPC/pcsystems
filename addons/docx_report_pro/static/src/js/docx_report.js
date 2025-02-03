@@ -2,6 +2,7 @@
 
 import { registry } from "@web/core/registry";
 import { download } from "@web/core/network/download";
+import {user} from "@web/core/user";
 
 registry
   .category("ir.actions.report handlers")
@@ -21,7 +22,8 @@ registry
         }
         if (type === "html") {
           const context = encodeURIComponent(
-            JSON.stringify(env.services.user.context),
+            //JSON.stringify(env.services.user.context),
+            JSON.stringify(user.context),
           );
           url += `?context=${context}`;
         }
@@ -36,7 +38,8 @@ registry
           url: "/report/download",
           data: {
             data: JSON.stringify([url, action.report_type]),
-            context: JSON.stringify(env.services.user.context),
+            //context: JSON.stringify(env.services.user.context),
+            context: JSON.stringify(user.context),
           },
         });
       } finally {
