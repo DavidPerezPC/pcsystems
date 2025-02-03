@@ -57,15 +57,20 @@ class AccountMove(models.Model):
     #         #   self.mapped('line_ids').remove_move_reconcile()
     #         self.write({'state': 'draft', 'is_move_sent': False})
 
+    def _format_currency(self, amount):
+        dp = f"{self.currency_id.decimal_places}f"
+        expr = '"${:,.' + dp + '}".format('+str(amount)+')'
+        return eval(expr).replace("$-","-$")
+    
     def get_invoice_data_toprint(self):
         cfdi_vals = self._l10n_mx_edi_get_extra_invoice_report_values()
         partner_id = self.partner_id
         partner_vat = partner_id.vat
         if partner_id.country_id != self.company_id.country_id:
             partner_vat += f" - RFC MÉXICO: {cfdi_vals['customer_rfc']}"
-        usage_text = f"{cfdi_vals['usage']} - {cfdi_vals['usage_desc']}"
+        usage_text = f"- {cfdi_vals['usage_desc']}"
         regime_text = dict(partner_id._fields['l10n_mx_edi_fiscal_regime'].selection).get(partner_id.l10n_mx_edi_fiscal_regime)
-        if self.l10n_mx_edi_payment_policy == 'PUE':
+        if cfdi_vals['payment_method'] == 'PUE':
             payment_method_text = 'Pago en una sola exhibición'
         else:
             payment_method_text = 'Pago en parcialidades o diferido'
@@ -100,16 +105,14 @@ class AccountMove(models.Model):
         amount_iva = 0
         for tax in tax_totals['subtotals'][0]['tax_groups']:
             group_name = tax['group_name']
-            group_amount = tax['display_base_amount_currency']
+            group_amount = tax['tax_amount_currency']
             if group_name[:4] == 'IEPS':
                 amount_ieps += group_amount
             elif group_name[:3] == 'IVA':
                 amount_iva += group_amount
-        dp = f"{self.currency_id.decimal_places}f"
-        expr = '"${:,.' + dp + '}".format(amount_ieps)'
-        amt_ieps = eval(expr)
-        expr = '"${:,.' + dp + '}".format(amount_iva)'
-        amt_iva = eval(expr)
+
+        amt_ieps = self._format_currency(amount_ieps)
+        amt_iva = self._format_currency(amount_iva)
 
         line_ids, customs_numbers = self.get_invoice_ferommis_lines() 
 
@@ -141,10 +144,10 @@ class AccountMove(models.Model):
             'partner_full_address': full_address,
             'customs_numbers': customs_numbers,
             'line_ids': line_ids,
-            'amt_untax': self.amount_untaxed,
+            'amt_untax': self._format_currency(self.amount_untaxed),
             'amt_iva': amt_iva,
             'amt_ieps': amt_ieps,
-            'amt_total': self.amount_total,
+            'amt_total': self._format_currency(self.amount_total),
             'amt_text': self.amount_total_words,
             'msg_usd': msg_usd,
             'notas': notas,

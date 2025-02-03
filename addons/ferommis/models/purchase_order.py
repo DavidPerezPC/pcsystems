@@ -46,7 +46,7 @@ class PurchaseOrder(models.Model):
         amount_iva = 0
         for tax in tax_totals['subtotals'][0]['tax_groups']:
             group_name = tax['group_name']
-            group_amount = tax['display_base_amount_currency']
+            group_amount = tax['tax_amount_currency']
             if group_name[:4] == 'IEPS':
                 amount_ieps += group_amount
             elif group_name[:3] == 'IVA':
@@ -71,14 +71,19 @@ class PurchaseOrder(models.Model):
             'date_due': self.date_planned.strftime("%d/%m/%Y"),
             'approver': self.user_id.name,
             'line_ids': line_ids,
-            'amt_untax': self.amount_untaxed,
+            'amt_untax': self._format_currency(self.amount_untaxed),
             'amt_iva': amt_iva,
             'amt_ieps': amt_ieps,
-            'amt_total': self.amount_total,
+            'amt_total': self._format_currency(self.amount_total),
             'amt_text': f"{self.currency_id.amount_to_text(amt_entero)} {amt_decimal}/100 {self.currency_id.name}".upper(),
         }
 
         return po_vals
+    
+    def _format_currency(self, amount):
+        dp = f"{self.currency_id.decimal_places}f"
+        expr = '"${:,.' + dp + '}".format('+str(amount)+')'
+        return eval(expr).replace("$-","-$")
     
     def _get_po_lines(self):
 
