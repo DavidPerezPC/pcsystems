@@ -28,7 +28,7 @@ class AccountMove(models.Model):
             lang = mail_template._render_lang(self.statement_line_id.ids)[self.statement_line_id.id]
         ctx = {
             'default_model': 'account.bank.statement.line',
-            'default_res_id': self.statement_line_id.id,
+            'default_res_ids': [self.statement_line_id.id],
             'default_use_template': bool(mail_template),
             'default_template_id': mail_template.id if mail_template else None,
             'default_attachment_ids': [(6,0,self.statement_line_id.attachment_ids.ids)],
