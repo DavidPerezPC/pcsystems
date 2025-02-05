@@ -9,7 +9,7 @@
           <field name='amount_untaxed' invisible="1" />
           <button name="action_payment_move_send" string="Send Receipt" 
               type="object" groups="account.group_account_invoice" 
-              invisible="move_type != 'entry' or state != 'posted' or not statement_line_id or not l10n_mx_edi_cfdi_uuid",
+              invisible="move_type != 'entry' or state != 'posted' or not statement_line_id or not l10n_mx_edi_cfdi_uuid"
           />
           <button name="update_cash_base_payment" string="Cambia Base Impuesto" 
               type="object" groups="account.group_account_invoice" 
@@ -17,6 +17,16 @@
           />
         </xpath>
       </field>
+    </record>
+
+    <record id="action_report_payment_statement_receipt" model="ir.actions.report">
+        <field name="name">Payment Receipt</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">account.report_payment_receipt</field>
+        <field name="report_file">account.report_payment_receipt</field>
+        <field name="binding_model_id" ref="model_account_move"/>
+        <field name="binding_type">report</field>
     </record>
   </data>
 </odoo>

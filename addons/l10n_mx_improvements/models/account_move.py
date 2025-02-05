@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from urllib.parse import quote_plus 
 #from odoo.addons.base.models.ir_ui_view import keep_query
 from odoo.addons.base.models.ir_qweb import keep_query
+import base64
 
 class AccountMove(models.Model):
     _inherit = ['account.move']
@@ -18,11 +19,94 @@ class AccountMove(models.Model):
     #             move.l10n_mx_edi_payment_method_id = move.partner_id.l10n_mx_edi_payment_method_id.id
 
     #     return res
+    payment_receipt_title = fields.Char(
+            compute='_compute_payment_receipt_title', store=False
+        )
+    
+    partner_type = fields.Char(default='customer', store=False)
+    amount = fields.Monetary(store=False)
+    memo = fields.Char(store=False)
+
+    def _compute_payment_receipt_title(self):
+        for move in self:
+            move.payment_receipt_title = _('Recibo de Pago')
+
+    def _get_payment_receipt_report_values(self):
+        # EXTENDS 'account'
+        values = {
+            'display_invoices': True,
+            'display_payment_method': True,
+        }
+
+        cfdi_infos = self.id and self._l10n_mx_edi_get_extra_payment_report_values()
+        if cfdi_infos:
+            values.update({
+                'display_invoices': False,
+                'display_payment_method': False,
+                'cfdi': cfdi_infos,
+            })
+
+        return values
+    
+    def _get_payment(self):
+        payment_id = self.id
+        memo = ''
+        for line in self.line_ids:
+            if line.account_id.account_type == 'asset_receivable':
+                memo += line.name.strip() + ', '
+        self.memo = f"Pago Factura(s): {memo[:-2]}"
+        self.amount = self.statement_line_id.amount
+        payment_report = self.env.ref('l10n_mx_improvements.action_report_payment_statement_receipt')
+        data_record = base64.b64encode(
+            self.env['ir.actions.report'].sudo()._render_qweb_pdf(
+                payment_report, [payment_id], data=None)[0])
+        ir_values = {
+            'name': f"{self.payment_receipt_title.replace(' ', '_')}_{self.name}.pdf",
+            'type': 'binary',
+            'datas': data_record,
+            'store_fname': data_record,
+            'mimetype': 'application/pdf',
+            'res_model': 'account.move',
+            'res_id': self.id,
+            'description': f"PDF del CFDI {self.name}",
+        }
+        payment_report_attachment_id = self.env['ir.attachment'].sudo().create(ir_values)
+        if payment_report_attachment_id:
+            return payment_report_attachment_id
+        return False
+            # email_template = self.env.ref(
+            #     'email_attachments.email_template_invoice_report')
+            # if self.partner_id.email:
+            #     email = self.partner_id.email
+            # else:
+            #     email = 'admin@example.com'
+            # if email_template and email:
+            #     email_values = {
+            #         'email_to': email,
+            #         'email_cc': False,
+            #         'scheduled_date': False,
+            #         'recipient_ids': [],
+            #         'partner_ids': [],
+            #         'auto_delete': True,
+            #     }
+            #     email_template.attachment_ids = [
+            #         (4, invoice_report_attachment_id.id)]
+            #     email_template.with_context(partner=self.partner_id,
+            #                                 inv=self).send_mail(
+            #         self.id, email_values=email_values, force_send=True)
+            #     email_template.attachment_ids = [(5, 0, 0)]
 
     def action_payment_move_send(self):
         """ Opens a wizard to compose an email, with relevant mail template loaded by default """
         self.ensure_one()
         lang = self.env.context.get('lang')
+        attach_ids = self.attachment_ids
+        report_payment = attach_ids.filtered(lambda att: att.name == f"{self.payment_receipt_title.replace(' ', '_')}_{self.name}.pdf")
+        attach_ids = self.attachment_ids.ids
+        if not report_payment:
+            report_payment = self._get_payment()
+            if report_payment:
+                attach_ids.append(report_payment.id)
         mail_template = self._find_payment_mail_template()
         if mail_template and mail_template.lang:
             lang = mail_template._render_lang(self.statement_line_id.ids)[self.statement_line_id.id]
@@ -31,7 +115,7 @@ class AccountMove(models.Model):
             'default_res_ids': [self.statement_line_id.id],
             'default_use_template': bool(mail_template),
             'default_template_id': mail_template.id if mail_template else None,
-            'default_attachment_ids': [(6,0,self.statement_line_id.attachment_ids.ids)],
+            'default_attachment_ids': [(6,0,attach_ids)],
             'default_composition_mode': 'comment',
             'proforma': self.env.context.get('proforma', False),
             'force_email': True,
