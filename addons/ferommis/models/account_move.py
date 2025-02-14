@@ -417,7 +417,10 @@ class AccountMove(models.Model):
         amt_ieps = self._format_currency(amount_ieps)
         amt_iva = self._format_currency(amount_iva)
 
-        line_ids, customs_numbers = self.get_invoice_ferommis_lines() 
+        line_ids, customs_numbers, predial_account = self.get_invoice_ferommis_lines() 
+
+        if predial_account:
+            predial_account = f"CUENTA PREDIAL: {predial_account}"
 
         invoice_vals = {
             'number': self.name,
@@ -429,6 +432,7 @@ class AccountMove(models.Model):
             'pw': self.l10n_mx_edi_payment_method_id.code,
             'pwt': self.l10n_mx_edi_payment_method_id.name,
             'ec': f"{export_code} {export_text}",
+            'cuenta_predial': predial_account,
             #'ect': export_text,
             'uuid': cfdi_vals['uuid'],
             'uui_related': uuid_related,
@@ -487,6 +491,7 @@ class AccountMove(models.Model):
 
         line_ids = []
         customs_number = []
+        predial_account = []
         for line in self.invoice_line_ids:
             line_uom = line.product_uom_id.unspsc_code_id
             tiva = ''
@@ -523,8 +528,11 @@ class AccountMove(models.Model):
                             customname = dict(slcobj._fields['customs_name'].selection).get(slcobj.customs_name)
                             ccustom += f" ADUANA {customname.upper()} {datetime.strftime(slcobj.customs_date, '%d/%m/%Y')} "
                         customs_number.append(ccustom)
+
+            if line.product_id.l10n_mx_edi_predial_account:
+                predial_account.append(line.product_id.l10n_mx_edi_predial_account)
         
-        return line_ids, ",".join(customs_number)
+        return line_ids, ",".join(customs_number), ",".join(predial_account)
 
 
     # def update_cash_base_payment(self):
