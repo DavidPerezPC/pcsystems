@@ -161,9 +161,9 @@ class AccountMove(models.Model):
                     continue
                 for ml in mov.line_ids.filtered(lambda acc: acc.account_id.id == acc_id):
                     if ml.debit:
-                        sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
+                        sql += f"update account_move_line set debit = {new_base_amount}, balance = {new_base_amount} where id = {ml.id};"
                     else:
-                        sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
+                        sql += f"update account_move_line set credit = {new_base_amount}, balance = {-new_base_amount} where id = {ml.id};"
             self.env.cr.execute(sql)
             cmonto = '{:20,.2f}'.format(new_base_amount).strip()
             notification = {
