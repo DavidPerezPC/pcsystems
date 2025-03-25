@@ -1,0 +1,47 @@
+<odoo>
+
+    <record id="stamps_import_wizard_view" model="ir.ui.view">
+        <field name="name">Import Finkok Stamps Report</field>
+        <field name="model">finkokstamps.import.wizard</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="Import Finkok Stamps">
+                <group col="4">
+                    <!--field name="file_name" invisible="1" /-->
+                    <field name="year"/>
+                    <!--field name="upload_file" 
+                        widget="binary"
+                        options="{'accepted_file_extensions': '.txt'}" 
+                        filename="file_name"/-->
+                    <field name="file_ids"
+                        widget="many2many_binary"
+                        options="{'accepted_file_extensions': '.csv'}" 
+                    />
+                </group>
+                <footer>
+                    <button name="import_finkokstamps" string="Import"
+                            type="object"
+                            class="btn-primary"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stamps_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import Finkok Stamps Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">finkokstamps.import.wizard</field>
+        <field name="binding_view_types">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stamps_import_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem name="Import Stamps" id="menu_action_import_stamps_wizard" 
+      parent="menu_action_finkok"
+      action="action_stamps_import_wizard"
+      sequence="10"
+      />
+</odoo>
