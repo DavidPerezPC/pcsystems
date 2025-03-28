@@ -5,7 +5,7 @@
 	"website" : "http://pcsystems.mx",
     "category": "Accounting",
     "description": "Addtional/Modification to fullfill FEROMMIS needs",
-    "depends": [      
+    "depends": [ "sale",     
         "l10n_mx_edi"
     ],
     "demo_xml": [],

@@ -16,9 +16,22 @@ class PurchaseOrder(models.Model):
             res.update({'delivery_address': deliveryaddress_id})
         return res
     
+    @api.onchange("partner_id")
+    def _onchange_partner_id(self):
+        if self.partner_id:
+            self.picking_type_id = False
+
+
     @api.onchange("picking_type_id")
     def _get_delivery_address(self):
-        self.delivery_address = self.picking_type_id.warehouse_id.partner_id.id
+        if self.picking_type_id:
+            if self.picking_type_id.warehouse_id.partner_id:
+                self.delivery_address = self.picking_type_id.warehouse_id.partner_id.id
+            else:
+                self.delivery_address = False
+        else:
+            self.delivery_address = False
+        #self.delivery_address = self.picking_type_id.warehouse_id.partner_id.id
 
     delivery_address = fields.Many2one(
         comodel_name='res.partner',
