@@ -6,4 +6,5 @@ from . import sale_report
 from . import stock_picking
 from . import account_bank_statement_line
 from . import sale_order
+from . import l10n_mx_edi_document
 
