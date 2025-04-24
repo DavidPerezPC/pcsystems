@@ -19,7 +19,7 @@
     'version': '18.00',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'sale_management', 'account'],
+    'depends': ['base', 'sale', 'account'],
 
     # always loaded
     'data': [

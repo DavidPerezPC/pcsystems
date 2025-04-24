@@ -164,7 +164,7 @@ class AccountMove(models.Model):
                         sql += f"update account_move_line set debit = {new_base_amount}, balance = {new_base_amount}, amount_currency = {new_base_amount} where id = {ml.id};"
                     else:
                         sql += f"update account_move_line set credit = {new_base_amount}, balance = {-new_base_amount}, amount_currency = {-new_base_amount}  where id = {ml.id};"
-            self.env.cr.execute(sql)
+                    self.env.cr.execute(sql)
             cmonto = '{:20,.2f}'.format(new_base_amount).strip()
             notification = {
                 'type': 'ir.actions.client',
