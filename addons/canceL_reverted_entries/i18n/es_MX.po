@@ -1,0 +1,183 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* canceL_reverted_entries
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-08-15 19:17+0000\n"
+"PO-Revision-Date: 2023-08-15 12:27-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#. module: canceL_reverted_entries
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.account_move_inverted_wizard_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__create_uid
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__create_date
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: canceL_reverted_entries
+#: model:ir.ui.menu,name:canceL_reverted_entries.menu_action_account_move_delete_reverted
+msgid "Cancel Reverted"
+msgstr "Cancelar Revertidos"
+
+#. module: canceL_reverted_entries
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.move_invertedmoves_wizard_tree
+msgid "Cancel Selected"
+msgstr "Cancelar Seleccionados"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__display_name
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: canceL_reverted_entries
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.account_move_inverted_wizard_view
+msgid "Find"
+msgstr "Encontrar"
+
+#. module: canceL_reverted_entries
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.account_move_inverted_wizard_view
+msgid "Find Reverted Moves to Cancel"
+msgstr "Buscar movimientos revertidos para cancelarlos"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__date_start
+msgid "From"
+msgstr "Desde"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_inverted_wizard__date_start
+msgid "From this date reverted moves will be search"
+msgstr "A partir de esta fecha se buscarán los movimientos revertidos"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__id
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: canceL_reverted_entries
+#: model:ir.model,name:canceL_reverted_entries.model_account_journal
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: canceL_reverted_entries
+#: model:ir.model,name:canceL_reverted_entries.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento de diario"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard____last_update
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard____last_update
+msgid "Last Modified on"
+msgstr "Modificado el"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__write_uid
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Modificado por"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__write_date
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__write_date
+msgid "Last Updated on"
+msgstr "Modificado el"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__date_origin
+msgid "O Date"
+msgstr "Fecha Origen"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__origin_move_id
+msgid "Origin"
+msgstr "Origen"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_invertedmoves_wizard__origin_move_id
+msgid "Origin move"
+msgstr "Movimiento Origen"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_invertedmoves_wizard__date_origin
+msgid "Origin move was on this date"
+msgstr "Fecha Movimiento Origen"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__date_reverted
+msgid "R Date"
+msgstr "Fecha Reversión"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_invertedmoves_wizard__reverted_move_id
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.move_invertedmoves_wizard_tree
+msgid "Reverted"
+msgstr "Reversión"
+
+#. module: canceL_reverted_entries
+#: model:ir.actions.act_window,name:canceL_reverted_entries.action_account_move_inverted_wizard
+#: model:ir.actions.act_window,name:canceL_reverted_entries.action_invertedmoves_wizard_tree
+msgid "Reverted Moves"
+msgstr "Movimientos Revertidos"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_invertedmoves_wizard__reverted_move_id
+msgid "Reverted move"
+msgstr "Movimiento de Reversión"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_invertedmoves_wizard__date_reverted
+msgid "Reverted move was on this date"
+msgstr "Fecha Movimiento de Reversión"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_inverted_wizard__journal_id
+msgid "Select the Jornal the has reverted moves"
+msgstr "Seleccionar Diario donde se buscarán movimientos con reversión"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,field_description:canceL_reverted_entries.field_account_move_inverted_wizard__date_end
+msgid "To"
+msgstr "Hasta"
+
+#. module: canceL_reverted_entries
+#: model:ir.model.fields,help:canceL_reverted_entries.field_account_move_inverted_wizard__date_end
+msgid "To this date reverted moves will be search"
+msgstr "Hasta esta fecha serán buscarán los movimientos revertidos"
+
+#. module: canceL_reverted_entries
+#: model:ir.model,name:canceL_reverted_entries.model_account_move_inverted_wizard
+msgid "Wizard for Cancel Reverted Moves"
+msgstr "Asistente de Cancelación de Movimientos Revertidos"
+
+#. module: canceL_reverted_entries
+#: model:ir.model,name:canceL_reverted_entries.model_account_move_invertedmoves_wizard
+msgid "account.move.invertedmoves.wizard"
+msgstr ""
+
+#. module: canceL_reverted_entries
+#: model_terms:ir.ui.view,arch_db:canceL_reverted_entries.account_move_inverted_wizard_view
+msgid "or"
+msgstr "o"
