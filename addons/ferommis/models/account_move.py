@@ -535,38 +535,66 @@ class AccountMove(models.Model):
         return line_ids, ",".join(customs_number), ",".join(predial_account)
 
 
-    # def update_cash_base_payment(self):
+    def get_journal_data_toprint(self):
+   
+        move_id = self.id
+        journal_id = self.journal_id.id
+        name = self.name
+    
+        move_ids = [move_id]
+        for line in self.line_ids:
 
-    #     for inv in self:
-    #         if inv.move_type != 'in_invoice' and inv.amount_untaxed != 0.01:
-    #             continue
+            for debit in line.matched_debit_ids:
+                if debit.credit_move_id and debit.credit_move_id.move_id.id != move_id:
+                    move_ids.append(debit.credit_move_id.move_id.id)
+                if debit.exchange_move_id:
+                    move_ids.append(debit.exchange_move_id.id)
+                if debit.debit_move_id and debit.debit_move_id.move_id.id != move_id:
+                    move_ids.append(debit.debit_move_id.move_id.id)
+            for credit in line.matched_credit_ids:
+                if credit.debit_move_id and credit.debit_move_id.move_id.id != move_id:
+                    move_ids.append(credit.debit_move_id.move_id.id)
+                if credit.exchange_move_id:
+                    move_ids.append(credit.exchange_move_id.id)
+                if credit.credit_move_id and credit.credit_move_id.move_id.id != move_id:
+                    move_ids.append(credit.credit_move_id.move_id.id)
 
-    #         if len(inv.invoice_line_ids) > 1 or len(inv.invoice_line_ids[0].tax_ids) > 1:
-    #             raise UserWarning("Factura con mas de un artículo y/o con mas de un impuesto.")
-    #             return 
-    #         tax = inv.invoice_line_ids[0].tax_ids[0].amount / 100
-    #         new_base_amount = inv.amount_tax / tax
-    #         acc_id = inv.company_id.account_cash_basis_base_account_id.id
-    #         base_ml_ids = inv.tax_cash_basis_created_move_ids[0].line_ids.filtered(lambda acc: acc.account_id.id == acc_id )
-    #         sql = ""
-    #         for ml in base_ml_ids:
-    #             if ml.debit:
-    #                 sql += f"update account_move_line set debit = {new_base_amount} where id = {ml.id};"
-    #             else:
-    #                 sql += f"update account_move_line set credit = {new_base_amount} where id = {ml.id};"
-    #         self.env.cr.execute(sql)
-    #         cmonto = '{:20,.2f}'.format(new_base_amount).strip()
-    #         notification = {
-    #             'type': 'ir.actions.client',
-    #             'tag': 'display_notification',
-    #             'params': {
-    #                 'title': _('Monto Base Actualizado'),
-    #                 'type': 'success',
-    #                 'message': f"El monto base fue actualizado a: {cmonto}",
-    #                 'sticky': True,
-    #                     }
-    #             }
-    #         return notification
+        cash_basis_move_ids = self.env['account.move'].search([
+            ('tax_cash_basis_origin_move_id', 'in', move_ids),
+            ('state', '=', 'posted'),
+        ])
+        move_ids += cash_basis_move_ids.ids
+        move_ids = str(tuple(move_ids))
+
+ 	                # case when sum(aml.debit) > 0 then to_char(sum(aml.debit), '999,999,999.9999') else '' end debe, 
+ 	                # case when sum(aml.credit) > 0 then to_char(sum(aml.credit), '999,999,999.9999') else '' end haber
+        sql = f"""
+                select aml.move_id, aml.move_name, to_char( aml.date, 'DD/MM/YYYY') date,
+                    concat('[', aa.code_store->>'1', '] ', aa."name"->>'en_US') AccCodeName,
+                    sum(aml.debit) as debe,
+                    sum(aml.credit) as haber
+                from account_move am
+                    join account_move_line aml on (aml.move_id = am.id)
+                    join account_account aa on (aa.id = aml.account_id )
+                where am.id in {move_ids} and aml.account_id != 38
+                group by 1, 2, 3, 4;
+            """
+
+        self._cr.execute(sql)
+        result = self._cr.dictfetchall()
+
+        data ={
+            'name': name,
+            'journal_name': self.journal_id.name,
+            'date': self.date,
+            'partner_name': self.partner_id.name,
+            'line_ids': result,
+            'total_debe': sum(d.get('debe', 0) for d in result),
+            'total_haber': sum(d.get('haber', 0) for d in result)
+        } 
+
+        return data 
+
 
             
             

@@ -32,7 +32,7 @@
                 <header>
                     <button name="action_delete_reverted_moves"
                             type="object"
-                            string="Delete Selected"
+                            string="Cancelar Selección"
                             class="oe_highlight"
                     />
                 </header>
