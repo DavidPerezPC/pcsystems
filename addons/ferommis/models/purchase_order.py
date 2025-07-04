@@ -80,7 +80,7 @@ class PurchaseOrder(models.Model):
             'ship_to_street': ship_to_street,
             'ship_to_city_state': ship_to_city_state,
             'number': self.name,
-            'date_order': self.date_approve.strftime("%d  %m  %Y"),
+            'date_order': self.date_approve.strftime("%d  %m  %Y") if self.date_approve else self.date_planned.strftime("%d/%m/%Y"),
             'date_due': self.date_planned.strftime("%d/%m/%Y"),
             'approver': self.user_id.name,
             'line_ids': line_ids,
@@ -105,11 +105,11 @@ class PurchaseOrder(models.Model):
             line_uom = line.product_uom.unspsc_code_id
             tiva = ''
             tieps= ''
-            product_ctx = {'seller_id': line.partner_id.id, 'lang': get_lang(line.env, line.partner_id.lang).code}
+            #product_ctx = {'seller_id': line.order_id.partner_id.id, 'lang': get_lang(line.env, line.order_id.partner_id.lang).code}
             try:
-                product_name = line._get_product_purchase_description(line.product_id.with_context(product_ctx))
+                product_code, product_name = self._get_product_purchase_code_description(line.product_id, seller_id=line.order_id.partner_id.id)
             except Exception as ex:
-                product_name = line.product_id.description_purchase or line.product_id.name
+                product_name = line.name or line.product_id.description_purchase or line.product_id.name
                 pass
             for tax in line.taxes_id:
                 if tax.name[:4] == 'IEPS':
@@ -119,7 +119,7 @@ class PurchaseOrder(models.Model):
             tiva = tiva[:len(tiva)-1]
             tieps = tieps[:len(tieps)-1]
             data = {
-                'clave': line.product_id.default_code,
+                'clave': product_code,
                 'product_id': line.product_id.unspsc_code_id.code,
                 'uom': f"{line_uom.code} {line_uom.name}",
                 'product_name': product_name,
@@ -133,3 +133,20 @@ class PurchaseOrder(models.Model):
             line_ids.append(data)
         
         return line_ids
+    
+    def _get_product_purchase_code_description(self, product, seller_id=None):
+        
+        code = product.default_code
+        description_purchase = product.description_purchase if product.description_purchase else product.name
+
+        if seller_id:
+            product = self.env['product.supplierinfo'].search([
+                ('product_tmpl_id', '=', product.product_tmpl_id.id),
+                ('partner_id', '=', seller_id)
+            ], limit=1)
+            if product:
+                product = product[0]
+                code = product.product_code
+                description_purchase  = product.product_name
+
+        return code, description_purchase
