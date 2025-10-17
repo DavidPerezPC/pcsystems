@@ -564,7 +564,7 @@ class AccountMove(models.Model):
             ('state', '=', 'posted'),
         ])
         move_ids += cash_basis_move_ids.ids
-        move_ids = str(tuple(move_ids))
+        move_ids = str(tuple(move_ids)).replace(",)",")")
 
  	                # case when sum(aml.debit) > 0 then to_char(sum(aml.debit), '999,999,999.9999') else '' end debe, 
  	                # case when sum(aml.credit) > 0 then to_char(sum(aml.credit), '999,999,999.9999') else '' end haber
