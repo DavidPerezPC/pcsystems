@@ -28,12 +28,13 @@
         <field name="name">Reverted Moves</field>
         <field name="model">account.move.invertedmoves.wizard</field>
         <field name="arch" type="xml">
-            <list string="Reverted" create="false" delete="false" editable="bottom">
+            <list string="Reverted" create="false" delete="false" editable="bottom" decoration-danger="canceled">
                 <header>
                     <button name="action_delete_reverted_moves"
                             type="object"
-                            string="Cancelar Selección"
+                            string="Eliminar Selección"
                             class="oe_highlight"
+
                     />
                 </header>
                 <field name="reverted_move_id"/>

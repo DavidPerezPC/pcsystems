@@ -86,6 +86,18 @@ class RevertedAccountMoves(models.TransientModel):
         readonly=True
     )
 
+    canceled = fields.Boolean(
+        string="Canceled",
+        help="Indicates if the moves were canceled",
+        compute='_compute_canceled'
+    ) 
+
+    @api.depends('reverted_move_id', 'origin_move_id')
+    def _compute_canceled(self):
+        for record in self:
+            record.canceled = (record.reverted_move_id.state == 'cancel' and
+                               record.origin_move_id.state == 'cancel') 
+            
     def action_delete_reverted_moves(self):
 
         reverted = self.mapped('reverted_move_id')
