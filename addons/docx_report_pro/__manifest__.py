@@ -21,7 +21,7 @@ fish docx fish docx to pdf jinja docx jinja2 \
     # Check https://github.com/odoo/odoo/blob/13.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
     "category": "Technical Settings",
-    "version": "18.0.0.0",
+    "version": "1.0",
     "license": "OPL-1",
     "price": 49,
     "currency": "EUR",

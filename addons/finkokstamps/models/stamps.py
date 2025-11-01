@@ -40,6 +40,12 @@ class VATStamps(models.Model):
         help="Customer that is related to the VAT assigned"
     )
 
+    group_partner_id = fields.Many2one(
+        "res.partner",
+        string="Group Customer",
+        help="Group Customer that is related to the VAT assigned"
+    )
+    
     active = fields.Boolean(
         string="Active",
         help="Indicates if this VAT is allowed for using stamps"

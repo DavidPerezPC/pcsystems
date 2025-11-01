@@ -9,6 +9,7 @@
           <field name="vat"/>
           <field name="name" />
           <field name="partner_id"/>
+          <field name="group_partner_id"/>
           <field name="active"/>
         </list>
       </field>
@@ -25,6 +26,7 @@
                             <field name="name"/>
                             <field name="vat"/>
                             <field name="partner_id"/>
+                            <field name="group_partner_id"/>
                             <field name="active" />
                         </group>
                     </group>
@@ -51,11 +53,14 @@
             <search string="VATS">
                 <field name="vat" />
                 <field name="partner_id"/>
+                <field name="group_partner_id"/>
                 <group string="Group By">
                   <filter string="VAT" name="grp_sync_vat"
                           context="{'group_by':'vat'}"/>
                   <filter string="Partner" name="grp_sync_partner"
                           context="{'group_by':'partner_id'}"/>
+                  <filter string="Group Partner" name="grp_sync_group_partner"
+                          context="{'group_by':'group_partner_id'}"/>
                 </group>
             </search>
         </field>
