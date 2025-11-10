@@ -15,6 +15,22 @@
       </field>
     </record>
 
+    <!-- search view -->
+    <record model="ir.ui.view" id="sync_contpaq_account_search">
+      <field name="name">sync.contpaq.account.search</field>
+      <field name="model">sync.contpaq.account</field>
+      <field name="arch" type="xml">
+      <search string="Buscar Cuentas Contpaq">
+        <field name="code"/>
+        <field name="name"/>
+        <field name="account_id"/>
+        <field name="partner_id"/>
+        <group>
+          <filter string="Contacto" name="group_by_partner_id" context="{'group_by':'partner_id'}"/>
+        </group>
+      </search>
+      </field>
+    </record>
 
     <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="sync_contpaq_account_action_window">
@@ -23,7 +39,7 @@
       <field name="res_model">sync.contpaq.account</field>
       <field name="view_id" ref="account_tree_form"/>
       <field name="view_mode">list,form</field>
-      <!--field name="search_view_id" ref="filters_seasons_tree"/-->
+      <field name="search_view_id" ref="sync_contpaq_account_search"/>
     </record>
 
     <!-- server action to the one above -->
