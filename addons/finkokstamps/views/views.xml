@@ -36,7 +36,7 @@
                                 <list>
                                   <field name="date"/>
                                   <field name="stamps" sum="Total Stamps"/>
-                                  <field name="canceled"/>                                
+                                  <field name="canceled" sum="Total Canceled"/>                                
                                 </list>
                             </field>            
                         </page>

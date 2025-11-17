@@ -88,7 +88,7 @@ class Stamps(models.Model):
 
     partner_id = fields.Many2one(
         'res.partner',
-     #related='vat_id.partner_id',
+        related='vat_id.partner_id',
         string='Customer',
         help='Customer that used this stamps',
         store=True
