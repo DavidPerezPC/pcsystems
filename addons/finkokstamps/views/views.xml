@@ -35,7 +35,7 @@
                             <field name="stamps_ids">
                                 <list>
                                   <field name="date"/>
-                                  <field name="stamps"/>
+                                  <field name="stamps" sum="Total Stamps"/>
                                   <field name="canceled"/>                                
                                 </list>
                             </field>            
@@ -54,13 +54,10 @@
                 <field name="vat" />
                 <field name="partner_id"/>
                 <field name="group_partner_id"/>
-                <group string="Group By">
-                  <filter string="VAT" name="grp_sync_vat"
-                          context="{'group_by':'vat'}"/>
-                  <filter string="Partner" name="grp_sync_partner"
-                          context="{'group_by':'partner_id'}"/>
-                  <filter string="Group Partner" name="grp_sync_group_partner"
-                          context="{'group_by':'group_partner_id'}"/>
+                <group>
+                  <filter string="VAT" name="grp_sync_vat" context="{'group_by':'vat'}"/>
+                  <filter string="Partner" name="grp_sync_partner" context="{'group_by':'partner_id'}"/>
+                  <filter string="Group Partner" name="grp_sync_group_partner" context="{'group_by':'group_partner_id'}"/>
                 </group>
             </search>
         </field>
@@ -71,29 +68,64 @@
       <field name="model">finkokstamps.stamps</field>
       <field name="arch" type="xml">
         <list>
+          <field name="date"/>
           <field name="vat_id"/>
           <field name="name" />
-          <field name="date"/>
-          <field name="stamps"/>
-          <field name="canceled"/>
-        </list>
-      </field>
-    </record>
+          <field name="partner_id"/>
+            <field name="group_partner_id"/>
+            <field name="stamps" sum="Total Stamps"/>
+            <field name="canceled" sum="Total Canceled"/>
+          </list>
+          </field>
+        </record>
 
-    <!-- actions opening views on models -->
-    <record model="ir.actions.act_window" id="finkok_vats_action_window">
-      <field name="name">Finkok Vats</field>
-      <field name="res_model">finkokstamps.vats</field>
-      <field name="view_id" ref="finkok_vats_list"/>
-      <field name="view_mode">list,form</field>
-      <field name="search_view_id" ref="finkok_vats_filters"/>
-    </record>
+        <record id="finkok_stamps_filters" model="ir.ui.view">
+          <field name="name">Stamps Filters</field>
+          <field name="model">finkokstamps.stamps</field>
+          <field name="arch" type="xml">
+            <search string="Stamps">
+              <field name="vat_id"/>
+              <field name="partner_id"/>
+              <field name="group_partner_id"/>
+              <field name="date"/>
+              <group>
+                <filter string="VAT" name="grp_vat" context="{'group_by':'vat_id'}"/>
+                <filter string="Partner" name="grp_partner" context="{'group_by':'partner_id'}"/>
+                <filter string="Group Partner" name="grp_group_partner" context="{'group_by':'group_partner_id'}"/>
+                <filter string="Date" name="grp_date" context="{'group_by':'date'}"/>
+              </group>
+            </search>
+          </field>
+        </record>
+
+        <record id="finkok_stamps_pivot" model="ir.ui.view">
+          <field name="name">Stamps Pivot</field>
+          <field name="model">finkokstamps.stamps</field>
+          <field name="arch" type="xml">
+            <pivot string="Stamps">
+              <field name="group_partner_id" type="row"/>
+              <field name="partner_id" type="row"/>
+              <field name="date" interval="month" type="col"/>
+              <field name="stamps" type="measure"/>
+            </pivot>
+          </field>
+        </record>
+
+        <!-- actions opening views on models -->
+        <record model="ir.actions.act_window" id="finkok_vats_action_window">
+          <field name="name">Finkok Vats</field>
+          <field name="res_model">finkokstamps.vats</field>
+          <field name="view_id" ref="finkok_vats_list"/>
+          <field name="view_mode">list,form</field>
+          <field name="search_view_id" ref="finkok_vats_filters"/>
+        </record>
+
 
     <record model="ir.actions.act_window" id="finkok_stamps_action_window">
       <field name="name">Finkok Stamps</field>
       <field name="res_model">finkokstamps.stamps</field>
       <field name="view_id" ref="finkok_stamps_list"/>
-      <field name="view_mode">list,form</field>
+      <field name="view_mode">list,pivot</field>
     </record>
 
     <!-- server action to the one above -->

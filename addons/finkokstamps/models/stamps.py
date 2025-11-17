@@ -86,6 +86,22 @@ class Stamps(models.Model):
 
     name = fields.Char()
 
+    partner_id = fields.Many2one(
+        'res.partner',
+     #related='vat_id.partner_id',
+        string='Customer',
+        help='Customer that used this stamps',
+        store=True
+    )
+
+    group_partner_id = fields.Many2one(
+        'res.partner',
+        related='vat_id.group_partner_id',
+        string='Group Customer',
+        help='Group Customer that used this stamps',
+        store=True
+    )
+
     stamps = fields.Integer(
         string="Stamps",
         help="Stamps issued"
