@@ -114,7 +114,7 @@ class AccountJournal(models.Model):
                 ref += "/" + ref2
             ref2 = row[6].strip()
             amountstr = row[2]
-            if row[3] == 'Cargo':
+            if row[3].upper() == 'CARGO':
                 amountstr = f"-{amountstr}"
             amount = eval(amountstr) 
             payment_ref = row[5].strip() + " " + row[6].strip()
@@ -123,7 +123,7 @@ class AccountJournal(models.Model):
             partner_name = False
             account_number = False
             unique_import_id = f'{sdate.replace("-", "")}_{ref}_{payment_ref}_{amountstr}'
-            statement_id = f'{self.name[-4:]} {sdate[:7]}'
+            statement_id = f'{sdate[2:7].replace("-", "")} {self.name[-4:]}'
             statement.append([sdate, ref, amount, payment_ref, partner_name, 
                               account_number, statement_id, unique_import_id ])
 
