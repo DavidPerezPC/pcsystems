@@ -1,0 +1,175 @@
+<odoo>
+    <record id="view_customers_suppliers_payments_tree" model="ir.ui.view">
+        <field name="name">customers.suppliers.payments.tree</field>
+        <field name="model">customers.suppliers.payments</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button string="Get Payments" type="object" name="action_customers_suppliers_payments_wizard" display="always"/>
+                </header>
+                <field name="currency_id" invisible="1" column_invisible="1"/>
+                <field name="move_id"/>
+                <field name="cfdi_payment_method"/>               
+                <field name="invoice_date"/>
+                <field name="invoice_amount"/>
+                <field name="invoice_amount_currency"/>
+                <field name="payment_id"/>
+                <field name="payment_date"/>
+                <field name="partner_id"/>
+                <field name="partner_vat"/>
+                <field name="amount"/>
+                <field name="amount_currency"/>
+                <field name="currency_rate"/>
+                <field name="invoice_uuid"/>
+                <field name="payment_uuid"/>
+                <field name="iva_16_base" sum="Total"  optional="hide"/>
+                <field name="iva_16_tax" sum="Total" optional="hide"/>                
+                <field name="iva_0_base" sum="Total" optional="hide"/>
+                <field name="iva_0_tax" sum="Total" optional="hide"/>
+                <field name="iva_8_base" sum="Total" optional="hide"/>
+                <field name="iva_8_tax" sum="Total" optional="hide"/>
+                <field name="iva_exento_base" sum="Total" optional="hide"/>
+                <field name="iva_exento_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_4_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_4_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_hon_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_hon_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_arr_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_arr_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_hon_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_hon_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_arr_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_arr_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_125_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_125_tax" sum="Total" optional="hide"/>
+                <field name="ieps_6_base" sum="Total" optional="hide"/>
+                <field name="ieps_6_tax" sum="Total" optional="hide"/>
+                <!--field name="currency_id" invisible="1"/-->
+                <!-- Add more fields as needed -->
+            </list>
+        </field>
+    </record>
+
+    <record id="view_only_suppliers_payments_tree" model="ir.ui.view">
+        <field name="name">only.suppliers.payments.tree</field>
+        <field name="model">customers.suppliers.payments</field>
+        <field name="arch" type="xml">
+            <list>
+                <header>
+                    <button string="Get Payments" type="object" name="action_customers_suppliers_payments_wizard" display="always"/>
+                </header>
+                <field name="currency_id" invisible="1" column_invisible="1"/>
+                <field name="move_id"/>
+                <field name="partner_vat"/>
+                <field name="partner_id"/>
+                <field name="invoice_date"/>
+                <field name="invoice"/>
+                <field name="invoice_uuid"/>
+                <field name="invoice_ref"/>
+                <field name="payment_id"/>
+                <field name="payment_account_id"/>
+                <field name="payment_date"/>
+                <field name="invoice_amount"/>
+                <field name="amount"/>
+                <field name="iva_16_base" sum="Total"  optional="hide"/>
+                <field name="iva_16_tax" sum="Total" optional="hide"/>                
+                <field name="iva_0_base" sum="Total" optional="hide"/>
+                <field name="iva_0_tax" sum="Total" optional="hide"/>
+                <field name="iva_8_base" sum="Total" optional="hide"/>
+                <field name="iva_8_tax" sum="Total" optional="hide"/>
+                <field name="iva_exento_base" sum="Total" optional="hide"/>
+                <field name="iva_exento_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_4_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_4_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_hon_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_hon_tax" sum="Total" optional="hide"/>
+                <field name="ret_iva_arr_base" sum="Total" optional="hide"/>
+                <field name="ret_iva_arr_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_hon_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_hon_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_arr_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_arr_tax" sum="Total" optional="hide"/>
+                <field name="ret_isr_125_base" sum="Total" optional="hide"/>
+                <field name="ret_isr_125_tax" sum="Total" optional="hide"/>
+                <field name="ieps_6_base" sum="Total" optional="hide"/>
+                <field name="ieps_6_tax" sum="Total" optional="hide"/>
+                <!-- Add more fields as needed -->
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customers_suppliers_payments_search" model="ir.ui.view">
+        <field name="name">customers.suppliers.payments.search</field>
+        <field name="model">customers.suppliers.payments</field>
+        <field name="arch" type="xml">
+            <search string="Customers/Suppliers Payments Search">
+                <field name="move_id" string="Invoice"/>
+                <field name="payment_id" string="Payment"/>
+                <field name="partner_id" string="Partner"/>
+                <field name="invoice_uuid" string="Invoice UUID"/>
+                <!--filter name="customer_move_type" string="Customers Invoices" domain="[('move_type','=','out_invoice')]"/>
+                <filter name="suppliers_move_type" string="Suppliers Invoices" domain="[('move_type','=','in_invoice')]"/>
+                <separator/-->
+                <filter  date= "payment_date" name="payment_date" string="Payment Date"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_partner" string="Partner" context="{'group_by':'partner_id'}"/>
+                    <filter name="group_by_journal" string="Journal" context="{'group_by':'payment_journal_id'}"/>
+                    <filter name="group_by_move_type" string="Move Type" context="{'group_by':'move_type'}"/>
+                    <separator/>
+                    <filter name="group_by_payment_date" string="Payment Date" context="{'group_by':'payment_date'}"/>
+                    <filter name="group_by_invoice_date" string="Invoice Date" context="{'group_by':'invoice_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_only_suppliers_payments" model="ir.actions.act_window">
+        <field name="name">Suppliers Payments</field>
+        <field name="res_model">customers.suppliers.payments</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_only_suppliers_payments_tree"/>
+        <field name="domain">[('move_type', '=', 'in_invoice')]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_customers_suppliers_payments_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Suppliers payments found.
+            </p>
+            <p>
+                Here you can manage and review all supplier payments.
+            </p>
+        </field>
+    </record>
+
+    <record id="action_customers_suppliers_payments" model="ir.actions.act_window">
+        <field name="name">Customers Payments</field>
+        <field name="res_model">customers.suppliers.payments</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_customers_suppliers_payments_tree"/>
+        <field name="domain">[('move_type', 'in', ['out_invoice'])]</field>
+        <field name="context">{}</field>
+        <field name="search_view_id" ref="view_customers_suppliers_payments_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No Customers payments found.
+            </p>
+            <p>
+                Here you can manage and review all Customers payments.
+            </p>
+        </field>
+    </record>
+    
+    <menuitem id="menu_customers_suppliers_payment" 
+        name="Customers Payments" 
+        parent="account.account_reports_partners_reports_menu"
+        action="action_customers_suppliers_payments"
+        sequence="20"
+    />
+
+    <menuitem id="menu_suppliers_payment" 
+        name="Suppliers Payments" 
+        parent="account.account_reports_partners_reports_menu"
+        action="action_only_suppliers_payments"
+        sequence="100"
+    />
+</odoo>

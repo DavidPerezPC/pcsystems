@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+customers_suppliers_payments,customers.suppliers.payments,model_customers_suppliers_payments,base.group_user,1,1,1,1
+customers_suppliers_payments_wizard,customers.suppliers.payments.wizard,model_customers_suppliers_payments_wizard,base.group_user,1,1,1,1

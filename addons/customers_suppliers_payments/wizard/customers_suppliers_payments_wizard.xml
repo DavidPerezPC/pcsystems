@@ -1,0 +1,22 @@
+<odoo>
+    <record id="customers_suppliers_payments_wizard_form" model="ir.ui.view">
+        <field name="name">Customers/Suppliers Payments Wizard</field>
+        <field name="model">customers.suppliers.payments.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Customers/Suppliers Payments">
+                <group>
+                    <field name="payment_from"/>
+                    <field name="payment_to"/>
+                </group>
+                <footer>
+                    <button name="action_create_customers_suppliers_payments_wizard"
+                        type="object"
+                        string="Get Payments" 
+                        class="btn-primary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

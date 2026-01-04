@@ -1,0 +1,428 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* customers_suppliers_payments
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-24 06:16+0000\n"
+"PO-Revision-Date: 2025-10-23 23:34-0700\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_MX\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.8\n"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__cfdi_payment_method
+msgid "CFDI Payment Method"
+msgstr "Método de Pago"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.customers_suppliers_payments_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__partner_id
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__create_uid
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__create_date
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields.selection,name:customers_suppliers_payments.selection__customers_suppliers_payments__payment_type__credit_note
+msgid "Credit Note"
+msgstr "Nota de Crédito"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__currency_rate
+msgid "Currency Rate"
+msgstr "T.C."
+
+#. module: customers_suppliers_payments
+#: model:ir.model,name:customers_suppliers_payments.model_customers_suppliers_payments
+msgid "Customer/Supplier Payments"
+msgstr "Relación de Pagos Clientes/Proveedores"
+
+#. module: customers_suppliers_payments
+#: model:ir.actions.act_window,name:customers_suppliers_payments.action_customers_suppliers_payments
+#: model:ir.ui.menu,name:customers_suppliers_payments.menu_customers_suppliers_payment
+msgid "Customers Payments"
+msgstr "Pagos de Clientes"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.customers_suppliers_payments_wizard_form
+msgid "Customers/Suppliers Payments"
+msgstr "Relación de Pagos Clientes/Proveedores"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Customers/Suppliers Payments Search"
+msgstr "Buscar pagos"
+
+#. module: customers_suppliers_payments
+#: model:ir.model,name:customers_suppliers_payments.model_customers_suppliers_payments_wizard
+msgid "Customers/Suppliers Payments Wizard"
+msgstr "Asistente de Pagos Clientes/Proveedores"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__display_name
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,help:customers_suppliers_payments.field_customers_suppliers_payments_wizard__payment_to
+msgid "Final date for payment search"
+msgstr "Fecha final de pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,help:customers_suppliers_payments.field_customers_suppliers_payments__invoice_uuid
+#: model:ir.model.fields,help:customers_suppliers_payments.field_customers_suppliers_payments__payment_uuid
+msgid "Folio in electronic invoice, is returned by SAT when send to stamp."
+msgstr "UUID de la factura generada por el SAT"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields.selection,name:customers_suppliers_payments.selection__customers_suppliers_payments__reconcile_type__full
+msgid "Full Reconciliation"
+msgstr "Conciliado"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.customers_suppliers_payments_wizard_form
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_tree
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_only_suppliers_payments_tree
+msgid "Get Payments"
+msgstr "Generar Pagos"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.actions.act_window,help:customers_suppliers_payments.action_customers_suppliers_payments
+msgid "Here you can manage and review all Customers payments."
+msgstr "Aquí puedes revisar y administrar los Pagos de Clientes."
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.actions.act_window,help:customers_suppliers_payments.action_only_suppliers_payments
+msgid "Here you can manage and review all supplier payments."
+msgstr "Aquí puedes revisar y administrar los Pagos de Proveedores."
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__id
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_0_base
+msgid "IVA 0% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_0_tax
+msgid "IVA 0% Tax"
+msgstr "IVA 0% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_16_base
+msgid "IVA 16% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_16_tax
+msgid "IVA 16% Tax"
+msgstr "IVA 16% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_8_base
+msgid "IVA 8% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_8_tax
+msgid "IVA 8% Tax"
+msgstr "IVA 8% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_exento_base
+msgid "IVA Exento Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__iva_exento_tax
+msgid "IVA Exento Tax"
+msgstr "IVA Exento IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,help:customers_suppliers_payments.field_customers_suppliers_payments_wizard__payment_from
+msgid "Initial date for payment search"
+msgstr "Fecha inicial de pagos"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__move_id
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_amount
+msgid "Invoice Amount"
+msgstr "Monto Factura"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_amount_currency
+msgid "Invoice Amount Currency"
+msgstr "Monto Factura M.E."
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_ref
+msgid "Invoice Concept"
+msgstr "Concepto Factura"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_date
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Invoice Date"
+msgstr "Fecha Factura"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice
+msgid "Invoice Number"
+msgstr "Num. Factura"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_uuid
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Invoice UUID"
+msgstr "UUID"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__invoice_taxes
+msgid "Invoices Taxes"
+msgstr "Impuestos"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Journal"
+msgstr "Diario"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__write_uid
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Actualizado por"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__write_date
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__write_date
+msgid "Last Updated on"
+msgstr "Actualizado el"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__move_type
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Move Type"
+msgstr "Tipo Doc"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.actions.act_window,help:customers_suppliers_payments.action_customers_suppliers_payments
+msgid "No Customers payments found."
+msgstr "No se encontraron pagos de Clientes."
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.actions.act_window,help:customers_suppliers_payments.action_only_suppliers_payments
+msgid "No Suppliers payments found."
+msgstr "No se encontraron pagos de Proveedores."
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields.selection,name:customers_suppliers_payments.selection__customers_suppliers_payments__reconcile_type__partial
+msgid "Partial Reconciliation"
+msgstr "Parcial"
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Partner"
+msgstr "Contacto"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__partner_vat
+msgid "Partner VAT"
+msgstr "RFC"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_id
+#: model:ir.model.fields.selection,name:customers_suppliers_payments.selection__customers_suppliers_payments__payment_type__payment
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Payment"
+msgstr "Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_account_id
+msgid "Payment Account"
+msgstr "Cuenta de Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__amount
+msgid "Payment Amount"
+msgstr "Monto Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__amount_currency
+msgid "Payment Amount Currency"
+msgstr "Monto Pago M.E."
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_date
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_search
+msgid "Payment Date"
+msgstr "Fecha Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__payment_from
+msgid "Payment From"
+msgstr "Desde"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_journal_id
+msgid "Payment Journal"
+msgstr "Diario de Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_move
+msgid "Payment Move"
+msgstr "Num. Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments_wizard__payment_to
+msgid "Payment To"
+msgstr "Hasta"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_type
+msgid "Payment Type"
+msgstr "Tipo Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__payment_uuid
+msgid "Payment UUID"
+msgstr "UUID Pago"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__reconcile_type
+msgid "Reconciliation Type"
+msgstr "Conciliacion"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ieps_6_base
+msgid "Ret IEPS 6% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ieps_6_tax
+msgid "Ret IEPS 6% Tax"
+msgstr "Ret IEPS 6% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_125_base
+msgid "Ret ISR 1.25% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_125_tax
+msgid "Ret ISR 1.25% Tax"
+msgstr "Ret ISR 1.25% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_arr_base
+msgid "Ret ISR Arr. Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_arr_tax
+msgid "Ret ISR Arr. Tax"
+msgstr "Ret ISR Arr. IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_hon_base
+msgid "Ret ISR Hon. Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_isr_hon_tax
+msgid "Ret ISR Hon. Tax"
+msgstr "Ret ISR Hon. IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_4_base
+msgid "Ret IVA 4% Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_4_tax
+msgid "Ret IVA 4% Tax"
+msgstr "Ret IVA 4% IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_arr_base
+msgid "Ret IVA Arr. Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_arr_tax
+msgid "Ret IVA Arr. Tax"
+msgstr "Ret IVA Arr. IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_hon_base
+msgid "Ret IVA Hon. Base"
+msgstr ""
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,field_description:customers_suppliers_payments.field_customers_suppliers_payments__ret_iva_hon_tax
+msgid "Ret IVA Hon. Tax"
+msgstr "Ret IVA Hon. IMP"
+
+#. module: customers_suppliers_payments
+#: model:ir.actions.act_window,name:customers_suppliers_payments.action_only_suppliers_payments
+#: model:ir.ui.menu,name:customers_suppliers_payments.menu_suppliers_payment
+msgid "Suppliers Payments"
+msgstr "Pagos Proveedores"
+
+#. module: customers_suppliers_payments
+#: model:ir.model.fields,help:customers_suppliers_payments.field_customers_suppliers_payments__partner_vat
+msgid ""
+"The Tax Identification Number. Values here will be validated based on the "
+"country format. You can use '/' to indicate that the partner is not subject "
+"to tax."
+msgstr ""
+"Registro Federal de Contribuyentes. El valor capturado será validado "
+"conforme a las reglas del SAT. Puedes utilizar '/' para indicar que no "
+"tiene RFC."
+
+#. module: customers_suppliers_payments
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_customers_suppliers_payments_tree
+#: model_terms:ir.ui.view,arch_db:customers_suppliers_payments.view_only_suppliers_payments_tree
+msgid "Total"
+msgstr ""

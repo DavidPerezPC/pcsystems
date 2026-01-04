@@ -5,7 +5,7 @@ import io
 import base64
 import csv
 
-TMP_STATEMENT = '/tmp/empty_statement.csv'  
+TMP_STATEMENT = 'empty_statement.csv'  
 STATEMENT_HEADER = ['date', 'ref', 
                     'amount', 
                     'payment_ref', 
@@ -94,7 +94,7 @@ class AccountJournal(models.Model):
             partner_name = row[11].replace("'","").strip()
             account_number = row[12].replace("'","").strip()
             unique_import_id = f'{sdate.replace("-", "")}_{ref}_{payment_ref}_{amountstr}'
-            statement_id = f'{self.name[-4:]} {sdate[:7]}'
+            statement_id = f'{self.name.upper()} {sdate[:7]}'
             statement.append([sdate, ref, amount, payment_ref, partner_name, 
                               account_number, statement_id, unique_import_id ])
 
@@ -123,7 +123,7 @@ class AccountJournal(models.Model):
             partner_name = False
             account_number = False
             unique_import_id = f'{sdate.replace("-", "")}_{ref}_{payment_ref}_{amountstr}'
-            statement_id = f'{sdate[2:7].replace("-", "")} {self.name[-4:]}'
+            statement_id = f'{sdate[2:7].replace("-", "")} {self.name.upper()}'
             statement.append([sdate, ref, amount, payment_ref, partner_name, 
                               account_number, statement_id, unique_import_id ])
 
