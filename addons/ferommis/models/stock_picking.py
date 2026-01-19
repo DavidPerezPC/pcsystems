@@ -29,7 +29,7 @@ class StockPicking(models.Model):
         carrier_name = self.carrier_id.name
         tracking_ref = self.carrier_tracking_ref
         responsible_name = self.user_id.name
-        sale_order = self.group_id.name
+        sale_order = self.origin
         notes = ''
         if self.note:
             html_notes = self.note

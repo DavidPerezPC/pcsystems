@@ -102,7 +102,7 @@ class PurchaseOrder(models.Model):
 
         line_ids = []
         for line in self.order_line:
-            line_uom = line.product_uom.unspsc_code_id
+            line_uom = line.product_uom_id.unspsc_code_id
             tiva = ''
             tieps= ''
             #product_ctx = {'seller_id': line.order_id.partner_id.id, 'lang': get_lang(line.env, line.order_id.partner_id.lang).code}
