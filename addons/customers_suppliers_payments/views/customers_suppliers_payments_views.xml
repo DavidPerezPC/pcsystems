@@ -111,14 +111,14 @@
                 <filter name="suppliers_move_type" string="Suppliers Invoices" domain="[('move_type','=','in_invoice')]"/>
                 <separator/-->
                 <filter  date= "payment_date" name="payment_date" string="Payment Date"/>
-                <group expand="0" string="Group By">
+                <!--group expand="0" string="Group By">
                     <filter name="group_by_partner" string="Partner" context="{'group_by':'partner_id'}"/>
                     <filter name="group_by_journal" string="Journal" context="{'group_by':'payment_journal_id'}"/>
                     <filter name="group_by_move_type" string="Move Type" context="{'group_by':'move_type'}"/>
                     <separator/>
                     <filter name="group_by_payment_date" string="Payment Date" context="{'group_by':'payment_date'}"/>
                     <filter name="group_by_invoice_date" string="Invoice Date" context="{'group_by':'invoice_date'}"/>
-                </group>
+                </group-->
             </search>
         </field>
     </record>

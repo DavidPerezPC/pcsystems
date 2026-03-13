@@ -37,7 +37,7 @@ class PurchaseOrder(models.Model):
         comodel_name='res.partner',
         string="Delivery Address",
         help="Addres where the products will be delivered",
-        domain=[('type', '=', 'delivery'), ('company_type', '=', 'person')], 
+        domain=[('type', '=', 'delivery')], 
     )
 
     def get_data_toprint(self):
@@ -111,7 +111,7 @@ class PurchaseOrder(models.Model):
             except Exception as ex:
                 product_name = line.name or line.product_id.description_purchase or line.product_id.name
                 pass
-            for tax in line.taxes_id:
+            for tax in line.tax_ids:
                 if tax.name[:4] == 'IEPS':
                     tieps += f"{tax.name},"
                 elif tax.name[:3] == 'IVA':
