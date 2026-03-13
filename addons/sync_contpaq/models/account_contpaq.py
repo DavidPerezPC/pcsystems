@@ -35,7 +35,7 @@ class AccountContpaq(models.Model):
         index=True,
         auto_join=True,
         ondelete="cascade",
-        domain="[('deprecated', '=', False)]",
+        domain="[('active', '!=', False)]",
         check_company=True,
         tracking=True,
     )
