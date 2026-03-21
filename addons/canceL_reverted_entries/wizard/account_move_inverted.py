@@ -83,7 +83,8 @@ class RevertedAccountMoves(models.TransientModel):
         string="O Date",
         help="Origin move was on this date",
         related="origin_move_id.date",
-        readonly=True
+        readonly=True,
+        store=True
     )
 
     canceled = fields.Boolean(

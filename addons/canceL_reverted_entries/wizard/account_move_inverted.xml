@@ -1,5 +1,4 @@
 <odoo>
-
   <record id="account_move_inverted_wizard_view" model="ir.ui.view">
         <field name="name">Cancel Reverted Journal Entries Wizard</field>
         <field name="model">account.move.inverted.wizard</field>
@@ -7,11 +6,9 @@
         <field name="arch" type="xml">
             <form string="Find Reverted Moves to Cancel">
                 <group col="4">
-
                     <field name="journal_id"/>
                     <field name="date_start"/>
                     <field name="date_end" />
-
                 </group>
                 <footer>
                     <button name="find_reverted_moves" string="Find"
@@ -34,7 +31,6 @@
                             type="object"
                             string="Eliminar Selección"
                             class="oe_highlight"
-
                     />
                 </header>
                 <field name="reverted_move_id"/>
@@ -49,12 +45,12 @@
         <field name="name">account.move.invertedmoves.wizard.search</field>
         <field name="model">account.move.invertedmoves.wizard</field>
         <field name="arch" type="xml">
-            <search string="Buscar Movimiento">
+            <search string="Buscar Movimientos Revertidos">
                 <field name="reverted_move_id"/>
                 <field name="origin_move_id"/>
                 <separator/>
-                <group string="Group By">
-                    <filter string="Fecha Reversión" name="group_date_reverted" context="{'group_by': 'date_reverted'}"/>
+                <group>
+                    <filter string="Fecha Reversion" name="group_date_reverted" context="{'group_by': 'date_reverted'}"/>
                     <separator/>
                     <filter string="Fecha Origen" name="group_date_origin" context="{'group_by': 'date_origin'}"/>
                 </group>
