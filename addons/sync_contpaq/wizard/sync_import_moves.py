@@ -34,6 +34,7 @@ _logger = logging.getLogger(__name__)
 
 class ImportContpaqMoves(models.TransientModel):
     _name = 'sync.contpaq.import.wizard'
+    _description = 'Wizard to import Journal Entries from Contpaq'
 
     def _get_default_journal(self, journaldef='PDN'):
         journal = self.env['account.journal'].search([('code', '=', journaldef)])

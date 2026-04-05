@@ -2,7 +2,7 @@
 
 {
     'name': "Customers/Suppliers Payments",
-    'version': "19.0.1.0.0",
+    'version': "19.0.2.0.0",
     'category': 'Accounting',
     'summary': 'This module shows Customers/Suppliers Payments per month',
     'description': "This is helpul for tax declaration within a month. Allows to export"
@@ -17,7 +17,7 @@
             'wizard/customers_suppliers_payments_wizard.xml',
 ],
     #'images': ['static/description/banner.jpg'],
-    'license': 'AGPL-3',
+    'license': 'OPL-1',
     'installable': True,
     'auto_install': False,
     'application': False,

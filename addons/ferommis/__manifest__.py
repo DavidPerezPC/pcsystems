@@ -11,6 +11,7 @@
     #    "views/res_partner.xml",
         "views/purchase_order.xml",
     ],
+    'license':'OPL-1',
     "active": False,
     "installable": True,
     "certificate": False,

@@ -17,6 +17,7 @@
     # for the full list
     'category': 'Accounting',
     'version': '1.0',
+    'license':'OPL-1',    
 
     # any module necessary for this one to work correctly
     'depends': ['base', 'account'],

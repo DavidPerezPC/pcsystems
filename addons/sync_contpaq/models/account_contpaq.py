@@ -4,6 +4,7 @@ from odoo import models, fields, api, _
 
 class AccountContpaq(models.Model):
     _name = 'sync.contpaq.account'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Relación de Cuentas Contpaq con Odoo'
 
     code = fields.Char(
@@ -33,11 +34,10 @@ class AccountContpaq(models.Model):
         help='Equivalent Odoo Account for the Contpaq Account',
         store=True, readonly=False,
         index=True,
-        auto_join=True,
         ondelete="cascade",
         domain="[('active', '!=', False)]",
         check_company=True,
-        tracking=True,
+        tracking=True
     )
 
     partner_id = fields.Many2one(

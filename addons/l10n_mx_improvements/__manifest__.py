@@ -15,6 +15,7 @@
         "views/stock_landed_cost.xml",
         "views/account_move.xml",
     ],
+    'license':'OPL-1',
     "active": False,
     "installable": True,
     "certificate": False,
