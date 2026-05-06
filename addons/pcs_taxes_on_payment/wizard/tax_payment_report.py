@@ -2,6 +2,7 @@ import io
 import base64
 import logging
 from collections import defaultdict
+from datetime import datetime, time
 
 import xlsxwriter
 
@@ -218,11 +219,11 @@ class TaxPaymentReportWizard(models.TransientModel):
         for rec in rows:
             if rec.payment_date:
                 sheet.write_datetime(row_idx, 0,
-                    fields.Date.to_datetime(rec.payment_date), fmt_d)
+                    datetime.combine(rec.payment_date, time.min), fmt_d)
             sheet.write(row_idx, 1, rec.move_id.name or "")
             if rec.invoice_date:
                 sheet.write_datetime(row_idx, 2,
-                    fields.Date.to_datetime(rec.invoice_date), fmt_d)
+                    datetime.combine(rec.invoice_date, time.min), fmt_d)
             sheet.write(row_idx, 3, rec.partner_id.name or "")
             sheet.write(row_idx, 4, rec.partner_id.vat or "")
             sheet.write(row_idx, 5, rec.counterpart_move_id.name or "")
