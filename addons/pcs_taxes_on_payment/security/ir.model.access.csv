@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_tax_payment_wizard,tax.payment.wizard,model_tax_payment_report_wizard,account.group_account_invoice,1,1,1,1
+access_tax_payment_summary,tax.payment.summary,model_tax_payment_summary,account.group_account_invoice,1,1,1,1

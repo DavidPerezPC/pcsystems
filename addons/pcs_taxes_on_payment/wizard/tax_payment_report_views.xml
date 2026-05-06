@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tax_payment_report_wizard" model="ir.ui.view">
+        <field name="name">tax.payment.report.wizard.form</field>
+        <field name="model">tax.payment.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Impuestos sobre Pagos">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="payment_date_from"/>
+                            <field name="payment_date_to"/>
+                        </group>
+                        <group>
+                            <field name="move_type"/>
+                            <field name="use_mxn"/>
+                            <field name="partner_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
+                    <field name="summary_ids" readonly="1">
+                        <list default_group_by="sat_category">
+                            <field name="sat_category"/>
+                            <field name="payment_date"/>
+                            <field name="move_id"/>
+                            <field name="partner_id"/>
+                            <field name="counterpart_move_id"/>
+                            <field name="currency_id"/>
+                            <field name="exchange_rate"/>
+                            <field name="paid_amount_company" sum="Pagado"/>
+                            <field name="iva_16_base" sum="Base 16%"/>
+                            <field name="iva_16_tax" sum="IVA 16%"/>
+                            <field name="iva_8_base" sum="Base 8%"/>
+                            <field name="iva_8_tax" sum="IVA 8%"/>
+                            <field name="iva_0_base" sum="Base 0%"/>
+                            <field name="iva_exento_base" sum="Exento"/>
+                            <field name="ret_iva_4_tax" sum="Ret IVA 4%"/>
+                            <field name="ret_iva_hon_tax" sum="Ret IVA Hon"/>
+                            <field name="ret_iva_arr_tax" sum="Ret IVA Arr"/>
+                            <field name="ret_isr_hon_tax" sum="Ret ISR Hon"/>
+                            <field name="ret_isr_arr_tax" sum="Ret ISR Arr"/>
+                            <field name="ret_isr_125_tax" sum="Ret ISR 1.25"/>
+                            <field name="ieps_6_tax" sum="IEPS 6"/>
+                            <field name="unmapped_taxes"
+                                   optional="show"
+                                   decoration-danger="unmapped_taxes"/>
+                        </list>
+                    </field>
+                </sheet>
+                <footer>
+                    <button name="action_compute" type="object"
+                            string="Calcular" class="btn-primary"/>
+                    <button name="action_export_xlsx" type="object"
+                            string="Exportar XLSX" class="btn-secondary"
+                            invisible="not summary_ids"/>
+                    <button string="Cerrar" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_tax_payment_report" model="ir.actions.act_window">
+        <field name="name">Impuestos sobre Pagos</field>
+        <field name="res_model">tax.payment.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_tax_payment_report"
+              name="Impuestos sobre Pagos"
+              parent="account.menu_finance_reports"
+              action="action_tax_payment_report"
+              sequence="90"/>
+</odoo>
