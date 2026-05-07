@@ -60,22 +60,22 @@ class AvcoReplay(models.AbstractModel):
             return amount, 'MXN=MXN'
 
         # --- TC manual de orden de compra ---
-        if document and hasattr(document, 'purchase_manual_currency_exchange_active'):
-            if (document.purchase_manual_currency_exchange_active
+        if document and 'purchase_manual_currency_rate_active' in document._fields.keys():
+            if (document.purchase_manual_currency_rate_active
                     and document.currency_id != company_currency):
                 rate = document.purchase_manual_currency_rate or 0.0
                 if rate > 0:
-                    converted = amount / rate
-                    return converted, f'PO-manual(1/{rate:.6f})'
+                    converted = amount / (1/rate)
+                    return converted, f'PO-manual({rate:.6f})'
 
         # --- TC manual de orden de venta ---
-        if document and hasattr(document, 'sale_manual_currency_rate_active'):
+        if document and 'sale_manual_currency_rate_active' in document._fields.keys():
             if (document.sale_manual_currency_rate_active
                     and document.currency_id != company_currency):
                 rate = document.sale_manual_currency_rate or 0.0
                 if rate > 0:
-                    converted = amount / rate
-                    return converted, f'SO-manual(1/{rate:.6f})'
+                    converted = amount / (1/rate)
+                    return converted, f'SO-manual({rate:.6f})'
 
         # --- TC estándar de Odoo ---
         converted = from_currency._convert(amount, company_currency, company, date)
@@ -113,7 +113,7 @@ class AvcoReplay(models.AbstractModel):
         """
         Orden de prioridad para determinar costo unitario de entrada:
           1) Factura de proveedor ligada al PO → price_unit convertido con TC del PO
-             (manual si purchase_manual_currency_exchange_active, sino Odoo std)
+             (manual si purchase_manual_currency_rate_active, sino Odoo std)
           2) Línea de PO sin factura → price_unit convertido con TC del PO
           3) Valor ya almacenado en el move (ya está en moneda compañía)
           4) Costo manual (para ajustes manuales sin fuente válida)
