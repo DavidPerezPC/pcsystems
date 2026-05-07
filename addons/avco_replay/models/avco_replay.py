@@ -57,7 +57,7 @@ class AvcoReplay(models.AbstractModel):
         company_currency = company.currency_id
 
         if from_currency == company_currency:
-            return amount, 'MXN=MXN'
+            return amount, f'{company_currency.name}={company_currency.name}'
 
         # --- TC manual de orden de compra ---
         if document and 'purchase_manual_currency_rate_active' in document._fields.keys():
@@ -66,7 +66,7 @@ class AvcoReplay(models.AbstractModel):
                 rate = document.purchase_manual_currency_rate or 0.0
                 if rate > 0:
                     converted = amount / (1/rate)
-                    return converted, f'PO-manual({rate:.6f})'
+                    return converted, f'PO-{document.name}-manual({rate:.6f})'
 
         # --- TC manual de orden de venta ---
         if document and 'sale_manual_currency_rate_active' in document._fields.keys():
@@ -75,7 +75,7 @@ class AvcoReplay(models.AbstractModel):
                 rate = document.sale_manual_currency_rate or 0.0
                 if rate > 0:
                     converted = amount / (1/rate)
-                    return converted, f'SO-manual({rate:.6f})'
+                    return converted, f'SO-{document.name}-manual({rate:.6f})'
 
         # --- TC estándar de Odoo ---
         converted = from_currency._convert(amount, company_currency, company, date)
