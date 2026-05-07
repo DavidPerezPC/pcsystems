@@ -17,6 +17,7 @@ class AvcoReplay(models.AbstractModel):
       - Salidas (valoradas al AVCO vigente, no modifican promedio)
       - Landed costs (costos en destino) sumados al costo unitario de entrada
       - Facturas de proveedor con diferencia de precio vs PO
+      - Tipo de cambio manual en PO/SO cuando está activo
     """
     _name = 'avco.replay'
     _description = 'Servicio de Replay de AVCO'
@@ -36,6 +37,49 @@ class AvcoReplay(models.AbstractModel):
             "Inspecciona env['stock.move']._fields y agrega el nombre correcto "
             "en AvcoReplay._get_value_field()."
         )
+
+    # ------------------------------------------------------------
+    # Conversión de moneda con soporte de TC manual por documento
+    # ------------------------------------------------------------
+    @api.model
+    def _convert_amount(self, amount, from_currency, company, date, document=None):
+        """
+        Convierte `amount` desde `from_currency` a la moneda de la compañía.
+
+        Si `document` es una orden de compra con TC manual activo, aplica
+        `amount / purchase_manual_currency_rate` (equivalente a amount * 1/rate).
+        Si `document` es una orden de venta con TC manual activo, aplica
+        `amount / sale_manual_currency_rate`.
+        En cualquier otro caso usa el TC estándar de Odoo.
+
+        Retorna (converted_amount, rate_label) donde rate_label describe el TC usado.
+        """
+        company_currency = company.currency_id
+
+        if from_currency == company_currency:
+            return amount, 'MXN=MXN'
+
+        # --- TC manual de orden de compra ---
+        if document and hasattr(document, 'purchase_manual_currency_exchange_active'):
+            if (document.purchase_manual_currency_exchange_active
+                    and document.currency_id != company_currency):
+                rate = document.purchase_manual_currency_rate or 0.0
+                if rate > 0:
+                    converted = amount / rate
+                    return converted, f'PO-manual(1/{rate:.6f})'
+
+        # --- TC manual de orden de venta ---
+        if document and hasattr(document, 'sale_manual_currency_rate_active'):
+            if (document.sale_manual_currency_rate_active
+                    and document.currency_id != company_currency):
+                rate = document.sale_manual_currency_rate or 0.0
+                if rate > 0:
+                    converted = amount / rate
+                    return converted, f'SO-manual(1/{rate:.6f})'
+
+        # --- TC estándar de Odoo ---
+        converted = from_currency._convert(amount, company_currency, company, date)
+        return converted, 'Odoo-std'
 
     # ------------------------------------------------------------
     # Landed costs: obtener el monto adicional por unidad para un stock.move
@@ -65,20 +109,24 @@ class AvcoReplay(models.AbstractModel):
     # Costo unitario de una entrada con TODAS las fuentes consideradas
     # ------------------------------------------------------------
     @api.model
-    def _get_incoming_unit_cost(self, move, manual_cost, current_avco):
+    def _get_incoming_unit_cost(self, move, manual_cost, current_avco, company):
         """
         Orden de prioridad para determinar costo unitario de entrada:
-          1) Factura de proveedor ligada al PO (bill_line.price_unit) + landed cost
-          2) Línea de PO (purchase_line_id.price_unit) + landed cost
-          3) Valor ya almacenado en el move (si viene de procesos previos)
+          1) Factura de proveedor ligada al PO → price_unit convertido con TC del PO
+             (manual si purchase_manual_currency_exchange_active, sino Odoo std)
+          2) Línea de PO sin factura → price_unit convertido con TC del PO
+          3) Valor ya almacenado en el move (ya está en moneda compañía)
           4) Costo manual (para ajustes manuales sin fuente válida)
           5) AVCO actual (último recurso)
+
+        Retorna (unit_cost_in_company_currency, rate_label).
         """
         value_field = self._get_value_field()
         landed_per_unit = self._get_landed_cost_per_unit(move)
 
         # --- 1) Factura de proveedor ---
         if move.purchase_line_id:
+            po = move.purchase_line_id.order_id
             AccountMoveLine = self.env['account.move.line']
             bill_line = AccountMoveLine.search([
                 ('purchase_line_id', '=', move.purchase_line_id.id),
@@ -86,24 +134,36 @@ class AvcoReplay(models.AbstractModel):
                 ('move_id.move_type', 'in', ('in_invoice', 'in_refund')),
             ], order='date asc', limit=1)
             if bill_line and bill_line.price_unit:
-                return bill_line.price_unit + landed_per_unit
+                bill_currency = bill_line.move_id.currency_id
+                bill_date = bill_line.move_id.invoice_date or bill_line.move_id.date
+                # El TC manual se toma del PO que originó la factura
+                unit_cost, rate_label = self._convert_amount(
+                    bill_line.price_unit, bill_currency, company, bill_date,
+                    document=po,
+                )
+                return unit_cost + landed_per_unit, f'BILL/{rate_label}'
 
             # --- 2) Línea de PO sin factura ---
             if move.purchase_line_id.price_unit:
-                return move.purchase_line_id.price_unit + landed_per_unit
+                po_currency = po.currency_id
+                po_date = po.date_order.date() if po.date_order else move.date
+                unit_cost, rate_label = self._convert_amount(
+                    move.purchase_line_id.price_unit, po_currency, company, po_date,
+                    document=po,
+                )
+                return unit_cost + landed_per_unit, f'PO/{rate_label}'
 
-        # --- 3) Valor ya en el move (puede incluir landed cost implícito) ---
+        # --- 3) Valor ya en el move (ya está en moneda compañía) ---
         move_val = move[value_field] or 0.0
         if move_val and move.quantity:
-            # No sumamos landed aquí porque el value ya suele incluirlo
-            return abs(move_val / move.quantity)
+            return abs(move_val / move.quantity), 'MOVE-value'
 
-        # --- 4) Ajuste manual → costo manual proporcionado por el usuario ---
+        # --- 4) Ajuste manual ---
         if manual_cost and manual_cost > 0:
-            return manual_cost + landed_per_unit
+            return manual_cost + landed_per_unit, 'MANUAL'
 
         # --- 5) Último recurso ---
-        return current_avco + landed_per_unit
+        return current_avco + landed_per_unit, 'AVCO-fallback'
 
     # ------------------------------------------------------------
     # Obtener AVCO inicial reproduciendo la historia previa a la fecha de corte
@@ -124,7 +184,7 @@ class AvcoReplay(models.AbstractModel):
             src_int = m.location_id.usage == 'internal'
             dst_int = m.location_dest_id.usage == 'internal'
             if dst_int and not src_int:
-                unit_cost = self._get_incoming_unit_cost(m, manual_cost, avco)
+                unit_cost, _ = self._get_incoming_unit_cost(m, manual_cost, avco, company)
                 qty_in = m.quantity
                 if qty + qty_in > 0:
                     avco = (qty * avco + qty_in * unit_cost) / (qty + qty_in)
@@ -141,7 +201,7 @@ class AvcoReplay(models.AbstractModel):
                        apply=False, rewrite_moves=False):
         """
         Retorna (log, avco_final, qty_final).
-        
+
         :param product: recordset product.product
         :param company: recordset res.company
         :param date_from: date string 'YYYY-MM-DD'
@@ -176,7 +236,9 @@ class AvcoReplay(models.AbstractModel):
 
             # --- ENTRADA ---
             if dst_int and not src_int:
-                unit_cost = self._get_incoming_unit_cost(m, manual_cost, avco)
+                unit_cost, rate_label = self._get_incoming_unit_cost(
+                    m, manual_cost, avco, company
+                )
                 landed_per_unit = self._get_landed_cost_per_unit(m)
                 qty_in = m.quantity
                 new_value = qty_in * unit_cost
@@ -186,9 +248,8 @@ class AvcoReplay(models.AbstractModel):
                 qty += qty_in
 
                 landed_tag = f" (+LC {landed_per_unit:.4f})" if landed_per_unit else ""
-                src = "PO" if m.purchase_line_id else ("AJUSTE" if not m[value_field] else "OTRO")
                 log.append(
-                    f"[{m.date}] IN  id={m.id} [{src}] "
+                    f"[{m.date}] IN  id={m.id} [{rate_label}] "
                     f"qty_in={qty_in:.4f} unit={unit_cost:.6f}{landed_tag} "
                     f"value={new_value:.4f} "
                     f"→ qty={qty:.4f} avco={avco:.6f}"
@@ -241,7 +302,7 @@ class AvcoReplay(models.AbstractModel):
         """
         En Odoo 19 el campo value de stock.move suele estar protegido.
         Usamos SQL directo para forzar la actualización.
-        
+
         ADVERTENCIA: irreversible. Respalda antes de usar.
         """
         self.env.cr.execute(
