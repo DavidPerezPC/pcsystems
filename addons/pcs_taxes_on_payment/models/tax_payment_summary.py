@@ -52,6 +52,9 @@ class TaxPaymentSummary(models.TransientModel):
         "account.move", string="Contraparte",
         help="Pago, NC o reembolso con el que se conció.")
 
+    invoice_uuid = fields.Char(string="UUID Factura", readonly=True)
+    counterpart_uuid = fields.Char(string="UUID Abono/NC", readonly=True)
+
     sat_category = fields.Selection([
         ("iva_trasladado", "IVA Trasladado (Clientes)"),
         ("nc_trasladado", "NC Clientes"),

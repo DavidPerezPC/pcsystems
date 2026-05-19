@@ -22,8 +22,10 @@
                             <field name="sat_category"/>
                             <field name="payment_date"/>
                             <field name="move_id"/>
+                            <field name="invoice_uuid"/>
                             <field name="partner_id"/>
                             <field name="counterpart_move_id"/>
+                            <field name="counterpart_uuid"/>
                             <field name="currency_id"/>
                             <field name="exchange_rate"/>
                             <field name="paid_amount_company" sum="Pagado"/>

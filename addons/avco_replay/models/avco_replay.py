@@ -82,6 +82,54 @@ class AvcoReplay(models.AbstractModel):
         return converted, 'Odoo-std'
 
     # ------------------------------------------------------------
+    # Referencia enriquecida: <orden>/<factura>
+    # ------------------------------------------------------------
+    @api.model
+    def _get_move_ref(self, move):
+        """
+        Construye la referencia del movimiento como '<orden>/<factura>' cuando
+        existen ambos. Soporta compras y ventas. Fallback: origin o picking.
+        """
+        AML = self.env['account.move.line']
+        mf = move._fields
+
+        # --- Compra ---
+        if 'purchase_line_id' in mf and move['purchase_line_id']:
+            pl = move['purchase_line_id']
+            po_name = pl['order_id']['name'] or ''
+            bill_line = AML.search([
+                ('purchase_line_id', '=', pl['id']),
+                ('parent_state', '=', 'posted'),
+                ('move_id.move_type', 'in', ('in_invoice', 'in_refund')),
+            ], order='date asc', limit=1)
+            if bill_line:
+                bill = bill_line['move_id']
+                bill_ref = bill['ref'] or ''
+                ref = f"{po_name}/{bill_ref}/{bill['name']}" if bill_ref else f"{po_name}/{bill['name']}"
+                return ref
+            return po_name
+
+        # --- Venta (campo opcional si el módulo sale está instalado) ---
+        if 'sale_line_id' in mf and move['sale_line_id']:
+            sl = move['sale_line_id']
+            so_name = sl['order_id']['name'] or ''
+            if 'sale_line_ids' in AML._fields:
+                inv_line = AML.search([
+                    ('sale_line_ids', 'in', [sl['id']]),
+                    ('parent_state', '=', 'posted'),
+                    ('move_id.move_type', 'in', ('out_invoice', 'out_refund')),
+                ], order='date asc', limit=1)
+                if inv_line:
+                    return f"{so_name}/{inv_line['move_id']['name']}"
+            return so_name
+
+        # --- Fallback: origen del documento o nombre del picking ---
+        picking_name = ''
+        if 'picking_id' in mf and move['picking_id']:
+            picking_name = move['picking_id']['name'] or ''
+        return move.origin or picking_name or ''
+
+    # ------------------------------------------------------------
     # Landed costs: obtener el monto adicional por unidad para un stock.move
     # ------------------------------------------------------------
     @api.model
@@ -200,7 +248,7 @@ class AvcoReplay(models.AbstractModel):
     def replay_product(self, product, company, date_from, manual_cost,
                        apply=False, rewrite_moves=False):
         """
-        Retorna (log, avco_final, qty_final).
+        Retorna (log, avco_final, qty_final, rows).
 
         :param product: recordset product.product
         :param company: recordset res.company
@@ -211,6 +259,7 @@ class AvcoReplay(models.AbstractModel):
         """
         value_field = self._get_value_field()
         log = []
+        rows = []
 
         log.append(f">>> Producto: {product.display_name} (id={product.id})")
         log.append(f">>> Compañía: {company.display_name} | Fecha corte: {date_from}")
@@ -221,6 +270,20 @@ class AvcoReplay(models.AbstractModel):
         # Estado inicial a la fecha de corte
         qty, avco = self._get_initial_state(product, company, date_from, manual_cost)
         log.append(f"[INICIO {date_from}] qty={qty:.4f} avco={avco:.6f}")
+
+        rows.append({
+            'producto': product.display_name,
+            'fecha': str(date_from),
+            'tipo': 'INICIO',
+            'move_id': '',
+            'ref': '',
+            'existencia_anterior': 0.0,
+            'entrada': 0.0,
+            'salida': 0.0,
+            'costo_movimiento': avco,
+            'nuevo_costo': avco,
+            'existencia': qty,
+        })
 
         # Moves desde la fecha de corte
         moves = self.env['stock.move'].search([
@@ -236,6 +299,8 @@ class AvcoReplay(models.AbstractModel):
 
             # --- ENTRADA ---
             if dst_int and not src_int:
+                qty_before = qty
+                avco_before = avco
                 unit_cost, rate_label = self._get_incoming_unit_cost(
                     m, manual_cost, avco, company
                 )
@@ -254,12 +319,27 @@ class AvcoReplay(models.AbstractModel):
                     f"value={new_value:.4f} "
                     f"→ qty={qty:.4f} avco={avco:.6f}"
                 )
+                rows.append({
+                    'producto': product.display_name,
+                    'fecha': str(m.date),
+                    'tipo': 'IN',
+                    'move_id': m.id,
+                    'ref': self._get_move_ref(m),
+                    'existencia_anterior': qty_before,
+                    'entrada': qty_in,
+                    'salida': 0.0,
+                    'costo_movimiento': unit_cost,
+                    'nuevo_costo': avco,
+                    'existencia': qty,
+                })
 
                 if apply and rewrite_moves:
                     self._rewrite_move_value(m, new_value, value_field)
 
             # --- SALIDA ---
             elif src_int and not dst_int:
+                qty_before = qty
+                avco_before = avco
                 qty_out = m.quantity
                 new_value = -qty_out * avco
                 qty -= qty_out
@@ -270,6 +350,19 @@ class AvcoReplay(models.AbstractModel):
                     f"value={new_value:.4f} "
                     f"→ qty={qty:.4f}"
                 )
+                rows.append({
+                    'producto': product.display_name,
+                    'fecha': str(m.date),
+                    'tipo': 'OUT',
+                    'move_id': m.id,
+                    'ref': self._get_move_ref(m),
+                    'existencia_anterior': qty_before,
+                    'entrada': 0.0,
+                    'salida': qty_out,
+                    'costo_movimiento': avco_before,
+                    'nuevo_costo': avco,
+                    'existencia': qty,
+                })
 
                 if apply and rewrite_moves:
                     self._rewrite_move_value(m, new_value, value_field)
@@ -280,6 +373,19 @@ class AvcoReplay(models.AbstractModel):
                     f"[{m.date}] INT id={m.id} qty={m.quantity:.4f} "
                     f"(sin impacto en AVCO)"
                 )
+                rows.append({
+                    'producto': product.display_name,
+                    'fecha': str(m.date),
+                    'tipo': 'INT',
+                    'move_id': m.id,
+                    'ref': self._get_move_ref(m),
+                    'existencia_anterior': qty,
+                    'entrada': 0.0,
+                    'salida': 0.0,
+                    'costo_movimiento': 0.0,
+                    'nuevo_costo': avco,
+                    'existencia': qty,
+                })
 
         log.append("-" * 70)
         log.append(f"[FINAL] avco_calculado={avco:.6f} qty_final={qty:.4f}")
@@ -292,7 +398,7 @@ class AvcoReplay(models.AbstractModel):
             else:
                 log.append(f">>> qty<=0 → standard_price NO modificado")
 
-        return log, avco, qty
+        return log, avco, qty, rows
 
     # ------------------------------------------------------------
     # Reescritura forzada del campo value en stock.move

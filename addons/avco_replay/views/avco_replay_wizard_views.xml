@@ -31,6 +31,14 @@
                             </field>
                         </page>
                         <page string="Log de resultado" name="log" invisible="not result_log">
+                            <group invisible="not excel_file">
+                                <field name="excel_file"
+                                       filename="excel_filename"
+                                       widget="binary"
+                                       string="Descargar Excel"
+                                       readonly="1"/>
+                                <field name="excel_filename" invisible="1"/>
+                            </group>
                             <field name="result_log" widget="text" readonly="1" nolabel="1"/>
                         </page>
                     </notebook>

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import io
+import base64
 from odoo import models, fields, api
 from odoo.exceptions import UserError
 
@@ -44,6 +46,15 @@ class AvcoReplayWizard(models.TransientModel):
         string='Log de resultado',
         readonly=True,
     )
+    excel_file = fields.Binary(
+        string='Archivo Excel',
+        readonly=True,
+        attachment=False,
+    )
+    excel_filename = fields.Char(
+        string='Nombre archivo',
+        readonly=True,
+    )
 
     @api.model
     def default_get(self, fields_list):
@@ -82,11 +93,12 @@ class AvcoReplayWizard(models.TransientModel):
 
         replay = self.env['avco.replay']
         all_log = []
+        all_rows = []
 
         for line in self.line_ids:
             all_log.append("")
             all_log.append("=" * 70)
-            log, avco, qty = replay.replay_product(
+            log, avco, qty, rows = replay.replay_product(
                 product=line.product_id,
                 company=self.company_id,
                 date_from=self.date_from,
@@ -95,10 +107,15 @@ class AvcoReplayWizard(models.TransientModel):
                 rewrite_moves=self.rewrite_moves,
             )
             all_log.extend(log)
+            all_rows.extend(rows)
             line.computed_avco = avco
             line.computed_qty = qty
 
         self.result_log = '\n'.join(all_log)
+
+        if all_rows:
+            self.excel_file = self._build_excel(all_rows)
+            self.excel_filename = f'avco_replay_{self.date_from}.xlsx'
 
         return {
             'type': 'ir.actions.act_window',
@@ -108,6 +125,82 @@ class AvcoReplayWizard(models.TransientModel):
             'target': 'new',
             'context': self.env.context,
         }
+
+    def _build_excel(self, rows):
+        """Genera el archivo Excel con el detalle del replay y retorna base64."""
+        try:
+            from openpyxl import Workbook
+            from openpyxl.styles import Font, PatternFill, Alignment, numbers
+            from openpyxl.utils import get_column_letter
+        except ImportError:
+            raise UserError(
+                "La librería openpyxl no está disponible. "
+                "Instálala con: pip install openpyxl"
+            )
+
+        wb = Workbook()
+        ws = wb.active
+        ws.title = 'AVCO Replay'
+
+        headers = [
+            'Producto', 'Fecha', 'Tipo', 'Move ID', 'Referencia',
+            'Existencia Anterior', 'Entrada', 'Salida',
+            'Costo Movimiento', 'Nuevo Costo', 'Existencia',
+        ]
+
+        header_font = Font(bold=True, color='FFFFFF')
+        header_fill = PatternFill(start_color='2E74B5', end_color='2E74B5', fill_type='solid')
+        center = Alignment(horizontal='center')
+
+        ws.append(headers)
+        for cell in ws[1]:
+            cell.font = header_font
+            cell.fill = header_fill
+            cell.alignment = center
+
+        num_fmt = '#,##0.######'
+        num_cols = {6, 7, 8, 9, 10, 11}  # columnas numéricas (1-indexed)
+
+        tipo_fills = {
+            'IN':     PatternFill(start_color='E2EFDA', end_color='E2EFDA', fill_type='solid'),
+            'OUT':    PatternFill(start_color='FCE4D6', end_color='FCE4D6', fill_type='solid'),
+            'INICIO': PatternFill(start_color='FFEB9C', end_color='FFEB9C', fill_type='solid'),
+            'INT':    PatternFill(start_color='EDEDED', end_color='EDEDED', fill_type='solid'),
+        }
+
+        for row in rows:
+            data = [
+                row['producto'],
+                row['fecha'],
+                row['tipo'],
+                row['move_id'],
+                row['ref'],
+                row['existencia_anterior'],
+                row['entrada'],
+                row['salida'],
+                row['costo_movimiento'],
+                row['nuevo_costo'],
+                row['existencia'],
+            ]
+            ws.append(data)
+            row_idx = ws.max_row
+            fill = tipo_fills.get(row['tipo'])
+            for col_idx, cell in enumerate(ws[row_idx], start=1):
+                if fill:
+                    cell.fill = fill
+                if col_idx in num_cols:
+                    cell.number_format = num_fmt
+
+        # Ajuste de anchos de columna
+        col_widths = [30, 22, 8, 10, 25, 18, 12, 12, 18, 14, 14]
+        for i, width in enumerate(col_widths, start=1):
+            ws.column_dimensions[get_column_letter(i)].width = width
+
+        ws.freeze_panes = 'A2'
+
+        buf = io.BytesIO()
+        wb.save(buf)
+        return base64.b64encode(buf.getvalue())
 
 
 class AvcoReplayWizardLine(models.TransientModel):

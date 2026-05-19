@@ -102,7 +102,7 @@ class PurchaseOrder(models.Model):
 
         line_ids = []
         for line in self.order_line:
-            line_uom = line.product_uom_id.unspsc_code_id
+            line_uom = line.product_uom_id.name or line.product_uom_id.unspsc_code_id.name
             tiva = ''
             tieps= ''
             #product_ctx = {'seller_id': line.order_id.partner_id.id, 'lang': get_lang(line.env, line.order_id.partner_id.lang).code}
@@ -121,7 +121,8 @@ class PurchaseOrder(models.Model):
             data = {
                 'clave': product_code,
                 'product_id': line.product_id.unspsc_code_id.code,
-                'uom': f"{line_uom.code} {line_uom.name}",
+                #'uom': f"{line_uom.code} {line_uom.name}",
+                'uom': line_uom,
                 'product_name': product_name,
                 'qty': line.product_qty,
                 'price': "{:,.4f}".format(line.price_unit),

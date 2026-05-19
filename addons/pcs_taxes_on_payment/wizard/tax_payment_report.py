@@ -129,6 +129,8 @@ class TaxPaymentReportWizard(models.TransientModel):
             "paid_amount_company": event["paid_amount_company"],
             "document_type": "refund" if event["is_refund"] else "invoice",
             "counterpart_move_id": event["counterpart_move"].id,
+            "invoice_uuid": move.l10n_mx_edi_cfdi_uuid or "",
+            "counterpart_uuid": event["counterpart_move"].l10n_mx_edi_cfdi_uuid or "",
         }
 
         for prefix in set(MAPPED_TAXES.values()):
@@ -200,8 +202,9 @@ class TaxPaymentReportWizard(models.TransientModel):
     def _write_sheet(self, wb, name, rows, fmt_h, fmt_m, fmt_mt, fmt_d, fmt_r):
         sheet = wb.add_worksheet(name)
         headers = [
-            ("Fecha Pago", 12), ("Factura", 15), ("Fecha Factura", 12),
-            ("Contacto", 30), ("RFC", 15), ("Contraparte", 15),
+            ("Fecha Pago", 12), ("Factura", 15), ("UUID Factura", 38),
+            ("Fecha Factura", 12), ("Contacto", 30), ("RFC", 15),
+            ("Contraparte", 15), ("UUID Abono/NC", 38),
             ("Moneda", 8), ("T.C.", 10),
             ("Pagado Moneda", 14), ("Pagado MXN", 14),
         ]
@@ -221,18 +224,20 @@ class TaxPaymentReportWizard(models.TransientModel):
                 sheet.write_datetime(row_idx, 0,
                     datetime.combine(rec.payment_date, time.min), fmt_d)
             sheet.write(row_idx, 1, rec.move_id.name or "")
+            sheet.write(row_idx, 2, rec.invoice_uuid or "")
             if rec.invoice_date:
-                sheet.write_datetime(row_idx, 2,
+                sheet.write_datetime(row_idx, 3,
                     datetime.combine(rec.invoice_date, time.min), fmt_d)
-            sheet.write(row_idx, 3, rec.partner_id.name or "")
-            sheet.write(row_idx, 4, rec.partner_id.vat or "")
-            sheet.write(row_idx, 5, rec.counterpart_move_id.name or "")
-            sheet.write(row_idx, 6, rec.currency_id.name or "")
-            sheet.write(row_idx, 7, rec.exchange_rate, fmt_r)
-            sheet.write(row_idx, 8, rec.paid_amount_currency, fmt_m)
-            sheet.write(row_idx, 9, rec.paid_amount_company, fmt_m)
+            sheet.write(row_idx, 4, rec.partner_id.name or "")
+            sheet.write(row_idx, 5, rec.partner_id.vat or "")
+            sheet.write(row_idx, 6, rec.counterpart_move_id.name or "")
+            sheet.write(row_idx, 7, rec.counterpart_uuid or "")
+            sheet.write(row_idx, 8, rec.currency_id.name or "")
+            sheet.write(row_idx, 9, rec.exchange_rate, fmt_r)
+            sheet.write(row_idx, 10, rec.paid_amount_currency, fmt_m)
+            sheet.write(row_idx, 11, rec.paid_amount_company, fmt_m)
 
-            col = 10
+            col = 12
             for code, _label in TAX_COLUMNS:
                 base_val = getattr(rec, code + "_base")
                 tax_val = getattr(rec, code + "_tax")
@@ -248,9 +253,9 @@ class TaxPaymentReportWizard(models.TransientModel):
 
         if row_idx > 1:
             sheet.write(row_idx, 0, "TOTAL", fmt_mt)
-            sheet.write(row_idx, 8, totals["paid_currency"], fmt_mt)
-            sheet.write(row_idx, 9, totals["paid_company"], fmt_mt)
-            col = 10
+            sheet.write(row_idx, 10, totals["paid_currency"], fmt_mt)
+            sheet.write(row_idx, 11, totals["paid_company"], fmt_mt)
+            col = 12
             for code, _label in TAX_COLUMNS:
                 sheet.write(row_idx, col, totals[code + "_base"], fmt_mt)
                 sheet.write(row_idx, col + 1, totals[code + "_tax"], fmt_mt)
