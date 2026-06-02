@@ -260,6 +260,7 @@ class AvcoReplay(models.AbstractModel):
         value_field = self._get_value_field()
         log = []
         rows = []
+        pending_corrections = []
 
         log.append(f">>> Producto: {product.display_name} (id={product.id})")
         log.append(f">>> Compañía: {company.display_name} | Fecha corte: {date_from}")
@@ -341,6 +342,7 @@ class AvcoReplay(models.AbstractModel):
                 qty_before = qty
                 avco_before = avco
                 qty_out = m.quantity
+                original_value = m[value_field] or 0.0
                 new_value = -qty_out * avco
                 qty -= qty_out
 
@@ -365,7 +367,42 @@ class AvcoReplay(models.AbstractModel):
                 })
 
                 if apply and rewrite_moves:
-                    self._rewrite_move_value(m, new_value, value_field)
+                    # Reescribir stock.move solo si el valor cambió
+                    if abs(new_value - original_value) >= 0.001:
+                        self._rewrite_move_value(m, new_value, value_field)
+
+                    # Corrección contable: independiente del rewrite de stock.move
+                    # (el account.move puede tener el valor antiguo aunque stock.move ya esté correcto)
+                    cogs_acc, stock_acc, inv_name, cogs_amount, inv_date, inv_partner = \
+                        self._get_cogs_stock_from_invoice(m, product)
+                    if not cogs_acc or not stock_acc:
+                        fb_cogs, fb_stock, _ = self._get_stock_accounts(product, company)
+                        cogs_acc = cogs_acc or fb_cogs
+                        stock_acc = stock_acc or fb_stock
+                    _, _, journal = self._get_stock_accounts(product, company)
+
+                    new_cogs = abs(new_value)
+                    orig_cogs = cogs_amount if cogs_amount else abs(original_value)
+                    diff = new_cogs - orig_cogs
+
+                    if cogs_acc and stock_acc and journal and abs(diff) >= 0.001:
+                        pending_corrections.append({
+                            'invoice_name': inv_name or f'MOVE/{m.id}',
+                            'cogs_account_id': cogs_acc.id,
+                            'stock_account_id': stock_acc.id,
+                            'journal_id': journal.id,
+                            'diff': diff,
+                            'product_id': product.id,
+                            'product_name': product.display_name,
+                            'partner_id': inv_partner.id if inv_partner else False,
+                            'date': inv_date or m['date'],
+                        })
+                    elif not (cogs_acc and stock_acc and journal):
+                        log.append(
+                            f"  [WARN] Corrección omitida move {m.id}: "
+                            f"COGS={bool(cogs_acc)}, inv={bool(stock_acc)}, "
+                            f"diario={bool(journal)}"
+                        )
 
             # --- INTERNO (bodega → bodega): no afecta AVCO ---
             else:
@@ -398,7 +435,143 @@ class AvcoReplay(models.AbstractModel):
             else:
                 log.append(f">>> qty<=0 → standard_price NO modificado")
 
-        return log, avco, qty, rows
+        return log, avco, qty, rows, pending_corrections
+
+    # ------------------------------------------------------------
+    # Cuentas reales de COGS e inventario desde la factura de venta
+    # ------------------------------------------------------------
+    @api.model
+    def _get_cogs_stock_from_invoice(self, move, product):
+        """
+        Navega stock.move → sale_line_id → invoice_lines → account.move y extrae
+        las cuentas de COGS (cargo) e inventario/stock-output (abono) que realmente
+        se usaron en la factura para este producto (contabilidad anglo-sajona).
+
+        Retorna (cogs_account, stock_account, invoice_name).
+        Retorna (None, None, '') si no se puede determinar.
+        """
+        if 'sale_line_id' not in move._fields or not move['sale_line_id']:
+            return None, None, '', 0.0, False, None
+
+        sl = move['sale_line_id']
+        if 'invoice_lines' not in sl._fields or not sl['invoice_lines']:
+            return None, None, '', 0.0, False, None
+
+        # Primera factura de cliente publicada vinculada a esta línea de venta
+        invoice = None
+        for il in sl['invoice_lines']:
+            am = il['move_id']
+            if am['state'] == 'posted' and am['move_type'] == 'out_invoice':
+                invoice = am
+                break
+
+        if not invoice:
+            return None, None, '', 0.0, False, None
+
+        invoice_name = invoice['name'] or ''
+        invoice_date = invoice['invoice_date'] or invoice['date']
+        partner = invoice['partner_id']
+        cogs_account = None
+        stock_account = None
+        cogs_amount = 0.0
+
+        _income_types = {'income', 'income_other'}
+
+        for line in invoice['line_ids']:
+            # Solo líneas de este producto
+            line_product = line['product_id']
+            if not line_product or line_product['id'] != product.id:
+                continue
+
+            account = line['account_id']
+            acct_type = account['account_type']
+
+            # Excluir cuentas por cobrar y de ingresos (son la parte de venta)
+            if acct_type == 'asset_receivable' or acct_type in _income_types:
+                continue
+
+            # COGS: línea de cargo (debit) — cuenta de gasto/costo
+            if line['debit'] > 0 and not cogs_account:
+                cogs_account = account
+                cogs_amount = line['debit']
+            # Inventario/stock-output: línea de abono (credit)
+            elif line['credit'] > 0 and not stock_account:
+                stock_account = account
+
+        return cogs_account, stock_account, invoice_name, cogs_amount, invoice_date, partner
+
+    # ------------------------------------------------------------
+    # Cuentas contables del producto para corrección AVCO (fallback)
+    # ------------------------------------------------------------
+    @api.model
+    def _get_stock_accounts(self, product, company):
+        """
+        Retorna (cogs_account, stock_valuation_account, stock_journal) para el producto.
+        Las propiedades de categoría son company-dependent.
+        """
+        categ = product.with_company(company).categ_id
+        cogs = categ.property_account_expense_categ_id
+        if not cogs:
+            cogs = product.with_company(company).property_account_expense_id
+        stock_account = categ.property_stock_valuation_account_id
+        journal = categ.property_stock_journal
+        return cogs, stock_account, journal
+
+    # ------------------------------------------------------------
+    # Asiento corrector de AVCO para movimientos de salida
+    # ------------------------------------------------------------
+    @api.model
+    def _create_invoice_correction_entries(self, corrections, company, log):
+        """
+        Recibe la lista de correcciones recolectadas durante el replay y crea
+        una sola póliza contable por cada factura afectada.
+
+        corrections: lista de dicts con keys:
+          invoice_name, cogs_account_id, stock_account_id,
+          journal_id, diff, product_name, date
+        """
+        from collections import defaultdict
+        by_invoice = defaultdict(list)
+        for c in corrections:
+            by_invoice[c['invoice_name']].append(c)
+
+        for invoice_name, items in by_invoice.items():
+            lines = []
+            for item in items:
+                diff = item['diff']
+                correction = abs(diff)
+                label = f"{item['product_name']} - Corrección Costo - {invoice_name}"
+                line_vals_base = {
+                    'product_id': item['product_id'],
+                    'partner_id': item['partner_id'] or False,
+                }
+                if diff > 0:
+                    lines += [
+                        (0, 0, {**line_vals_base, 'account_id': item['cogs_account_id'],  'name': label, 'debit': correction, 'credit': 0.0}),
+                        (0, 0, {**line_vals_base, 'account_id': item['stock_account_id'], 'name': label, 'debit': 0.0,        'credit': correction}),
+                    ]
+                else:
+                    lines += [
+                        (0, 0, {**line_vals_base, 'account_id': item['stock_account_id'], 'name': label, 'debit': correction, 'credit': 0.0}),
+                        (0, 0, {**line_vals_base, 'account_id': item['cogs_account_id'],  'name': label, 'debit': 0.0,        'credit': correction}),
+                    ]
+
+            entry_date = items[0]['date']
+            journal_id = items[0]['journal_id']
+
+            entry = self.env['account.move'].create({
+                'move_type': 'entry',
+                'date': entry_date,
+                'journal_id': journal_id,
+                'ref': invoice_name,
+                'company_id': company.id,
+                'line_ids': lines,
+            })
+            getattr(entry, 'action_post')()
+            log.append(
+                f"  [ASIENTO] {entry['name']} | factura={invoice_name} | "
+                f"{len(items)} línea(s)"
+            )
 
     # ------------------------------------------------------------
     # Reescritura forzada del campo value en stock.move

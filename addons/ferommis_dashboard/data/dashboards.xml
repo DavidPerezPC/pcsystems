@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="spreadsheet_dashboard_account_accountant.dashboard_accounting" model="spreadsheet.dashboard">
+        <field name="spreadsheet_binary_data" type="base64"
+               file="ferommis_dashboard/data/files/accounting_dashboard_ferommis.json"/>
+    </record>
+
+</odoo>

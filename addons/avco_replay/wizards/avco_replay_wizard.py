@@ -94,11 +94,12 @@ class AvcoReplayWizard(models.TransientModel):
         replay = self.env['avco.replay']
         all_log = []
         all_rows = []
+        all_corrections = []
 
         for line in self.line_ids:
             all_log.append("")
             all_log.append("=" * 70)
-            log, avco, qty, rows = replay.replay_product(
+            log, avco, qty, rows, corrections = replay.replay_product(
                 product=line.product_id,
                 company=self.company_id,
                 date_from=self.date_from,
@@ -108,8 +109,17 @@ class AvcoReplayWizard(models.TransientModel):
             )
             all_log.extend(log)
             all_rows.extend(rows)
+            all_corrections.extend(corrections)
             line.computed_avco = avco
             line.computed_qty = qty
+
+        if self.apply_changes and self.rewrite_moves and all_corrections:
+            all_log.append("")
+            all_log.append("=" * 70)
+            all_log.append(">>> PÓLIZAS DE CORRECCIÓN CONTABLE")
+            replay._create_invoice_correction_entries(
+                all_corrections, self.company_id, all_log
+            )
 
         self.result_log = '\n'.join(all_log)
 

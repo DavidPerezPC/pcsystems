@@ -16,18 +16,27 @@ class CustomerSuppliersPaymentsWizard(models.TransientModel):
         required=True, default=fields.Date.context_today)
 
     def action_create_customers_suppliers_payments_wizard(self):
-
-        """Action to fetch and display customer/supplier payments."""
+        """Elimina registros del periodo y regenera con cálculo correcto de impuestos."""
         if not self.payment_from or not self.payment_to:
             return {
                 'type': 'ir.actions.act_window_message',
-                'title': 'No Date Provided',
-                'message': 'Please select a payment date.',
+                'title': 'Sin Fechas',
+                'message': 'Selecciona el rango de fechas de pago.',
             }
-        payments_obj = self.env['customers.suppliers.payments']
-        payments_obj.get_all_reconciled_payments(self.payment_from, self.payment_to)
+        self.env['customers.suppliers.payments'].get_all_reconciled_payments(
+            self.payment_from, self.payment_to)
 
-        return True
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Pagos Clientes/Proveedores',
+            'res_model': 'customers.suppliers.payments',
+            'view_mode': 'list,form',
+            'domain': [
+                ('payment_date', '>=', self.payment_from),
+                ('payment_date', '<=', self.payment_to),
+            ],
+            'target': 'current',
+        }
         # return {
         #     'type': 'ir.actions.act_window',
         #     'name': 'Supplier Payments',

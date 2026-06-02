@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
-
+import logging
 from odoo import models, fields, api
-MAPPES_TAXS = { 
+
+_logger = logging.getLogger(__name__)
+
+MAPPED_TAXES = {
+     1: 'iva_0_',
+     2: 'iva_16_',
+     5: 'ret_isr_arr_',
+    19: 'iva_exento_',
     24: 'iva_8_',
     25: 'ret_isr_hon_',
     26: 'ret_iva_hon_',
@@ -16,6 +23,8 @@ MAPPES_TAXS = {
     37: 'iva_16_',
     38: 'ieps_6_',
 }
+
+
 class CustomerSuppliersPayments(models.Model):
     _name = 'customers.suppliers.payments'
     _description = 'Customer/Supplier Payments'
@@ -46,10 +55,10 @@ class CustomerSuppliersPayments(models.Model):
     payment_date = fields.Date(string='Payment Date', readonly=True)
     partner_id = fields.Many2one('res.partner', string='Contact', readonly=True)
     partner_vat = fields.Char(string='Partner VAT', related='partner_id.vat', readonly=True, store=True)
-    amount = fields.Monetary(string='Payment Amount', readonly=True)
+    amount = fields.Monetary(string='Payment Amount MXN', readonly=True)
     amount_currency = fields.Monetary(string='Payment Amount Currency', readonly=True)
     currency_id = fields.Many2one('res.currency', string='Currency', related='payment_id.currency_id', readonly=True)
-    currency_rate = fields.Float(string='Currency Rate', compute="_compute_currency_rate", readonly=True)
+    currency_rate = fields.Float(string='Currency Rate', digits=(12, 6), readonly=True)
     payment_move = fields.Char(string='Payment Move', readonly=True)
     payment_journal_id = fields.Many2one('account.journal', string='Payment Journal', readonly=True)
     payment_account_id = fields.Many2one(
@@ -64,7 +73,7 @@ class CustomerSuppliersPayments(models.Model):
         string='Payment Type', readonly=True
     )
 
-###DEFINICION DE IMPUESTOS POR GRUPO DE IMPUESTOS, ESTO TENDRÁ QUE CAMBIAR POR CLIENTE
+    # Impuestos
     iva_16_base = fields.Float(string='IVA 16% Base', readonly=True)
     iva_16_tax = fields.Float(string='IVA 16% Tax', readonly=True)
     iva_exento_base = fields.Float(string='IVA Exento Base', readonly=True)
@@ -87,7 +96,7 @@ class CustomerSuppliersPayments(models.Model):
     ret_isr_125_tax = fields.Float(string='Ret ISR 1.25% Tax', readonly=True)
     ieps_6_base = fields.Float(string='Ret IEPS 6% Base', readonly=True)
     ieps_6_tax = fields.Float(string='Ret IEPS 6% Tax', readonly=True)
-###FIN DEFINICION DE IMPUESTOS POR GRUPO DE IMPUESTOS,
+
     @api.depends('move_id.amount_total_signed', 'move_id.amount_total_in_currency_signed')
     def _compute_invoice_amount(self):
         for record in self:
@@ -95,150 +104,107 @@ class CustomerSuppliersPayments(models.Model):
                 record.invoice_amount_currency = abs(record.move_id.amount_total_in_currency_signed)
                 record.invoice_amount = abs(record.move_id.amount_total_signed)
             else:
-                record.invoice_amount_currency =  0 
+                record.invoice_amount_currency = 0
                 record.invoice_amount = abs(record.move_id.amount_total_signed)
 
-    @api.depends('amount', 'amount_currency')
-    def _compute_currency_rate(self):
-        for record in self:
-            if record.currency_id and record.amount_currency:
-                record.currency_rate = record.amount / record.amount_currency
-            else:
-                record.currency_rate = 1.0
-
-
     def get_all_reconciled_payments(self, start_date, end_date):
-        results = []
-
-        # Validate date range
         if not start_date or not end_date:
-            raise ValueError("Start date and end date must be provided.")
+            raise ValueError("Debes proporcionar fecha inicial y final.")
         if start_date > end_date:
-            raise ValueError("Start date cannot be after end date.")
-        
-        # Step 1: Delete records within this date range 
+            raise ValueError("La fecha inicial no puede ser mayor que la final.")
+
+        # Eliminar registros del periodo antes de recrearlos
         self.env['customers.suppliers.payments'].search([
             ('payment_date', '>=', start_date),
-            ('payment_date', '<=', end_date)
+            ('payment_date', '<=', end_date),
         ]).unlink()
-        
-        # Step 2: All reconciled move lines in date range from payments or credit notes
-        move_lines = self.env['account.move.line'].search([
-            ('date', '>=', start_date),
-            ('date', '<=', end_date),
-            #("partner_id", "in", [8015]), #[8363, 12234, 9924]),
-            ('journal_id.type', 'in', ['bank', 'cash', 'purchase', 'sale']),
-            ('account_id.account_type', 'in', ['asset_receivable', 'liability_payable']),
-            ('move_id.move_type', 'in', ['entry', 'out_refund', 'in_refund']),
-            #('move_id.id', 'in', [77436,79352,79426]),
+
+        # Facturas con pagos/abonos en el rango via partial reconciles
+        moves = self._find_invoices_with_payments(start_date, end_date)
+        created = 0
+
+        for move in moves:
+            breakdown = move._get_paid_tax_breakdown(start_date, end_date)
+            for event in breakdown:
+                vals = self._build_record_vals(move, event)
+                if vals:
+                    self.create(vals)
+                    created += 1
+
+        _logger.info("customers.suppliers.payments: %d registros creados para %s - %s",
+                     created, start_date, end_date)
+
+    def _find_invoices_with_payments(self, date_from, date_to):
+        """Facturas/NC con conciliaciones parciales en el rango de fechas."""
+        partials = self.env['account.partial.reconcile'].search([
+            ('max_date', '>=', date_from),
+            ('max_date', '<=', date_to),
         ])
-        
+        if not partials:
+            return self.env['account.move']
 
-        for line in move_lines:
-            #Determine if the move is an invoice
-            move_type = line.move_id.move_type
-            if move_type in ['out_invoice', 'in_invoice']:
-                # It's an invoice, skip
+        lines = partials.debit_move_id | partials.credit_move_id
+        move_ids = lines.move_id.ids
+
+        return self.env['account.move'].search([
+            ('id', 'in', move_ids),
+            ('state', '=', 'posted'),
+            ('move_type', 'in', (
+                'out_invoice', 'out_refund', 'in_invoice', 'in_refund')),
+        ], order='invoice_date, name')
+
+    def _build_record_vals(self, move, event):
+        """Construye el dict de valores para crear un registro."""
+        counterpart = event['counterpart_move']
+        is_credit_note = counterpart.move_type in ('out_refund', 'in_refund')
+
+        # Cuenta contable principal de la factura
+        invoice_account = move.line_ids.filtered(
+            lambda l: l.account_id.account_type in (
+                'asset_receivable', 'liability_payable')
+        )[:1].account_id
+
+        vals = {
+            'move_id': move.id,
+            'invoice_date': move.invoice_date,
+            'invoice': move.ref or move.name,
+            'invoice_ref': invoice_account.id if invoice_account else False,
+            'payment_id': counterpart.id,
+            'payment_date': event['payment_date'],
+            'partner_id': move.partner_id.id,
+            'amount': event['paid_amount_company'],
+            'amount_currency': event['paid_amount_currency'],
+            'currency_rate': event['exchange_rate'],
+            'payment_move': counterpart.name,
+            'payment_journal_id': counterpart.journal_id.id,
+            'reconcile_type': (
+                'full' if move.payment_state == 'paid' else 'partial'),
+            'payment_type': 'credit_note' if is_credit_note else 'payment',
+        }
+
+        # Inicializar columnas de impuestos en cero
+        for prefix in set(MAPPED_TAXES.values()):
+            vals[prefix + 'base'] = 0.0
+            vals[prefix + 'tax'] = 0.0
+
+        # Llenar impuestos desde el breakdown (moneda compañía)
+        for tax_data in event['taxes']:
+            tax_id = tax_data['tax_id'].id
+            prefix = MAPPED_TAXES.get(tax_id)
+            if not prefix:
+                _logger.warning(
+                    "Factura %s: impuesto id=%s (%s) no está en MAPPED_TAXES",
+                    move.name, tax_id, tax_data['tax_name'])
                 continue
+            vals[prefix + 'base'] += tax_data['base_amount_company']
+            vals[prefix + 'tax'] += tax_data['tax_amount_company']
 
-            # Determine if it's a credit note
-            is_credit_note = move_type in ['out_refund', 'in_refund']
+        return vals
 
-            # Gather reconciled invoice lines
-            full_lines = line.full_reconcile_id.reconciled_line_ids if line.full_reconcile_id else self.env['account.move.line']
-            partial_lines = line.matched_debit_ids.mapped('credit_move_id') + \
-                            line.matched_credit_ids.mapped('debit_move_id') + \
-                            line.matched_debit_ids.mapped('debit_move_id') + \
-                            line.matched_credit_ids.mapped('credit_move_id')
-
-            reconciled_lines = (full_lines | partial_lines).filtered(
-                lambda l: l.move_id.move_type in ['out_invoice', 'in_invoice']
-            )
-
-            invoices = [x.move_id for x in reconciled_lines]
-            for invoice in invoices:
-                if abs(line.balance) <= 1:
-                    continue
-                #invoice = invoice_line.move_id
-                #taxes2 = self.get_invoices_taxes(invoice)
-                #bases, taxes = invoice._get_rounded_base_and_tax_lines(False()
-                result = {
-                    'move_id': invoice.id,
-                    'invoice_date': invoice.date,
-                    'invoice': invoice.ref or invoice.name,
-                    'invoice_ref': invoice.line_ids[0].account_id.id,
-                    'payment_id': line.move_id.id,
-                    'payment_date': line.date,
-                    'partner_id': line.partner_id.id,
-                    'amount': abs(line.balance),
-                    'amount_currency': abs(line.amount_currency or line.balance),
-                    'currency_id': line.currency_id.id or line.company_currency_id.id,
-                    'payment_move': line.move_id.name,
-                    'payment_journal_id': line.move_id.journal_id.id,
-                    'reconcile_type': 'full' if line.full_reconcile_id else 'partial',
-                    'payment_type': 'credit_note' if is_credit_note else 'payment',
-                }               
-                tax_totals = invoice.tax_totals['subtotals'] if invoice.tax_totals else []
-                percent_paid = abs(line.amount_currency) / invoice.amount_total if invoice.amount_total else 0
-                currency_rate = (line.balance / line.amount_currency) if line.amount_currency else 1
-                for tax in tax_totals:
-                    for tax_group in tax['tax_groups']:
-                        tax_affected = MAPPES_TAXS.get(tax_group['id'])
-                        if not tax_affected:
-                            continue
-                        if tax_affected:
-                            factor = -1 if is_credit_note else 1
-                            #need to multiply by percent paid
-                            taxinvolved = self.env['account.tax'].browse(tax_group['involved_tax_ids'][0])
-                            tax_percent = taxinvolved.amount / 100
-                            results_key_base = f"{tax_affected}base"
-                            results_key_tax = f"{tax_affected}tax"
-                            result.update({results_key_base: tax_group['base_amount'] * percent_paid * factor,
-                                            results_key_tax: tax_group['base_amount'] * tax_percent * percent_paid * factor
-                                          })
-                results.append(result)
-
-        if results:
-            # Create records in the model
-            for payment in results:
-                self.create(payment)
-
-        return results
-
-    def get_invoices_taxes(self, move_id):
-
-        taxes = {}
-        for line in move_id.invoice_line_ids:
-            for tax in line.tax_ids:
-                tax_amount = 0.0
-                tax_base_amount = 0.0
-                # Find the tax line for this tax and invoice line
-                for tax_line in move_id.line_ids.filtered(lambda l: l.tax_line_id.l10n_mx_tax_type == tax.l10n_mx_tax_type and l.tax_line_id.id == tax.id):
-                    tax_amount += abs(tax_line.balance or (tax_line.debit - tax_line.credit))
-                    tax_base_amount += abs(tax_line.tax_base_amount)
-                # Check if the tax type already exists in the dictionary 
-                if tax.l10n_mx_tax_type in taxes:
-                    if tax.name not in taxes[tax.l10n_mx_tax_type]['tax_name']:
-                        # Append the tax name if it's not already in the list
-                        taxes[tax.l10n_mx_tax_type]['tax_name'].append(","+tax.name)
-                    taxes[tax.l10n_mx_tax_type]['tax_amount'] += tax_amount
-                    taxes[tax.l10n_mx_tax_type]['tax_base_amount'] += tax_base_amount
-                else:
-                    # Initialize the tax entry if it doesn't exist
-                    taxes[tax.l10n_mx_tax_type] = {
-                        'tax_name': [tax.name],
-                        'tax_amount': tax_amount,
-                        'tax_base_amount': tax_base_amount,
-                        'is_retention': tax.amount < 0,
-                        'account_id': tax.cash_basis_transition_account_id.id,
-                        'origin_move_id': move_id.id,
-                    }
-        # Convert the dictionary to a list of dictionaries
-        return taxes
-    
     def action_customers_suppliers_payments_wizard(self):
-        view_id = self.env.ref('customers_suppliers_payments.customers_suppliers_payments_wizard_form').id
-        action =  {
+        view_id = self.env.ref(
+            'customers_suppliers_payments.customers_suppliers_payments_wizard_form').id
+        return {
             'type': 'ir.actions.act_window',
             'name': "Create Customers/Suppliers Payments",
             'res_model': 'customers.suppliers.payments.wizard',
@@ -246,6 +212,3 @@ class CustomerSuppliersPayments(models.Model):
             'view_id': view_id,
             'target': 'new',
         }
-        return action   
-    
-    

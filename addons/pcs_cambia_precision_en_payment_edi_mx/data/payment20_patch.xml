@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="payment20_precision_patch" inherit_id="l10n_mx_edi.payment20">
+        <xpath expr="//*[local-name()='TrasladoP']" position="attributes">
+            <attribute name="t-att-BaseP">format_float(tax_values['base'], precision=2)</attribute>
+            <attribute name="t-att-ImporteP">format_float(tax_values['importe'], precision=2)</attribute>
+        </xpath>
+    </template>
+</odoo>

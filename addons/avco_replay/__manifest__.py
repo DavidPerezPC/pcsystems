@@ -19,7 +19,7 @@ Características:
 * Reescritura opcional del campo value en stock.move
 * Detección automática del campo de valor según build de v19
     """,
-    'author': 'Custom',
+    'author': 'PC Systems',
     'depends': [
         'stock',
         'purchase',
