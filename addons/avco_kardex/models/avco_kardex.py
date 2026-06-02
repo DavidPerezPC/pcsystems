@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging
 from datetime import timedelta
 from odoo import models, api
+
+_logger = logging.getLogger(__name__)
 
 
 class AvcoKardex(models.AbstractModel):
@@ -8,27 +11,71 @@ class AvcoKardex(models.AbstractModel):
     _description = 'Generador de Kardex AVCO'
 
     @api.model
-    def generate_kardex(self, product, company, date_from, date_to):
+    def _compute_initial_state(self, product, company, date_from, history_from=None):
         """
-        Genera las filas del kardex para un producto en el rango [date_from, date_to].
-
-        Delega el cálculo del estado inicial y los costos unitarios a avco.replay
-        para mantener la lógica de AVCO en un solo lugar.
-
-        Retorna (rows, totals):
-          rows   — lista de dicts listos para volcar al Excel
-          totals — dict con resumen del producto al cierre del período
+        Calcula qty y avco iniciales procesando moves en [history_from, date_from).
+        Si history_from es None procesa toda la historia anterior a date_from.
+        Retorna (qty, avco, moves_found).
         """
         replay = self.env['avco.replay']
+        domain = [
+            ('product_id', '=', product.id),
+            ('state', '=', 'done'),
+            ('date', '<', date_from),
+            ('company_id', '=', company.id),
+        ]
+        if history_from:
+            domain.append(('date', '>=', history_from))
 
-        qty, avco = replay._get_initial_state(product, company, date_from, 0.0)
+        prev_moves = self.env['stock.move'].search(domain, order='date asc, id asc')
+
+        _logger.info(
+            "AvcoKardex [%s] company=%s date_from=%s history_from=%s → %d moves previos",
+            product.display_name, company.name, date_from, history_from, len(prev_moves),
+        )
+
+        qty = 0.0
+        avco = 0.0
+        for m in prev_moves:
+            src_int = m.location_id.usage == 'internal'
+            dst_int = m.location_dest_id.usage == 'internal'
+            if dst_int and not src_int:
+                unit_cost, _ = replay._get_incoming_unit_cost(m, 0.0, avco, company)
+                qty_in = m.quantity
+                if qty + qty_in > 0:
+                    avco = (qty * avco + qty_in * unit_cost) / (qty + qty_in)
+                qty += qty_in
+            elif src_int and not dst_int:
+                qty -= m.quantity
+
+        _logger.info(
+            "AvcoKardex [%s] qty_inicial=%.4f avco_inicial=%.6f",
+            product.display_name, qty, avco,
+        )
+        return qty, avco, len(prev_moves)
+
+    @api.model
+    def generate_kardex(self, product, company, date_from, date_to,
+                        history_from=None):
+        replay = self.env['avco.replay']
+
+        qty, avco, prev_count = self._compute_initial_state(
+            product, company, date_from, history_from
+        )
+
+        if prev_count:
+            inicio_ref = f'{prev_count} mov. previos'
+        else:
+            inicio_ref = f'Sin movimientos antes de {date_from}'
+            if history_from:
+                inicio_ref += f' (desde {history_from})'
 
         rows = [{
             'producto': product.display_name,
             'fecha': str(date_from),
             'tipo': 'INICIO',
             'move_id': '',
-            'ref': '',
+            'ref': inicio_ref,
             'existencia_anterior': 0.0,
             'entrada': 0.0,
             'salida': 0.0,
@@ -45,7 +92,6 @@ class AvcoKardex(models.AbstractModel):
             ('company_id', '=', company.id),
         ]
         if date_to:
-            # < día siguiente para incluir todos los movimientos del date_to
             domain.append(('date', '<', date_to + timedelta(days=1)))
 
         moves = self.env['stock.move'].search(domain, order='date asc, id asc')

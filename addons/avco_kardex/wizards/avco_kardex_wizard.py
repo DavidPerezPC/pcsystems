@@ -9,9 +9,16 @@ class AvcoKardexWizard(models.TransientModel):
     _name = 'avco.kardex.wizard'
     _description = 'Wizard para Kardex AVCO'
 
-    date_from = fields.Date(string='Fecha desde', required=True)
+    history_from = fields.Date(
+        string='Movimientos desde',
+        default='2020-01-01',
+        required=True,
+        help='Fecha desde la que se acumula el saldo inicial del período. '
+             'Define el punto de partida del cálculo AVCO.',
+    )
+    date_from = fields.Date(string='Kardex desde', required=True)
     date_to = fields.Date(
-        string='Fecha hasta',
+        string='Kardex hasta',
         required=True,
         default=fields.Date.today,
     )
@@ -78,6 +85,7 @@ class AvcoKardexWizard(models.TransientModel):
                 company=company,
                 date_from=self.date_from,
                 date_to=self.date_to,
+                history_from=self.history_from,
             )
             for row in rows:
                 vals_list.append({
