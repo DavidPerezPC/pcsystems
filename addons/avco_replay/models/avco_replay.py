@@ -39,6 +39,22 @@ class AvcoReplay(models.AbstractModel):
         )
 
     # ------------------------------------------------------------
+    # Conversión de cantidad a UOM base del producto
+    # ------------------------------------------------------------
+    @api.model
+    def _move_qty(self, move):
+        """
+        Retorna move.quantity convertida a la UOM base del producto.
+        move.quantity está en move.product_uom, que puede diferir de
+        product.uom_id (p.ej. 'Caja de 12' vs 'Unidades').
+        """
+        if not move.product_uom or move.product_uom == move.product_id.uom_id:
+            return move.quantity
+        return move.product_uom._compute_quantity(
+            move.quantity, move.product_id.uom_id
+        )
+
+    # ------------------------------------------------------------
     # Conversión de moneda con soporte de TC manual por documento
     # ------------------------------------------------------------
     @api.model
@@ -148,10 +164,11 @@ class AvcoReplay(models.AbstractModel):
             ('move_id', '=', move.id),
             ('cost_id.state', '=', 'done'),
         ])
-        if not adj_lines or not move.quantity:
+        base_qty = self._move_qty(move)
+        if not adj_lines or not base_qty:
             return 0.0
         total_landed = sum(adj_lines.mapped('additional_landed_cost'))
-        return total_landed / move.quantity
+        return total_landed / base_qty
 
     # ------------------------------------------------------------
     # Costo unitario de una entrada con TODAS las fuentes consideradas
@@ -184,9 +201,13 @@ class AvcoReplay(models.AbstractModel):
             if bill_line and bill_line.price_unit:
                 bill_currency = bill_line.move_id.currency_id
                 bill_date = bill_line.move_id.invoice_date or bill_line.move_id.date
-                # El TC manual se toma del PO que originó la factura
+                # Convertir price_unit de la UOM de la factura a la UOM base
+                bill_uom = bill_line.product_uom_id or move.product_uom
+                price_in_base = bill_uom._compute_price(
+                    bill_line.price_unit, move.product_id.uom_id
+                )
                 unit_cost, rate_label = self._convert_amount(
-                    bill_line.price_unit, bill_currency, company, bill_date,
+                    price_in_base, bill_currency, company, bill_date,
                     document=po,
                 )
                 return unit_cost + landed_per_unit, f'BILL/{rate_label}'
@@ -195,16 +216,22 @@ class AvcoReplay(models.AbstractModel):
             if move.purchase_line_id.price_unit:
                 po_currency = po.currency_id
                 po_date = po.date_order.date() if po.date_order else move.date
+                # Convertir price_unit de la UOM del PO a la UOM base
+                po_uom = move.purchase_line_id.product_uom_id or move.product_uom
+                price_in_base = po_uom._compute_price(
+                    move.purchase_line_id.price_unit, move.product_id.uom_id
+                )
                 unit_cost, rate_label = self._convert_amount(
-                    move.purchase_line_id.price_unit, po_currency, company, po_date,
+                    price_in_base, po_currency, company, po_date,
                     document=po,
                 )
                 return unit_cost + landed_per_unit, f'PO/{rate_label}'
 
         # --- 3) Valor ya en el move (ya está en moneda compañía) ---
         move_val = move[value_field] or 0.0
-        if move_val and move.quantity:
-            return abs(move_val / move.quantity), 'MOVE-value'
+        base_qty = self._move_qty(move)
+        if move_val and base_qty:
+            return abs(move_val / base_qty), 'MOVE-value'
 
         # --- 4) Ajuste manual ---
         if manual_cost and manual_cost > 0:
@@ -233,12 +260,12 @@ class AvcoReplay(models.AbstractModel):
             dst_int = m.location_dest_id.usage == 'internal'
             if dst_int and not src_int:
                 unit_cost, _ = self._get_incoming_unit_cost(m, manual_cost, avco, company)
-                qty_in = m.quantity
+                qty_in = self._move_qty(m)
                 if qty + qty_in > 0:
                     avco = (qty * avco + qty_in * unit_cost) / (qty + qty_in)
                 qty += qty_in
             elif src_int and not dst_int:
-                qty -= m.quantity
+                qty -= self._move_qty(m)
         return qty, avco
 
     # ------------------------------------------------------------
@@ -306,7 +333,7 @@ class AvcoReplay(models.AbstractModel):
                     m, manual_cost, avco, company
                 )
                 landed_per_unit = self._get_landed_cost_per_unit(m)
-                qty_in = m.quantity
+                qty_in = self._move_qty(m)
                 new_value = qty_in * unit_cost
 
                 if qty + qty_in > 0:
@@ -341,7 +368,7 @@ class AvcoReplay(models.AbstractModel):
             elif src_int and not dst_int:
                 qty_before = qty
                 avco_before = avco
-                qty_out = m.quantity
+                qty_out = self._move_qty(m)
                 original_value = m[value_field] or 0.0
                 new_value = -qty_out * avco
                 qty -= qty_out
@@ -407,7 +434,7 @@ class AvcoReplay(models.AbstractModel):
             # --- INTERNO (bodega → bodega): no afecta AVCO ---
             else:
                 log.append(
-                    f"[{m.date}] INT id={m.id} qty={m.quantity:.4f} "
+                    f"[{m.date}] INT id={m.id} qty={self._move_qty(m):.4f} "
                     f"(sin impacto en AVCO)"
                 )
                 rows.append({

@@ -41,12 +41,12 @@ class AvcoKardex(models.AbstractModel):
             dst_int = m.location_dest_id.usage == 'internal'
             if dst_int and not src_int:
                 unit_cost, _ = replay._get_incoming_unit_cost(m, 0.0, avco, company)
-                qty_in = m.quantity
+                qty_in = replay._move_qty(m)
                 if qty + qty_in > 0:
                     avco = (qty * avco + qty_in * unit_cost) / (qty + qty_in)
                 qty += qty_in
             elif src_int and not dst_int:
-                qty -= m.quantity
+                qty -= replay._move_qty(m)
 
         _logger.info(
             "AvcoKardex [%s] qty_inicial=%.4f avco_inicial=%.6f",
@@ -106,7 +106,7 @@ class AvcoKardex(models.AbstractModel):
             if dst_int and not src_int:
                 qty_before = qty
                 unit_cost, _ = replay._get_incoming_unit_cost(m, 0.0, avco, company)
-                qty_in = m.quantity
+                qty_in = replay._move_qty(m)
                 if qty + qty_in > 0:
                     avco = (qty * avco + qty_in * unit_cost) / (qty + qty_in)
                 qty += qty_in
@@ -128,7 +128,7 @@ class AvcoKardex(models.AbstractModel):
 
             elif src_int and not dst_int:
                 qty_before = qty
-                qty_out = m.quantity
+                qty_out = replay._move_qty(m)
                 qty -= qty_out
                 total_out += qty_out
                 rows.append({
