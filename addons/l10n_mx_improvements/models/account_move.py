@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from urllib.parse import quote_plus 
 #from odoo.addons.base.models.ir_ui_view import keep_query
 from odoo.addons.base.models.ir_qweb import keep_query
+#from odoo.addons.portal.controllers.portal import keep_query
 import base64
 
 class AccountMove(models.Model):

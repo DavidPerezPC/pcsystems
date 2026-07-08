@@ -19,7 +19,8 @@ class StockLandedCost(models.Model):
          ('02', 'Tijuana'),
          ('03', 'Veracruz'),
          ('04', 'AICM'),
-         ('05', 'Mazatlán')
+         ('05', 'Mazatlán'),
+         ('06', 'Mexicali')
         ]
     )
     
