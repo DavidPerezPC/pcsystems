@@ -38,6 +38,19 @@ from io import BytesIO
 class AccountMove(models.Model):
     _inherit = ['account.move']
 
+    def action_post(self):
+        """Override action_post to validate postal code for out_invoice and out_refund."""
+        for move in self:
+            if move.move_type in ['out_invoice', 'out_refund']:
+                if not move.partner_id.zip:
+                    raise ValidationError(
+                        _("Cannot confirm document type '%s' for partner '%s' without a postal code. "
+                          "Please assign a postal code to the partner first. Verify if document is on CFDI Public."
+                          ) 
+                        % (move.move_type, move.partner_id.name)
+                    )
+        return super().action_post()
+
     # # -------------------------------------------------------------------------
     # # CFDI Generation: Payments
     # # -------------------------------------------------------------------------
