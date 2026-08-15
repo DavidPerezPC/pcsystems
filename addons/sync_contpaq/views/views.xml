@@ -16,6 +16,20 @@
     </record>
 
 
+    <!-- search view -->
+    <record model="ir.ui.view" id="account_contpaq_search_view">
+      <field name="name">sync_contpaq_account.search</field>
+      <field name="model">sync.contpaq.account</field>
+      <field name="arch" type="xml">
+        <search string="Buscar Cuentas Contpaq">
+          <field name="name" string="Name"/>
+          <field name="code" string="Code"/>
+          <field name="account_id" string="Odoo Account"/>
+          <field name="analytic_account_id" string="Analytic Account"/>
+        </search>
+      </field>
+    </record>
+
     <!-- actions opening views on models -->
     <record model="ir.actions.act_window" id="sync_contpaq_account_action_window">
       <field name="name">Relación Cuentas Contpaq Odoo</field>
@@ -23,7 +37,7 @@
       <field name="res_model">sync.contpaq.account</field>
       <field name="view_id" ref="account_tree_form"/>
       <field name="view_mode">list,form</field>
-      <!--field name="search_view_id" ref="filters_seasons_tree"/-->
+      <field name="search_view_id" ref="account_contpaq_search_view"/>
     </record>
 
     <!-- server action to the one above -->
