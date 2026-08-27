@@ -7,7 +7,9 @@ _logger = logging.getLogger(__name__)
 MAPPED_TAXES = {
      1: 'iva_0_',
      2: 'iva_16_',
+     3: 'ret_iva_4_',
      5: 'ret_isr_arr_',
+    10: 'iva_16_',
     19: 'iva_exento_',
     24: 'iva_8_',
     25: 'ret_isr_hon_',
