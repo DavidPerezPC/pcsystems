@@ -128,6 +128,8 @@ class CustomerSuppliersPayments(models.Model):
     ret_isr_125_tax = fields.Float(string='Ret ISR 1.25% Tax', readonly=True)
     ieps_6_base = fields.Float(string='Ret IEPS 6% Base', readonly=True)
     ieps_6_tax = fields.Float(string='Ret IEPS 6% Tax', readonly=True)
+    no_objeto_base = fields.Float(string='No Objeto Base', readonly=True)
+    no_objeto_tax = fields.Float(string='No Objeto Tax', readonly=True)
 
     @api.depends('move_id.amount_total_signed', 'move_id.amount_total_in_currency_signed')
     def _compute_invoice_amount(self):
