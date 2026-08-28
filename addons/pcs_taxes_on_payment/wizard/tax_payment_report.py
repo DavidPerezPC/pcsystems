@@ -25,6 +25,7 @@ TAX_COLUMNS = [
     ("ret_isr_arr", "Ret ISR Arr"),
     ("ret_isr_125", "Ret ISR 1.25"),
     ("ieps_6", "IEPS 6"),
+    ("no_objeto", "No Objeto de Impuesto"),
 ]
 
 SAT_CATEGORY_LABELS = {
