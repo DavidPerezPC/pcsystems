@@ -53,7 +53,7 @@ MAPPED_TAXES = {
     53: "ret_iva_4_",
     56: "ret_iva_arr_",
     57: "ret_iva_hon_",
-    62: "no_objeto_",
+    #62: "no_objeto_",
     73: "iva_16_",
 }
 
