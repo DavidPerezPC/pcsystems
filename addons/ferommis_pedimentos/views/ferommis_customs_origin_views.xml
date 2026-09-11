@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ferommis_customs_origin_view_list" model="ir.ui.view">
+        <field name="name">ferommis.customs.origin.list</field>
+        <field name="model">ferommis.customs.origin</field>
+        <field name="arch" type="xml">
+            <list string="Origen PEPS de pedimentos" create="false" edit="false">
+                <field name="out_move_id" string="Salida"/>
+                <field name="product_id"/>
+                <field name="quantity" sum="Cantidad"/>
+                <field name="picking_id" string="Recepción"/>
+                <field name="in_move_date" string="Fecha de recepción"/>
+                <field name="customs_number" string="Pedimento"/>
+                <field name="landed_cost_id" optional="hide"/>
+                <field name="company_id" column_invisible="True"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="ferommis_customs_origin_view_search" model="ir.ui.view">
+        <field name="name">ferommis.customs.origin.search</field>
+        <field name="model">ferommis.customs.origin</field>
+        <field name="arch" type="xml">
+            <search string="Origen PEPS de pedimentos">
+                <field name="product_id"/>
+                <field name="picking_id"/>
+                <field name="out_move_id" string="Salida"/>
+                <filter name="filter_in_move_date" date="in_move_date" string="Fecha de recepción"/>
+                <group>
+                    <filter name="group_product" string="Producto" domain="[]" context="{'group_by': 'product_id'}"/>
+                    <filter name="group_picking" string="Recepción" domain="[]" context="{'group_by': 'picking_id'}"/>
+                    <filter name="group_date" string="Mes de recepción" domain="[]" context="{'group_by': 'in_move_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="ferommis_customs_origin_action" model="ir.actions.act_window">
+        <field name="name">Origen PEPS de pedimentos</field>
+        <field name="res_model">ferommis.customs.origin</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="ferommis_customs_origin_view_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aún no hay salidas registradas</p>
+            <p>Cada renglón dice de qué recepción de compra salió la mercancía de una entrega.
+               Es el rastro que sostiene el pedimento que aparece en la factura.</p>
+        </field>
+    </record>
+
+    <menuitem id="ferommis_customs_origin_menu"
+              name="Origen PEPS de pedimentos"
+              parent="stock.menu_warehouse_report"
+              action="ferommis_customs_origin_action"
+              sequence="95"/>
+</odoo>
