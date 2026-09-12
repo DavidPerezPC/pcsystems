@@ -16,6 +16,10 @@ class AccountMove(models.Model):
             string="Section", 
             help="Section for this Lot",
             store=True)
+
+    lot_size = fields.Float(related="lot_id.lot_size",
+        string="Area Size", 
+        help="Area size of the Lot (Has)")
     
     crop_id = fields.Many2one(
         'product.product',
@@ -32,10 +36,21 @@ class AccountMove(models.Model):
     season_name = fields.Char(
         string="Seson Paid",
         help="Season Paid in this invoice",
-        store=False,
+        store=True,
         compute="_get_season_paid")
 
-    @api.depends('season_name')
+    @api.onchange('crop_id')
+    def _onchange_crop_id(self):
+        for rec in self:
+            season_name  = ''
+            for season in rec.season_ids:
+                for crop in self.crop_id:
+                    if season.name != crop.name:
+                        season_name = season.name
+                        break
+            rec.season_name = season_name
+
+    @api.depends('season_ids','crop_id')
     def _get_season_paid(self):
         for rec in self:
             season_name  = ''
@@ -47,6 +62,9 @@ class AccountMove(models.Model):
             rec.season_name = season_name
 
 
+    def button_process_edi_web_services(self):
+        return self.action_process_edi_web_services()
+    
     # @api.onchange("crop_id")
     # def onchange_crop_id(self):
     #     if self.crop_id.pack_ok:

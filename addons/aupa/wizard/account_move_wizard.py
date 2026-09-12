@@ -69,7 +69,9 @@ class AccountMoveWizard(models.TransientModel):
                     'analytic_account_id': self.lot_id.id, 
                     'quantity': self.lot_id.lot_size, 
                     'price_unit': product.product_id.lst_price,
+                    'tax_ids': [(6, 0, product.product_id.product_tmpl_id.taxes_id.ids)],
                     'analytic_tag_ids': [(6, 0, analytic_ids)],
+
                 }])
 
         invoice = self.env['account.move'].create(
